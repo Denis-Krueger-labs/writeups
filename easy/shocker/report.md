@@ -4,7 +4,7 @@
 > **Difficulty:** `Easy` \
 > **Date:** 2026-03-07 \
 > **Author:** 0N1S3C \
-> **Scope:** Authorized lab environment only \
+> **Scope:** Authorized lab environment only 
 
 ---
 
