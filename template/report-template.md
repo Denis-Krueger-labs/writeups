@@ -4,7 +4,7 @@
 > **Difficulty:** `Easy` / `Medium` / `Hard` \
 > **Date:** YYYY-MM-DD \
 > **Author:** 0N1S3C \
-> **Scope:** Authorized lab environment only \
+> **Scope:** Authorized lab environment only 
 
 ---
 
