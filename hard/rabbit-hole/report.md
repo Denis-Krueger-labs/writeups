@@ -1,5 +1,5 @@
 
-# Rabbit Hole - Technical Report
+# Rabbit Hole  - Technical Report
 
 > **Platform:** TryHackMe \
 > **Difficulty:** `Hard` \
