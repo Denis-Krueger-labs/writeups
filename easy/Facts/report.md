@@ -1,4 +1,4 @@
-# Facts — Technical Report
+# Facts - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
