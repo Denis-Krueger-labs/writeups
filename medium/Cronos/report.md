@@ -1,4 +1,4 @@
-# Cronos — Technical Report
+# Cronos - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Medium` \
