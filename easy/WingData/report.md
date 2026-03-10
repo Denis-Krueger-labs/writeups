@@ -1,4 +1,4 @@
-# WingData — Technical Report
+# WingData - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
