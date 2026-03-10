@@ -1,4 +1,4 @@
-# Eighteen — Technical Report
+# Eighteen - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` (Community rating: Medium/Hard) \
