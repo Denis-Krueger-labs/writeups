@@ -1,4 +1,4 @@
-# All in One — Technical Report
+# All in One - Technical Report
 
 > **Platform:** TryHackMe \
 > **Difficulty:** `Easy` \
