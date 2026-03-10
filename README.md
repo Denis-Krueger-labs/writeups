@@ -1,4 +1,4 @@
-# TryHackMe Technical Writeups
+# Technical Writeups
 
 This repository contains structured technical documentation of selected TryHackMe rooms.
 
