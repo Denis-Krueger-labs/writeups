@@ -1,4 +1,4 @@
-# Bashed — Technical Report
+# Bashed - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
