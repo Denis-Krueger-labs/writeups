@@ -1,4 +1,4 @@
-# Rabbit Store — Technical Report
+# Rabbit Store - Technical Report
 
 > **Platform:** TryHackMe \
 > **Difficulty:** `Medium` \
