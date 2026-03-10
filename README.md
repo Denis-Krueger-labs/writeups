@@ -19,26 +19,26 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 |-----|----------|----|----|------|
 | [CCTV](./easy/cctv/) | HTB | Linux | SQLi (CVE-2024-51428), motionEye command injection, HMAC bypass, sh/bash pitfalls | 2026-03-08 |
 | [Facts](./easy/facts/) | HTB | Linux | Mass assignment CVE-2025-2304, S3 credential abuse, sudo facter exploitation | 2026-03-08 |
-| [WingData](./easy/wingdata/) | HTB | Linux | Wing FTP unauthenticated RCE (CVE-2025-47812), tarfile symlink CVE-2025-4517 | 2026-03-08 |
-| [Eighteen](./easy/eighteen/) | HTB | Windows DC | MSSQL impersonation, BadSuccessor CVE-2025-53779, dMSA abuse, Kerberos tunneling | 2026-03-08 |
-| [Conversor](./easy/conversor/) | HTB | TBD | TBD | TBD |
-| [Bashed](./easy/bashed/) | HTB | Linux | TBD | TBD |
-| [Shocker](./easy/shocker/) | HTB | Linux | TBD | TBD |
-| [All In One](./easy/all-in-one/) | THM | Linux | TBD | TBD |
+| [WingData](./easy/wingdata/) | HTB | Linux | Wing FTP unauthenticated RCE (CVE-2025-47812), tarfile symlink CVE-2025-4517 | 2026-03-09 |
+| [Eighteen](./easy/eighteen/) | HTB | Windows DC | MSSQL impersonation, BadSuccessor CVE-2025-53779, dMSA abuse, Kerberos tunneling | 2026-03-10 |
+| [Conversor](./easy/conversor/) | HTB | Linux | Source code disclosure, path traversal file upload, cronjob hijack, sudo needrestart | 2026-03-08 |
+| [Bashed](./easy/bashed/) | HTB | Linux | Exposed phpbash webshell, sudo misconfiguration, cronjob hijack | 2026-03-07 |
+| [Shocker](./easy/shocker/) | HTB | Linux | ShellShock CVE-2014-6271 (CGI), sudo perl GTFOBins | 2026-03-07 |
+| [All In One](./easy/all-in-one/) | THM | Linux | LFI (mail-masta plugin), credential discovery, sudo socat | 2026-02-20 |
 
 ### Medium
 
 | Box | Platform | OS | Key Techniques | Date |
 |-----|----------|----|----|------|
-| [Cronos](./medium/cronos/) | HTB | Linux | TBD | TBD |
-| [Rabbit Store](./medium/rabbit-store/) | THM | TBD | TBD | TBD |
-| [CTF Collection Vol.2](./medium/ctf-collection-vol-2/) | THM | CTF | TBD | TBD |
+| [Cronos](./medium/cronos/) | HTB | Linux | DNS zone transfer, SQLi auth bypass, command injection, cronjob hijack | 2026-03-07 |
+| [Rabbit Store](./medium/rabbit-store/) | THM | Linux | Business logic flaw, SSTI (Jinja2), RabbitMQ Erlang cookie abuse | 2026-02-22 |
+| [CTF Collection Vol.2](./medium/ctf-collection-vol-2/) | THM | Web Challenges | Multi-layer encoding, cookie tampering, time-based SQLi, HTTP method abuse | Learning exercise |
 
 ### Hard
 
 | Box | Platform | OS | Key Techniques | Date |
 |-----|----------|----|----|------|
-| [Rabbit Hole](./hard/rabbit-hole/) | THM | TBD | TBD | TBD |
+| [Rabbit Hole](./hard/rabbit-hole/) | THM | Linux | Second-order SQLi, information_schema.processlist credential interception | 2026-03-09 |
 
 ---
 
@@ -69,20 +69,43 @@ See [METHODOLOGY.md](./METHODOLOGY.md) for the full assessment framework.
 
 ## Key Lessons Learned (So Far)
 
-- **Motion uses `/bin/sh` not `/bin/bash`** — reverse shell redirect operators matter (CCTV)
-- **Wrong VPN network breaks everything** — Starting Point ≠ Labs VPN (Facts)
+### Technical Insights
+- **Motion uses `/bin/sh` not `/bin/bash`** — reverse shell redirect operators matter; `>&` fails in sh (CCTV)
+- **Wrong VPN network breaks everything** — Starting Point ≠ Labs VPN, always verify before troubleshooting (Facts)
 - **Read the exploit source code** — parameter names matter; `password[role]` not `user[role]` (Facts)
 - **HMAC keys can be hashes themselves** — don't always need plaintext passwords (CCTV)
 - **`--custom-dir` bypasses env var restrictions** — blocking `FACTERLIB` doesn't help when CLI flags exist (Facts)
 - **Port 88 filtering requires creative tunneling** — chisel + socat for Kerberos over SSH (Eighteen)
 - **BadSuccessor is absurdly powerful** — CreateChild on any OU = domain admin on WS2025 (Eighteen)
+- **Vhost enum isn't always the answer** — sometimes it's just in the page source (WingData)
+- **Static salts are almost as bad as no salts** — "WingFTP" for every user means standard wordlist attacks work perfectly (WingData)
+- **`filter="data"` is not sufficient** — CVE-2025-4517 shows Python's tarfile filter doesn't protect against symlink+hardlink chaining (WingData)
+- **PBKDF2 at 600k iterations defeats GPU cracking** — hashcat was impractical, custom CPU-based Python script was the correct tool (Eighteen)
+
+### Enumeration & Methodology
+- **Gobuster extensions matter** — using `-x sh,cgi,pl` finds scripts that default scans miss (Shocker)
+- **Port 53 is an attack surface** — DNS zone transfer hands you the entire subdomain structure instantly (Cronos)
+- **Source code disclosure is critical** — entire attack chains can start with downloading exposed archives (Conversor)
+- **Second-order SQLi requires patience** — injection fires at query time, not insert time (Rabbit Hole)
+- **Double quotes matter** — single-quoted injection sanitized, `/"` prefix bypassed it (Rabbit Hole)
+- **`information_schema.processlist` is a real attack surface** — overprivileged DB users expose live queries including credentials (Rabbit Hole)
+
+### Privilege Escalation Patterns
+- **Cronjob hijacking appears EVERYWHERE** — Bashed, Cronos, Conversor all used this; always check `/etc/crontab` and writable script directories
+- **GTFOBins for sudo privesc** — sudo + unusual binary = check GTFOBins immediately (Shocker, All-in-One, Conversor)
+- **File ownership reveals who runs scripts** — `test.txt` owned by root despite script owned by scriptmanager = root runs it (Bashed)
+
+### Rabbit Holes & Mindset
+- **The box name is the hint** — "Rabbit Hole" literally told us to avoid over-engineering (Rabbit Hole)
+- **Don't stop at the first working vector** — exploring alternatives after solving teaches the most
+- **Difficulty ratings don't always match reality** — "Easy" boxes can require MSSQL chains, custom hash cracking, and 2025 CVEs (Eighteen)
 
 ---
 
 ## Stats
 
-- **HTB:** Premium member, 4+ boxes solved (Easy machines, preparing for Medium)
-- **THM:** Top 1%, Gold League #1 (1,069 points), 211+ rooms completed
+- **HTB:** Premium member, 9 boxes solved (7 Easy, 1 Medium, preparing for more Medium/Hard)
+- **THM:** Top 1%, Gold League #1 (1,069 points), 211+ rooms completed (including 3 documented challenge boxes)
 - **Current Goal:** CWES certification → CWEE → CPTS path
 - **Training Focus:** Red teaming, privilege escalation, Active Directory attacks
 
@@ -98,6 +121,8 @@ All activities documented in this repository were conducted exclusively within a
 
 - **HTB Profile:** [0N1S3C2](https://app.hackthebox.com/users/XXXXX)
 - **THM Profile:** [0N1S3C](https://tryhackme.com/p/0N1S3C)
+- **Location:** Würzburg, Germany
+- **University:** THWS Würzburg (Bachelor of Information Security)
 
 ---
 
