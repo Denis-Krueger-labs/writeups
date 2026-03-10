@@ -1,4 +1,4 @@
-# Shocker — Technical Report
+# Shocker - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
