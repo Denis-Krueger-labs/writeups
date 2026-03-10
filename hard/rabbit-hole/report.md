@@ -2,7 +2,7 @@
 # Rabbit Hole — Technical Report
 
 > **Platform:** TryHackMe \
-> **Difficulty:** `Easy` \
+> **Difficulty:** `Hard` \
 > **Date:** 2026-03-09 \
 > **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only
