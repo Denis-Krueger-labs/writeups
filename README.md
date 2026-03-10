@@ -17,14 +17,14 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 
 | Box | Platform | OS | Key Techniques | Date |
 |-----|----------|----|----|------|
-| [CCTV](./easy/cctv/report.md) | HTB | Linux | SQLi (CVE-2024-51428), motionEye command injection, HMAC bypass, sh/bash pitfalls | 2026-03-08 |
-| [Facts](./easy/facts/report.md) | HTB | Linux | Mass assignment CVE-2025-2304, S3 credential abuse, sudo facter exploitation | 2026-03-08 |
-| [WingData](./easy/wingdata/report.md) | HTB | Linux | Wing FTP unauthenticated RCE (CVE-2025-47812), tarfile symlink CVE-2025-4517 | 2026-03-09 |
-| [Eighteen](./easy/eighteen/report.md) | HTB | Windows DC | MSSQL impersonation, BadSuccessor CVE-2025-53779, dMSA abuse, Kerberos tunneling | 2026-03-10 |
-| [Conversor](./easy/conversor/report.md) | HTB | Linux | Source code disclosure, path traversal file upload, cronjob hijack, sudo needrestart | 2026-03-08 |
-| [Bashed](./easy/bashed/report.md) | HTB | Linux | Exposed phpbash webshell, sudo misconfiguration, cronjob hijack | 2026-03-07 |
-| [Shocker](./easy/shocker/report.md) | HTB | Linux | ShellShock CVE-2014-6271 (CGI), sudo perl GTFOBins | 2026-03-07 |
-| [All In One](./easy/all-in-one/report.md) | THM | Linux | LFI (mail-masta plugin), credential discovery, sudo socat | 2026-02-20 |
+| [CCTV](easy/CCTV/report.md) | HTB | Linux | SQLi (CVE-2024-51428), motionEye command injection, HMAC bypass, sh/bash pitfalls | 2026-03-08 |
+| [Facts](easy/facts/report.md) | HTB | Linux | Mass assignment CVE-2025-2304, S3 credential abuse, sudo facter exploitation | 2026-03-08 |
+| [WingData](easy/wingdata/report.md) | HTB | Linux | Wing FTP unauthenticated RCE (CVE-2025-47812), tarfile symlink CVE-2025-4517 | 2026-03-09 |
+| [Eighteen](easy/eighteen/report.md) | HTB | Windows DC | MSSQL impersonation, BadSuccessor CVE-2025-53779, dMSA abuse, Kerberos tunneling | 2026-03-10 |
+| [Conversor](easy/conversor/report.md) | HTB | Linux | Source code disclosure, path traversal file upload, cronjob hijack, sudo needrestart | 2026-03-08 |
+| [Bashed](easy/bashed/report.md) | HTB | Linux | Exposed phpbash webshell, sudo misconfiguration, cronjob hijack | 2026-03-07 |
+| [Shocker](easy/shocker/report.md) | HTB | Linux | ShellShock CVE-2014-6271 (CGI), sudo perl GTFOBins | 2026-03-07 |
+| [All In One](easy/all-in-one/report.md) | THM | Linux | LFI (mail-masta plugin), credential discovery, sudo socat | 2026-02-20 |
 
 ### Medium
 
