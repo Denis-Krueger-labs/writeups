@@ -1,4 +1,4 @@
-# Conversor — Technical Report
+# Conversor - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
