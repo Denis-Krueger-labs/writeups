@@ -1,4 +1,4 @@
-# CCTV — Technical Report
+# CCTV - Technical Report
 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
