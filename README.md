@@ -121,7 +121,7 @@ All activities documented in this repository were conducted exclusively within a
 
 ## Contact
 
-- **HTB Profile:** [0N1S3C2](https://app.hackthebox.com/users/XXXXX)
+- **HTB Profile:** [0N1S3C2](https://app.hackthebox.com/users/3188353)
 - **THM Profile:** [0N1S3C](https://tryhackme.com/p/0N1S3C)
 - **Location:** Würzburg, Germany
 - **University:** THWS Würzburg (Bachelor of Information Security)
