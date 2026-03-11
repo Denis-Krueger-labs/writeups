@@ -3,7 +3,7 @@
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
 > **Date:** 2026-03-08 \
-> **Author:** 0N1S3C2 \
+> **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only
 
 ---
