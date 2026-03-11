@@ -34,7 +34,7 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 | [Rabbit Store](medium/Rabbit%20Store/report.md) | THM | Linux | Business logic flaw, SSTI (Jinja2), RabbitMQ Erlang cookie abuse | 2026-02-22 |
 | [CTF Collection Vol.2](medium/ctf-collection-vol-2/report.md) | THM | Web Challenges | Multi-layer encoding, cookie tampering, time-based SQLi, HTTP method abuse | Learning exercise |
 | [Hammer](medium/Hammer/report.md) | THM | Linux | Rate limit bypass (X-Forwarded-For), JWT kid exploitation, session-specific code brute force | 2026-03-11 |) | THM | Linux | Rate limit bypass (X-Forwarded-For), JWT kid exploitation, session-specific code brute force | 2026-03-11 |
-| [Pterodactyl](./medium/pterodactyl/report.md) | HTB | Linux | CVE-2025-49132 + PEAR RCE, CVE-2025-6018/6019 PAM/udisks chain | 2026-03-12 |
+| [Pterodactyl](./medium/Pterodactyl/report.md) | HTB | Linux | CVE-2025-49132 + PEAR RCE, CVE-2025-6018/6019 PAM/udisks chain | 2026-03-12 |
 
 ### Hard
 
