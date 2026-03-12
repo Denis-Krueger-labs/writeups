@@ -35,7 +35,7 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 | [CTF Collection Vol.2](medium/ctf-collection-vol-2/report.md) | THM | Web Challenges | Multi-layer encoding, cookie tampering, time-based SQLi, HTTP method abuse | Learning exercise |
 | [Hammer](medium/Hammer/report.md) | THM | Linux | Rate limit bypass (X-Forwarded-For), JWT kid exploitation, session-specific code brute force | 2026-03-11 |) | THM | Linux | Rate limit bypass (X-Forwarded-For), JWT kid exploitation, session-specific code brute force | 2026-03-11 |
 | [Pterodactyl](./medium/Pterodactyl/report.md) | HTB | Linux | CVE-2025-49132 + PEAR RCE, CVE-2025-6018/6019 PAM/udisks chain | 2026-03-12 |
-
+| [Jarvis](./medium/Jarvis/report.md) | HTB | Linux | SQLi → phpMyAdmin CVE-2018-12613 LFI → Command injection bypass → SUID systemctl | 2026-03-12 |
 ### Hard
 
 | Box | Platform | OS | Key Techniques | Date |
@@ -129,5 +129,6 @@ All activities documented in this repository were conducted exclusively within a
 ---
 
 *"Always verify the VPN network before troubleshooting connectivity for 30 minutes." — Lessons learned the hard way*
+
 # Updated Thu Mar 12 19:52:25 CET 2026
 
