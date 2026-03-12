@@ -1,0 +1,130 @@
+---
+layout: default
+---
+
+<article class="writeup-page">
+
+  <!-- Writeup Header -->
+  <header class="writeup-header">
+    <div class="writeup-header-inner">
+
+      <div class="writeup-breadcrumb">
+        <a href="{{ site.baseurl }}/">Home</a>
+        <span class="crumb-sep">›</span>
+        <a href="{{ site.baseurl }}/#writeups">Writeups</a>
+        <span class="crumb-sep">›</span>
+        <span>{{ page.title }}</span>
+      </div>
+
+      <div class="writeup-hero-meta">
+        <div class="writeup-title-block">
+          <div class="writeup-badges">
+            <span class="badge difficulty-badge {{ page.difficulty }}">{{ page.difficulty | capitalize }}</span>
+            <span class="badge platform-badge {{ page.platform | downcase }}">{{ page.platform }}</span>
+            <span class="badge os-badge">{{ page.os }}</span>
+            {% if page.date %}<span class="badge date-badge">{{ page.date | date: "%Y-%m-%d" }}</span>{% endif %}
+          </div>
+          <h1 class="writeup-title">{{ page.title }}</h1>
+          {% if page.description %}<p class="writeup-description">{{ page.description }}</p>{% endif %}
+        </div>
+
+        {% if page.cve %}
+        <div class="writeup-cves">
+          <span class="cves-label">CVEs:</span>
+          {% for cve in page.cve %}
+          <span class="cve-tag">{{ cve }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if page.techniques %}
+        <div class="writeup-techniques">
+          {% for technique in page.techniques %}
+          <span class="technique-tag">{{ technique }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="writeup-header-deco" aria-hidden="true">
+        {% include moth-small.svg %}
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Rose divider -->
+  <div class="writeup-divider" aria-hidden="true">
+    <span class="divider-line"></span>
+    <span class="divider-rose">🌹</span>
+    <span class="divider-line"></span>
+  </div>
+
+  <!-- Content -->
+  <div class="writeup-content-wrapper">
+    <aside class="writeup-toc" id="tocAside">
+      <div class="toc-inner">
+        <div class="toc-header">
+          <span class="toc-icon">◆</span>
+          <span>Contents</span>
+        </div>
+        <nav id="tocNav" aria-label="Table of contents"></nav>
+      </div>
+    </aside>
+
+    <div class="writeup-content markdown-body" id="writeupContent">
+      {{ content }}
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="writeup-footer-nav">
+    <a href="{{ site.baseurl }}/#writeups" class="btn btn-ghost">← Back to Writeups</a>
+  </div>
+
+</article>
+
+<script>
+// Auto-generate table of contents from headings
+document.addEventListener('DOMContentLoaded', () => {
+  const content = document.getElementById('writeupContent');
+  const nav = document.getElementById('tocNav');
+  if (!content || !nav) return;
+
+  const headings = content.querySelectorAll('h2, h3');
+  if (headings.length < 2) {
+    document.getElementById('tocAside').style.display = 'none';
+    return;
+  }
+
+  const ul = document.createElement('ul');
+  headings.forEach((h, i) => {
+    if (!h.id) h.id = 'section-' + i;
+    const li = document.createElement('li');
+    li.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    li.appendChild(a);
+    ul.appendChild(li);
+  });
+  nav.appendChild(ul);
+
+  // Highlight active section on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        const activeLink = nav.querySelector(`a[href="#${entry.target.id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  headings.forEach(h => observer.observe(h));
+});
+</script>

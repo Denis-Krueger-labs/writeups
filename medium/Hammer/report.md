@@ -1,3 +1,13 @@
+---
+layout: writeup
+title: "Hammer"
+platform: THM
+os: Linux
+date: 2026-03-11
+techniques: ["rate limit bypass", "JWT kid exploitation", "OTP brute force", "X-Forwarded-For header abuse"]
+description: "X-Forwarded-For rate limit bypass for OTP brute force, JWT kid header injection for admin escalation."
+---
+
 # Hammer — Technical Report
 
 > **Platform:** TryHackMe \

@@ -1,3 +1,13 @@
+---
+layout: writeup
+title: "Rabbit Store"
+platform: THM
+os: Linux
+date: 2026-02-22
+techniques: ["business logic flaw", "SSTI Jinja2", "RabbitMQ Erlang cookie abuse"]
+description: "Business logic subscription bypass, Jinja2 SSTI for RCE, RabbitMQ Erlang cookie for privilege escalation."
+---
+
 # Rabbit Store - Technical Report
 
 > **Platform:** TryHackMe \

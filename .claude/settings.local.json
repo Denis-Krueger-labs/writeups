@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash --version)",
+      "Bash(/c/Users/dkrue/OneDrive/Desktop/writeups/.gitignore:*)"
+    ]
+  }
+}

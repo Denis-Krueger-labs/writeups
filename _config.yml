@@ -1,0 +1,71 @@
+title: "0N1S3C2 — Cybersecurity Writeups"
+description: "HTB & TryHackMe penetration testing reports. Red team methodology, privilege escalation, Active Directory attacks."
+url: "https://Denis-Krueger-labs.github.io"
+baseurl: "/writeups"
+
+author:
+  name: "Denis"
+  handle: "0N1S3C2"
+  htb: "https://app.hackthebox.com/users/3188353"
+  thm: "https://tryhackme.com/p/0N1S3C"
+  github: "https://github.com/Denis-Krueger-labs"
+  university: "THWS Würzburg"
+
+permalink: pretty
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: "highlight"
+    block:
+      line_numbers: false
+
+highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Jekyll processes all dirs not starting with _ or .
+# We explicitly include these so Jekyll renders report.md files
+include:
+  - easy
+  - medium
+  - hard
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - mythology.md
+  - template/
+  - "easy/all-in-one/scans/"
+  - "medium/Rabbit Store/notes.md"
+  - "medium/ctf-collection-vol-2/notes.md"
+  - vendor/
+  - .bundle/
+  - node_modules/
+  - "**/.DS_Store"
+
+# Default layouts + metadata per directory
+defaults:
+  - scope:
+      path: "easy"
+    values:
+      layout: writeup
+      difficulty: easy
+  - scope:
+      path: "medium"
+    values:
+      layout: writeup
+      difficulty: medium
+  - scope:
+      path: "hard"
+    values:
+      layout: writeup
+      difficulty: hard
+
+sass:
+  sass_dir: _sass
+  style: compressed

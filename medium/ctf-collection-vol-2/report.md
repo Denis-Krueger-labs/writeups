@@ -1,3 +1,12 @@
+---
+layout: writeup
+title: "CTF Collection Vol.2"
+platform: THM
+os: Web
+techniques: ["multi-layer encoding", "cookie tampering", "time-based SQLi", "HTTP method abuse"]
+description: "Multi-challenge CTF covering encoding layers, cookie manipulation, blind SQLi, and HTTP verb tampering."
+---
+
 # Reflection - Lessons Learned from CTF Collection Vol.2
 
 CTF Collection Vol.2 was an extremely valuable learning experience, but it presented unique challenges when considering it as a structured portfolio write-up.

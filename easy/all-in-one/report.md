@@ -1,3 +1,13 @@
+---
+layout: writeup
+title: "All In One"
+platform: THM
+os: Linux
+date: 2026-02-20
+techniques: ["LFI", "credential discovery", "sudo socat", "WordPress exploitation"]
+description: "WordPress mail-masta LFI for config credentials, SSH login as elyana, sudo socat GTFOBins for root."
+---
+
 # All in One - Technical Report
 
 > **Platform:** TryHackMe \

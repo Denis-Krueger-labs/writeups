@@ -1,3 +1,14 @@
+---
+layout: writeup
+title: "Shocker"
+platform: HTB
+os: Linux
+date: 2026-03-07
+techniques: ["ShellShock", "CGI exploitation", "sudo perl GTFOBins"]
+cve: ["CVE-2014-6271"]
+description: "Gobuster discovers /cgi-bin/user.sh, ShellShock payload for RCE, sudo perl GTFOBins for root."
+---
+
 # Shocker - Technical Report
 
 > **Platform:** HackTheBox \

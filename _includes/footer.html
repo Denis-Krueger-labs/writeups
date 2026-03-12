@@ -1,0 +1,34 @@
+<footer class="site-footer">
+  <div class="footer-deco" aria-hidden="true">
+    <span class="footer-line"></span>
+    {% include moth-tiny.svg %}
+    <span class="footer-rose">🌹</span>
+    {% include moth-tiny.svg %}
+    <span class="footer-line"></span>
+  </div>
+
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-handle">0N1S3C2</div>
+      <p class="footer-tagline">Red team methodology • Gothic aesthetic • Perpetual student</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Profiles</h4>
+      <ul class="footer-links" role="list">
+        <li><a href="{{ site.author.htb }}" target="_blank" rel="noopener" class="footer-link htb">HackTheBox</a></li>
+        <li><a href="{{ site.author.thm }}" target="_blank" rel="noopener" class="footer-link thm">TryHackMe</a></li>
+        <li><a href="{{ site.author.github }}" target="_blank" rel="noopener" class="footer-link gh">GitHub</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Disclaimer</h4>
+      <p class="footer-disclaimer">All activities documented here were conducted exclusively within authorized lab environments. No real-world systems were accessed.</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© {{ 'now' | date: "%Y" }} Denis (0N1S3C2) • THWS Würzburg</span>
+  </div>
+</footer>

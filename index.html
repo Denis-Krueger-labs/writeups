@@ -1,0 +1,172 @@
+---
+layout: default
+title: Home
+description: "HTB & THM penetration testing writeups by 0N1S3C2 — red team methodology, privilege escalation, Active Directory attacks."
+---
+
+<!-- ═══ HERO ════════════════════════════════════════════════════════ -->
+<section class="hero">
+
+  <div class="hero-moth" aria-hidden="true">
+    {% include moth.svg %}
+  </div>
+
+  <div class="hero-content reveal">
+    <div class="hero-handle">0N1S3C2</div>
+    <h1 class="hero-title">Cybersecurity<br>Writeups</h1>
+    <p class="hero-subtitle">HackTheBox &amp; TryHackMe — Red Team Methodology</p>
+
+    <div class="hero-stats">
+      <span class="stat"><span class="stat-num">{% assign writeup_pages = site.pages | where: 'layout', 'writeup' %}{{ writeup_pages | size }}</span> writeups</span>
+      <span class="stat-divider">◆</span>
+      <span class="stat">THM <span class="stat-num">Top 1%</span></span>
+      <span class="stat-divider">◆</span>
+      <span class="stat">HTB <span class="stat-num">Premium</span></span>
+      <span class="stat-divider">◆</span>
+      <span class="stat">CWES <span class="stat-num">→</span> CPTS</span>
+    </div>
+
+    <div class="hero-actions">
+      <a href="#writeups" class="btn btn-primary">View Writeups</a>
+      <a href="{{ site.baseurl }}/about" class="btn btn-ghost">About Me</a>
+    </div>
+  </div>
+
+  <div class="hero-rose" aria-hidden="true">
+    {% include rose.svg %}
+  </div>
+
+</section>
+
+<!-- ═══ DIVIDER ══════════════════════════════════════════════════════ -->
+<div class="section-divider" aria-hidden="true">
+  <span class="divider-line"></span>
+  <span class="divider-rose">🌹</span>
+  <span class="divider-line"></span>
+</div>
+
+<!-- ═══ WRITEUPS ═════════════════════════════════════════════════════ -->
+<section class="writeups-section" id="writeups">
+
+  <div class="section-header reveal">
+    <h2>Penetration Test Reports</h2>
+
+    <div class="filter-tabs" role="tablist" aria-label="Filter by difficulty">
+      {% assign all_wu   = site.pages | where: 'layout', 'writeup' %}
+      {% assign easy_wu  = all_wu | where: 'difficulty', 'easy' %}
+      {% assign med_wu   = all_wu | where: 'difficulty', 'medium' %}
+      {% assign hard_wu  = all_wu | where: 'difficulty', 'hard' %}
+
+      <button class="tab active" role="tab" data-filter="all"
+              aria-selected="true">All <span class="count">{{ all_wu | size }}</span></button>
+      <button class="tab" role="tab" data-filter="easy"
+              aria-selected="false">Easy <span class="count">{{ easy_wu | size }}</span></button>
+      <button class="tab" role="tab" data-filter="medium"
+              aria-selected="false">Medium <span class="count">{{ med_wu | size }}</span></button>
+      <button class="tab" role="tab" data-filter="hard"
+              aria-selected="false">Hard <span class="count">{{ hard_wu | size }}</span></button>
+    </div>
+  </div>
+
+  <div class="writeup-grid" id="writeupGrid">
+    {% assign sorted = site.pages | where: 'layout', 'writeup' | sort: 'date' | reverse %}
+    {% for wu in sorted %}
+    <a href="{{ wu.url | prepend: site.baseurl }}" class="writeup-card" data-difficulty="{{ wu.difficulty }}">
+      <div class="card-difficulty-bar"></div>
+      <div class="card-body">
+
+        <div class="card-header-row">
+          <h3 class="card-title">{{ wu.title }}</h3>
+          <span class="badge platform-badge {{ wu.platform | downcase }}">{{ wu.platform }}</span>
+        </div>
+
+        <div class="card-meta">
+          <span class="badge difficulty-badge {{ wu.difficulty }}">{{ wu.difficulty | capitalize }}</span>
+          {% if wu.os %}<span class="badge os-badge">{{ wu.os }}</span>{% endif %}
+          {% if wu.date %}<span class="badge date-badge">{{ wu.date | date: "%Y-%m-%d" }}</span>{% endif %}
+        </div>
+
+        {% if wu.cve and wu.cve.size > 0 %}
+        <div class="card-cves">
+          {% for cve in wu.cve %}
+          <span class="cve-tag">{{ cve }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if wu.techniques and wu.techniques.size > 0 %}
+        <div class="card-techniques">
+          {% for tech in wu.techniques limit:3 %}
+          <span class="technique-tag">{{ tech }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="card-footer">
+          <span class="read-link">Read Report <span class="arrow">→</span></span>
+        </div>
+
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+</section>
+
+<!-- ═══ ABOUT STRIP ══════════════════════════════════════════════════ -->
+<section class="about-strip reveal">
+  <div class="about-strip-inner">
+    <div class="about-strip-text">
+      <h2>About This Site</h2>
+      <p>Technical documentation of HackTheBox and TryHackMe machines solved during my Information Security degree and red team certification prep at THWS Würzburg. Every report follows a structured pentest methodology — enumeration, exploitation, privilege escalation, and defensive considerations.</p>
+      <a href="{{ site.baseurl }}/about" class="btn btn-ghost">Learn More →</a>
+    </div>
+    <div class="about-strip-moth" aria-hidden="true">
+      {% include moth-small.svg %}
+    </div>
+  </div>
+</section>
+
+<style>
+/* About strip (landing-page-only component) */
+.about-strip {
+  background: linear-gradient(135deg, rgba(26,10,46,0.6), rgba(13,13,26,0.8));
+  border-top: 1px solid rgba(168,85,247,0.15);
+  border-bottom: 1px solid rgba(168,85,247,0.15);
+  margin: 2rem 0;
+  padding: 4rem 1.5rem;
+}
+.about-strip-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+}
+.about-strip-text {
+  max-width: 600px;
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #f0e6ff, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  p {
+    color: #b8a0d0;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    font-size: 0.94rem;
+  }
+}
+.about-strip-moth {
+  opacity: 0.5;
+  animation: mothFloat 7s ease-in-out infinite;
+  .moth-small { width: 140px; height: auto; }
+  @media (max-width: 640px) { display: none; }
+}
+</style>

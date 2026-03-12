@@ -1,3 +1,14 @@
+---
+layout: writeup
+title: "WingData"
+platform: HTB
+os: Linux
+date: 2026-03-09
+techniques: ["unauthenticated RCE", "NULL byte injection", "hash cracking", "tarfile filter bypass"]
+cve: ["CVE-2025-47812", "CVE-2025-4517"]
+description: "Wing FTP NULL byte injection RCE, SHA256+salt hash crack for lateral movement, Python tarfile symlink bypass to overwrite sudoers."
+---
+
 # WingData - Technical Report
 
 > **Platform:** HackTheBox \

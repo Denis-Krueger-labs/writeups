@@ -1,0 +1,162 @@
+// ═══════════════════════════════════════════
+//  ANIMATIONS
+// ═══════════════════════════════════════════
+
+// ── Moth floating (hero) ──────────────────
+@keyframes mothFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%       { transform: translateY(-12px) rotate(-1.5deg); }
+  50%       { transform: translateY(-6px) rotate(0.5deg); }
+  75%       { transform: translateY(-16px) rotate(1deg); }
+}
+
+// ── Moth hover (nav logo) ─────────────────
+@keyframes mothHover {
+  0%   { transform: scale(1) rotate(0deg); }
+  30%  { transform: scale(1.2) rotate(-5deg); }
+  60%  { transform: scale(1.15) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+// ── Rose floating ─────────────────────────
+@keyframes roseFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%       { transform: translateY(-10px) rotate(2deg); }
+}
+
+// ── Rose spin (divider) ───────────────────
+@keyframes roseSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+// ── Petal fall ────────────────────────────
+@keyframes petalFall {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% {
+    transform: translateY(100vh) translateX(var(--drift)) rotate(var(--spin));
+    opacity: 0;
+  }
+}
+
+// ── Petal shape ───────────────────────────
+.petal {
+  position: absolute;
+  top: -20px;
+  border-radius: 50% 0 50% 0;
+  animation: petalFall var(--duration) var(--delay) ease-in infinite;
+  pointer-events: none;
+
+  &.petal-1  { --spin: 180deg; --drift: 40px;  border-radius: 50% 0 50% 0; }
+  &.petal-2  { --spin: -120deg; --drift: -30px; border-radius: 0 50% 0 50%; }
+  &.petal-3  { --spin: 240deg;  --drift: 60px;  border-radius: 50% 50% 0 0; }
+  &.petal-4  { --spin: -200deg; --drift: -50px; border-radius: 0 0 50% 50%; }
+}
+
+// ── Gradient shift (hero bg) ──────────────
+@keyframes gradShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+// ── Glow pulse ────────────────────────────
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(147,51,234,0.4)) drop-shadow(0 0 40px rgba(147,51,234,0.15)); }
+  50%       { filter: drop-shadow(0 0 30px rgba(147,51,234,0.65)) drop-shadow(0 0 60px rgba(147,51,234,0.3)) drop-shadow(0 0 90px rgba(217,70,239,0.15)); }
+}
+
+// ── Hero moth glow pulse ──────────────────
+.hero-moth {
+  animation: mothFloat 6s ease-in-out infinite, glowPulse 4s ease-in-out infinite;
+}
+
+// ── Card entrance ─────────────────────────
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.writeup-card {
+  animation: cardEnter 0.4s ease forwards;
+}
+
+// Stagger card entrance
+@for $i from 1 through 20 {
+  .writeup-card:nth-child(#{$i}) {
+    animation-delay: #{($i - 1) * 0.06}s;
+    opacity: 0;
+  }
+}
+
+// ── TOC link underline ────────────────────
+#tocNav a {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: $purple-500;
+    transition: width $transition-fast;
+  }
+  &:hover::after, &.active::after { width: 100%; }
+}
+
+// ── Moth wing flutter (hover on moth svgs) ─
+.moth-svg {
+  transition: filter $transition-slow;
+  &:hover {
+    filter: drop-shadow(0 0 12px rgba(147,51,234,0.7));
+  }
+}
+
+// ── Page fade-in ──────────────────────────
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.site-main {
+  animation: pageFade 0.5s ease forwards;
+}
+
+// ── Typewriter cursor (handle) ────────────
+.hero-handle::after {
+  content: '█';
+  display: inline-block;
+  animation: blink 1.2s step-end infinite;
+  margin-left: 2px;
+  color: $accent-magenta;
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+// ── Scroll-reveal class (applied via JS) ──
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

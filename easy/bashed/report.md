@@ -1,3 +1,13 @@
+---
+layout: writeup
+title: "Bashed"
+platform: HTB
+os: Linux
+date: 2026-03-07
+techniques: ["exposed webshell", "sudo misconfiguration", "cronjob hijack"]
+description: "Phpbash webshell exposed on web server, sudo scriptmanager, cronjob running root-owned writable script."
+---
+
 # Bashed - Technical Report
 
 > **Platform:** HackTheBox \

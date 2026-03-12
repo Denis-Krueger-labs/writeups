@@ -1,3 +1,13 @@
+---
+layout: writeup
+title: "Conversor"
+platform: HTB
+os: Linux
+date: 2026-03-08
+techniques: ["source code disclosure", "path traversal", "file upload", "cronjob hijack", "sudo needrestart"]
+description: "Archive disclosure reveals source, path traversal file upload into writable dir, cronjob hijack then sudo needrestart for root."
+---
+
 # Conversor - Technical Report
 
 > **Platform:** HackTheBox \

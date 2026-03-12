@@ -1,3 +1,14 @@
+---
+layout: writeup
+title: "Facts"
+platform: HTB
+os: Linux
+date: 2026-03-08
+techniques: ["mass assignment", "S3 credential abuse", "sudo facter", "SSH key cracking"]
+cve: ["CVE-2025-2304"]
+description: "Camaleon CMS mass assignment to admin, S3 bucket SSH key exfiltration, sudo facter --custom-dir for root."
+---
+
 # Facts - Technical Report
 
 > **Platform:** HackTheBox \

@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none" class="moth-svg moth-hero" aria-hidden="true" role="img">
+  <defs>
+    <radialGradient id="wg1" cx="40%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#9333ea" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#4a1c7a" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#0d0d1a" stop-opacity="0.7"/>
+    </radialGradient>
+    <radialGradient id="wg2" cx="60%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#9333ea" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#4a1c7a" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#0d0d1a" stop-opacity="0.7"/>
+    </radialGradient>
+    <radialGradient id="wg3" cx="35%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0.7"/>
+    </radialGradient>
+    <radialGradient id="wg4" cx="65%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0.7"/>
+    </radialGradient>
+    <filter id="mothGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="eyeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Upper left wing -->
+  <path d="M155 105 C135 88 105 68 68 62 C45 58 25 64 18 80 C12 95 22 113 48 122 C75 131 118 125 148 112 Z"
+    fill="url(#wg1)" stroke="#7c3aed" stroke-width="1" filter="url(#mothGlow)"/>
+  <!-- Upper right wing -->
+  <path d="M165 105 C185 88 215 68 252 62 C275 58 295 64 302 80 C308 95 298 113 272 122 C245 131 202 125 172 112 Z"
+    fill="url(#wg2)" stroke="#7c3aed" stroke-width="1" filter="url(#mothGlow)"/>
+
+  <!-- Lower left wing -->
+  <path d="M153 112 C132 120 100 135 72 152 C52 163 35 170 28 158 C21 146 36 128 62 116 C88 104 132 108 153 112 Z"
+    fill="url(#wg3)" stroke="#6d28d9" stroke-width="0.8" opacity="0.9"/>
+  <!-- Lower right wing -->
+  <path d="M167 112 C188 120 220 135 248 152 C268 163 285 170 292 158 C299 146 284 128 258 116 C232 104 188 108 167 112 Z"
+    fill="url(#wg4)" stroke="#6d28d9" stroke-width="0.8" opacity="0.9"/>
+
+  <!-- Wing veins — upper left -->
+  <path d="M155 106 C140 96 122 80 92 70" stroke="#a855f7" stroke-width="0.7" opacity="0.45"/>
+  <path d="M154 108 C138 100 118 87 85 80" stroke="#a855f7" stroke-width="0.6" opacity="0.4"/>
+  <path d="M153 110 C137 105 118 97 90 92" stroke="#a855f7" stroke-width="0.6" opacity="0.35"/>
+  <path d="M152 112 C138 110 120 106 98 104" stroke="#a855f7" stroke-width="0.5" opacity="0.3"/>
+  <!-- Wing veins — upper right (mirror) -->
+  <path d="M165 106 C180 96 198 80 228 70" stroke="#a855f7" stroke-width="0.7" opacity="0.45"/>
+  <path d="M166 108 C182 100 202 87 235 80" stroke="#a855f7" stroke-width="0.6" opacity="0.4"/>
+  <path d="M167 110 C183 105 202 97 230 92" stroke="#a855f7" stroke-width="0.6" opacity="0.35"/>
+  <path d="M168 112 C182 110 200 106 222 104" stroke="#a855f7" stroke-width="0.5" opacity="0.3"/>
+  <!-- Wing veins — lower left -->
+  <path d="M153 113 C140 122 118 132 92 142" stroke="#7c3aed" stroke-width="0.5" opacity="0.35"/>
+  <path d="M152 115 C138 126 115 137 88 148" stroke="#7c3aed" stroke-width="0.4" opacity="0.3"/>
+  <!-- Wing veins — lower right -->
+  <path d="M167 113 C180 122 202 132 228 142" stroke="#7c3aed" stroke-width="0.5" opacity="0.35"/>
+  <path d="M168 115 C182 126 205 137 232 148" stroke="#7c3aed" stroke-width="0.4" opacity="0.3"/>
+
+  <!-- Eye spots — upper wings -->
+  <g filter="url(#eyeGlow)">
+    <circle cx="82" cy="88" r="11" fill="#080810" stroke="#c084fc" stroke-width="1.5"/>
+    <circle cx="82" cy="88" r="6.5" fill="#110d1f" stroke="#a855f7" stroke-width="1.2"/>
+    <circle cx="82" cy="88" r="2.5" fill="#e9d5ff" opacity="0.9"/>
+    <circle cx="80" cy="86" r="1" fill="white" opacity="0.6"/>
+  </g>
+  <g filter="url(#eyeGlow)">
+    <circle cx="238" cy="88" r="11" fill="#080810" stroke="#c084fc" stroke-width="1.5"/>
+    <circle cx="238" cy="88" r="6.5" fill="#110d1f" stroke="#a855f7" stroke-width="1.2"/>
+    <circle cx="238" cy="88" r="2.5" fill="#e9d5ff" opacity="0.9"/>
+    <circle cx="236" cy="86" r="1" fill="white" opacity="0.6"/>
+  </g>
+
+  <!-- Wing edge markings -->
+  <path d="M62 70 C72 66 86 65 98 68" stroke="#d8b4fe" stroke-width="0.8" opacity="0.35" fill="none"/>
+  <path d="M258 70 C248 66 234 65 222 68" stroke="#d8b4fe" stroke-width="0.8" opacity="0.35" fill="none"/>
+  <path d="M32 100 C40 95 52 90 62 88" stroke="#d8b4fe" stroke-width="0.6" opacity="0.25" fill="none"/>
+  <path d="M288 100 C280 95 268 90 258 88" stroke="#d8b4fe" stroke-width="0.6" opacity="0.25" fill="none"/>
+  <!-- Subtail on lower wings -->
+  <path d="M52 155 C58 162 65 165 70 160" stroke="#9333ea" stroke-width="0.8" opacity="0.4" fill="none"/>
+  <path d="M268 155 C262 162 255 165 250 160" stroke="#9333ea" stroke-width="0.8" opacity="0.4" fill="none"/>
+
+  <!-- Body -->
+  <ellipse cx="160" cy="110" rx="5.5" ry="30" fill="#0d0d1a" stroke="#7c3aed" stroke-width="1.2"/>
+  <!-- Body segments -->
+  <line x1="155" y1="100" x2="165" y2="100" stroke="#6d28d9" stroke-width="0.6" opacity="0.6"/>
+  <line x1="155" y1="107" x2="165" y2="107" stroke="#6d28d9" stroke-width="0.6" opacity="0.6"/>
+  <line x1="155" y1="114" x2="165" y2="114" stroke="#6d28d9" stroke-width="0.5" opacity="0.5"/>
+  <line x1="155" y1="121" x2="165" y2="121" stroke="#6d28d9" stroke-width="0.5" opacity="0.5"/>
+  <line x1="156" y1="128" x2="164" y2="128" stroke="#6d28d9" stroke-width="0.4" opacity="0.4"/>
+  <!-- Thorax -->
+  <ellipse cx="160" cy="92" rx="6" ry="8" fill="#110d1f" stroke="#7c3aed" stroke-width="1"/>
+  <!-- Head -->
+  <circle cx="160" cy="80" r="5.5" fill="#110d1f" stroke="#9333ea" stroke-width="1"/>
+  <!-- Eyes (tiny) -->
+  <circle cx="157.5" cy="79" r="1.2" fill="#c084fc" opacity="0.9"/>
+  <circle cx="162.5" cy="79" r="1.2" fill="#c084fc" opacity="0.9"/>
+
+  <!-- Antennae — feathery/bipectinate -->
+  <!-- Left shaft -->
+  <path d="M157 75 C152 64 148 50 150 35" stroke="#9333ea" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <!-- Left branches -->
+  <path d="M156.5 73 C153 71 149 71 146 73" stroke="#7c3aed" stroke-width="0.7" fill="none" opacity="0.75"/>
+  <path d="M156 70 C152 67 148 66 145 67" stroke="#7c3aed" stroke-width="0.65" fill="none" opacity="0.7"/>
+  <path d="M155 66 C151 63 147 61 144 62" stroke="#7c3aed" stroke-width="0.6" fill="none" opacity="0.65"/>
+  <path d="M154 62 C150 58 146 56 143 56" stroke="#7c3aed" stroke-width="0.55" fill="none" opacity="0.6"/>
+  <path d="M153 57 C149 53 145 51 143 51" stroke="#7c3aed" stroke-width="0.5" fill="none" opacity="0.55"/>
+  <path d="M152 52 C148 48 145 45 143 45" stroke="#7c3aed" stroke-width="0.45" fill="none" opacity="0.5"/>
+  <path d="M151 47 C148 43 146 40 145 39" stroke="#7c3aed" stroke-width="0.4" fill="none" opacity="0.45"/>
+  <!-- Right shaft (mirror) -->
+  <path d="M163 75 C168 64 172 50 170 35" stroke="#9333ea" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <!-- Right branches -->
+  <path d="M163.5 73 C167 71 171 71 174 73" stroke="#7c3aed" stroke-width="0.7" fill="none" opacity="0.75"/>
+  <path d="M164 70 C168 67 172 66 175 67" stroke="#7c3aed" stroke-width="0.65" fill="none" opacity="0.7"/>
+  <path d="M165 66 C169 63 173 61 176 62" stroke="#7c3aed" stroke-width="0.6" fill="none" opacity="0.65"/>
+  <path d="M166 62 C170 58 174 56 177 56" stroke="#7c3aed" stroke-width="0.55" fill="none" opacity="0.6"/>
+  <path d="M167 57 C171 53 175 51 177 51" stroke="#7c3aed" stroke-width="0.5" fill="none" opacity="0.55"/>
+  <path d="M168 52 C172 48 175 45 177 45" stroke="#7c3aed" stroke-width="0.45" fill="none" opacity="0.5"/>
+  <path d="M169 47 C172 43 174 40 175 39" stroke="#7c3aed" stroke-width="0.4" fill="none" opacity="0.45"/>
+</svg>

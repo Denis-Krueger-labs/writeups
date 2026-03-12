@@ -1,3 +1,14 @@
+---
+layout: writeup
+title: "CCTV"
+platform: HTB
+os: Linux
+date: 2026-03-08
+techniques: ["SQLi", "command injection", "HMAC bypass", "port forwarding"]
+cve: ["CVE-2024-51428"]
+description: "ZoneMinder SQLi to SSH, then motionEye command injection via unsanitized image_file_name for root via Motion daemon."
+---
+
 # CCTV - Technical Report
 
 > **Platform:** HackTheBox \

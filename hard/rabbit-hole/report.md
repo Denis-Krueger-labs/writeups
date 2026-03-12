@@ -1,3 +1,13 @@
+---
+layout: writeup
+title: "Rabbit Hole"
+platform: THM
+os: Linux
+date: 2026-03-09
+techniques: ["second-order SQLi", "processlist credential interception", "double-quote injection bypass"]
+description: "Second-order SQLi via information_schema.processlist to intercept live credentials from overprivileged DB users."
+---
+
 
 # Rabbit Hole  - Technical Report
 

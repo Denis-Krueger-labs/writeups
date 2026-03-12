@@ -1,3 +1,14 @@
+---
+layout: writeup
+title: "Pterodactyl"
+platform: HTB
+os: Linux
+date: 2026-03-12
+techniques: ["PEAR RCE", "PAM module abuse", "udisks privesc"]
+cve: ["CVE-2025-49132", "CVE-2025-6018", "CVE-2025-6019"]
+description: "Pterodactyl Panel RCE via PEAR, CVE-2025-6018/6019 PAM and udisks privilege escalation chain."
+---
+
 # Pterodactyl — Technical Report
 
 > **Platform:** HackTheBox \

@@ -1,3 +1,14 @@
+---
+layout: writeup
+title: "Eighteen"
+platform: HTB
+os: "Windows DC"
+date: 2026-03-10
+techniques: ["MSSQL impersonation", "BadSuccessor", "dMSA abuse", "Kerberos tunneling", "Pass-the-Hash"]
+cve: ["CVE-2025-53779"]
+description: "MSSQL impersonation chain, PBKDF2 custom cracking, WinRM password spray, BadSuccessor dMSA to Domain Admin."
+---
+
 # Eighteen - Technical Report
 
 > **Platform:** HackTheBox \
