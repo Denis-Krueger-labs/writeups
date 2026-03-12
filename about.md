@@ -10,7 +10,7 @@ description: "Denis Krüger — Information Security student at THWS Würzburg, 
   <div class="about-header-inner">
     <div class="about-moth" aria-hidden="true">{% include moth.svg %}</div>
     <div class="about-intro">
-      <div class="about-handle">0N1S3C2</div>
+      <div class="about-handle">0N1S3C</div>
       <h1 class="about-name">Denis Krüger</h1>
       <p class="about-bio">Information Security student at THWS Würzburg, focused on offensive security and understanding how attack chains are constructed end-to-end. I value understanding <em>why</em> an exploit works — not just how to reproduce it.</p>
       <div class="about-links">
@@ -77,6 +77,9 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
   <a href="https://tryhackme.com/p/0N1S3C" target="_blank" rel="noopener">
     <img src="https://tryhackme-badges.s3.amazonaws.com/0N1S3C.png?v=3" alt="TryHackMe Badge" />
   </a>
+  
+  /
+  
   <a href="https://app.hackthebox.com/public/users/3188353" target="_blank" rel="noopener">
     <img src="https://www.hackthebox.eu/badge/image/3188353" alt="HackTheBox Badge" />
   </a>
