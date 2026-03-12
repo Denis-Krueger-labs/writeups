@@ -77,9 +77,6 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
   <a href="https://tryhackme.com/p/0N1S3C" target="_blank" rel="noopener">
     <img src="https://tryhackme-badges.s3.amazonaws.com/0N1S3C.png?v=3" alt="TryHackMe Badge" />
   </a>
-  
-  /
-  
   <a href="https://app.hackthebox.com/public/users/3188353" target="_blank" rel="noopener">
     <img src="https://www.hackthebox.eu/badge/image/3188353" alt="HackTheBox Badge" />
   </a>
