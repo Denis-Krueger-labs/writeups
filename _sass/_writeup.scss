@@ -1,18 +1,14 @@
-// ═══════════════════════════════════════════
-//  WRITEUP PAGE STYLES
-// ═══════════════════════════════════════════
+// WRITEUP PAGE STYLES - brutalist gothic
 
 .writeup-page {
   padding-top: $nav-height;
   min-height: 100vh;
 }
 
-// ── Writeup header ────────────────────────
 .writeup-header {
-  background:
-    radial-gradient(ellipse 100% 100% at 50% 0%, rgba($purple-900, 0.7) 0%, transparent 70%),
-    $bg-secondary;
-  border-bottom: 1px solid $border;
+  background: $bg-void;
+  border-bottom: 1px solid $border-brutal;
+  border-top: 2px solid $purple-800;
   padding: 3rem 1.5rem 2.5rem;
 }
 
@@ -23,7 +19,7 @@
 }
 
 .writeup-breadcrumb {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: $text-muted;
   font-family: $font-mono;
   margin-bottom: 1.5rem;
@@ -31,99 +27,63 @@
   align-items: center;
   gap: 0.4rem;
   flex-wrap: wrap;
+  letter-spacing: 0.08em;
 
-  a {
-    color: $text-muted;
-    text-decoration: none;
-    &:hover { color: $purple-300; }
-  }
-
-  .crumb-sep { color: $purple-700; }
+  a { color: $text-muted; text-decoration: none; }
+  a:hover { color: $purple-300; }
+  .crumb-sep { color: $purple-800; }
 }
 
 .writeup-hero-meta { max-width: 800px; }
-
-.writeup-badges {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
+.writeup-badges { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 1rem; }
 
 .writeup-title {
   font-family: $font-display;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 700;
-  letter-spacing: 0.03em;
-  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.0;
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, $text-primary 0%, $purple-200 70%, $accent-magenta 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: $text-primary;
 }
 
 .writeup-description {
-  font-size: 1rem;
-  color: $text-secondary;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.writeup-cves {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.75rem;
-}
-
-.cves-label {
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   color: $text-muted;
   font-family: $font-mono;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  border-left: 2px solid $purple-800;
+  padding-left: 1rem;
 }
 
-.writeup-techniques {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
+.writeup-cves { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.cves-label { font-size: 0.68rem; color: $text-muted; font-family: $font-mono; text-transform: uppercase; letter-spacing: 0.12em; }
+.writeup-techniques { display: flex; gap: 0.35rem; flex-wrap: wrap; }
 
 .writeup-header-deco {
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.45;
+  opacity: 0.3;
   pointer-events: none;
-
-  .moth-small { width: 120px; height: auto; }
-
+  .moth-small { width: 110px; height: auto; }
   @media (max-width: 768px) { display: none; }
 }
 
-// ── Writeup divider ───────────────────────
 .writeup-divider {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
   padding: 1rem 2rem;
-  color: $purple-600;
-
-  .divider-line {
-    flex: 1;
-    max-width: 400px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, $purple-700, transparent);
-  }
-  .divider-rose { font-size: 1rem; }
+  color: $purple-800;
+  .divider-line { flex: 1; max-width: 400px; height: 1px; background: linear-gradient(90deg, transparent, $purple-800, transparent); }
+  .divider-rose { font-size: 0.85rem; opacity: 0.5; }
 }
 
-// ── Content layout ────────────────────────
 .writeup-content-wrapper {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -132,34 +92,23 @@
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
   align-items: start;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
 }
 
-// ── Table of Contents ─────────────────────
 .writeup-toc {
   position: sticky;
   top: calc($nav-height + 1.5rem);
   height: calc(100vh - $nav-height - 3rem);
   overflow-y: auto;
   padding-right: 1.5rem;
-
-  // Hide scrollbar
-  &::-webkit-scrollbar { width: 3px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: $purple-800; border-radius: 2px; }
-
-  @media (max-width: 900px) {
-    display: none;
-  }
+  @media (max-width: 900px) { display: none; }
 }
 
 .toc-inner {
-  background: $bg-card;
+  background: $bg-void;
   border: 1px solid $border;
-  border-radius: $radius-md;
+  border-radius: 0;
+  border-left: 2px solid $purple-800;
   overflow: hidden;
 }
 
@@ -167,280 +116,117 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: rgba($purple-700, 0.15);
+  padding: 0.65rem 1rem;
+  background: rgba($purple-900, 0.3);
   border-bottom: 1px solid $border;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: $purple-400;
+  letter-spacing: 0.15em;
+  color: $purple-700;
   font-weight: 600;
   font-family: $font-mono;
 }
 
-#tocNav ul {
-  list-style: none;
-  padding: 0.5rem 0;
-}
-
+#tocNav ul { list-style: none; padding: 0.5rem 0; }
 #tocNav li a {
   display: block;
-  padding: 0.3rem 1rem;
-  font-size: 0.78rem;
+  padding: 0.28rem 1rem;
+  font-size: 0.73rem;
   color: $text-muted;
   text-decoration: none;
   line-height: 1.4;
   transition: all $transition-fast;
   border-left: 2px solid transparent;
-
-  &:hover {
-    color: $text-secondary;
-    background: rgba(147,51,234,0.05);
-  }
-
-  &.active {
-    color: $purple-300;
-    border-left-color: $purple-500;
-    background: rgba(147,51,234,0.08);
-  }
+  font-family: $font-mono;
 }
+#tocNav li a:hover { color: $text-secondary; background: rgba(60, 15, 100, 0.15); }
+#tocNav li a.active { color: $purple-300; border-left-color: $purple-600; background: rgba(60, 15, 100, 0.2); }
+#tocNav li.toc-h3 a { padding-left: 1.75rem; font-size: 0.68rem; opacity: 0.75; }
 
-#tocNav li.toc-h3 a {
-  padding-left: 1.75rem;
-  font-size: 0.74rem;
-}
-
-// ═══════════════════════════════════════════
-//  MARKDOWN BODY (report content)
-// ═══════════════════════════════════════════
+// MARKDOWN BODY
 
 .markdown-body {
   min-width: 0;
 
-  // Headings
-  h1 { font-size: 1.9rem; margin-bottom: 1.5rem; margin-top: 2.5rem; }
-  h2 {
-    font-size: 1.4rem;
-    margin-top: 3rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid $border;
-    color: $purple-200;
-    font-family: $font-display;
-    letter-spacing: 0.02em;
-  }
-  h3 {
-    font-size: 1.1rem;
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-    color: $purple-300;
-    font-family: $font-heading;
-  }
-  h4 {
-    font-size: 0.95rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: $text-secondary;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-family: $font-mono;
-  }
+  h1 { font-family: $font-display; font-size: 1.8rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem; margin-top: 2.5rem; color: $text-primary; }
+  h2 { font-family: $font-display; font-size: 1.15rem; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 3rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid $border; color: $text-secondary; padding-left: 0.75rem; border-left: 3px solid $purple-700; }
+  h3 { font-size: 0.95rem; font-family: $font-mono; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2rem; margin-bottom: 0.75rem; color: $purple-300; }
+  h4 { font-size: 0.8rem; font-family: $font-mono; margin-top: 1.5rem; margin-bottom: 0.5rem; color: $text-muted; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; }
+  h1:first-child { display: none; }
 
-  h1:first-child { display: none; } // Hide the # Title since we have a custom header
-
-  // Paragraphs
-  p {
-    margin-bottom: 1.2rem;
-    color: $text-secondary;
-    line-height: 1.8;
-    font-size: 0.94rem;
-  }
-
-  // Blockquote (report metadata header)
-  > blockquote:first-of-type {
-    background: linear-gradient(135deg, rgba($purple-900, 0.5), rgba($purple-800, 0.3));
-    border-left: 3px solid $purple-500;
-    border-radius: 0 $radius-md $radius-md 0;
-    padding: 1.25rem 1.5rem;
-    margin: 1.5rem 0;
-
-    p { color: $text-secondary; margin: 0; line-height: 1.9; font-size: 0.88rem; }
-    strong { color: $purple-300; }
-    code { background: rgba($purple-700, 0.3); }
-  }
+  p { margin-bottom: 1.2rem; color: $text-secondary; line-height: 1.85; font-size: 0.93rem; }
 
   blockquote {
-    border-left: 3px solid $purple-700;
+    border-left: 2px solid $purple-800;
     padding: 0.75rem 1.25rem;
     margin: 1.5rem 0;
-    background: rgba($purple-900, 0.25);
-    border-radius: 0 $radius-sm $radius-sm 0;
-
-    p { color: $text-muted; font-size: 0.9rem; margin: 0; }
+    background: rgba($bg-void, 0.5);
+    border-radius: 0;
+    p { color: $text-muted; font-size: 0.88rem; margin: 0; font-family: $font-mono; }
   }
 
-  // Code
-  code {
-    font-family: $font-mono;
-    font-size: 0.83rem;
-    background: rgba($purple-800, 0.35);
-    color: $text-code;
-    padding: 0.15rem 0.45rem;
-    border-radius: $radius-sm;
-    border: 1px solid rgba($purple-600, 0.2);
-  }
+  code { font-family: $font-mono; font-size: 0.82rem; background: rgba($purple-900, 0.4); color: $text-code; padding: 0.12rem 0.4rem; border-radius: 0; border: 1px solid rgba($purple-800, 0.3); }
 
   pre {
     background: $bg-code;
-    border: 1px solid rgba($purple-700, 0.35);
-    border-radius: $radius-md;
+    border: 1px solid rgba($purple-800, 0.3);
+    border-radius: 0;
+    border-left: 3px solid $purple-800;
     padding: 1.25rem;
     overflow-x: auto;
     margin: 1.5rem 0;
     position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, $purple-700, $accent-magenta, $purple-700);
-      border-radius: $radius-md $radius-md 0 0;
-    }
-
-    code {
-      background: none;
-      border: none;
-      padding: 0;
-      font-size: 0.82rem;
-      color: $text-code;
-      white-space: pre;
-    }
+    code { background: none; border: none; padding: 0; font-size: 0.81rem; color: $text-code; white-space: pre; }
   }
 
-  // Tables
   table {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
-    font-size: 0.85rem;
-    overflow: hidden;
-    border-radius: $radius-md;
+    font-size: 0.84rem;
     border: 1px solid $border;
-
-    th {
-      background: rgba($purple-700, 0.25);
-      color: $purple-200;
-      font-family: $font-mono;
-      font-size: 0.78rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.75rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid $border;
-    }
-
-    td {
-      padding: 0.65rem 1rem;
-      color: $text-secondary;
-      border-bottom: 1px solid rgba(168,85,247,0.06);
-      vertical-align: top;
-
-      code { font-size: 0.78rem; }
-    }
-
+    th { background: rgba($purple-900, 0.5); color: $text-muted; font-family: $font-mono; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.65rem 1rem; text-align: left; border-bottom: 1px solid $border-brutal; }
+    td { padding: 0.6rem 1rem; color: $text-secondary; border-bottom: 1px solid rgba(60, 20, 100, 0.15); vertical-align: top; }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba($purple-900, 0.3); }
+    tr:hover td { background: rgba($purple-900, 0.2); }
   }
 
-  // Lists
   ul, ol {
     padding-left: 1.5rem;
     margin-bottom: 1.2rem;
-
-    li {
-      color: $text-secondary;
-      font-size: 0.94rem;
-      line-height: 1.75;
-      margin-bottom: 0.3rem;
-
-      &::marker { color: $purple-500; }
-    }
+    li { color: $text-secondary; font-size: 0.93rem; line-height: 1.8; margin-bottom: 0.3rem; }
+    li::marker { color: $purple-700; }
   }
 
-  // Task lists
-  input[type="checkbox"] {
-    accent-color: $purple-500;
-    margin-right: 0.4rem;
-  }
-
-  // Horizontal rules — styled as decorative dividers
-  hr {
-    border: none;
-    border-top: 1px solid $border;
-    margin: 2.5rem 0;
-    position: relative;
-
-    &::after {
-      content: '◆';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: $bg-primary;
-      color: $purple-700;
-      padding: 0 0.75rem;
-      font-size: 0.6rem;
-    }
-  }
-
-  // Strong / emphasis
+  input[type="checkbox"] { accent-color: $purple-600; margin-right: 0.4rem; }
+  hr { border: none; border-top: 1px solid $border; margin: 2.5rem 0; }
   strong { color: $text-primary; font-weight: 600; }
-  em { color: $purple-200; font-style: italic; }
-
-  // Attack chain block (the ``` chains at top of reports)
-  pre code {
-    &:has(→) {
-      color: $purple-200;
-    }
-  }
+  em { color: $purple-300; font-style: italic; }
 }
 
-// ── Syntax highlighting (Rouge purple theme) ─
 .highlight {
-  .c, .c1, .cm, .cs { color: #6b6b8a; font-style: italic; }  // Comments
-  .k, .kd, .kn, .kp, .kr, .kt { color: #c084fc; }            // Keywords
-  .s, .s1, .s2, .sb, .sc, .sd, .sh, .si, .sx, .sr { color: #86efac; } // Strings
-  .n, .na, .nb, .nc, .nd, .ni, .ne, .nl { color: #e9d5ff; }  // Names
-  .nf, .nt { color: #a855f7; }                                 // Function/tag names
-  .m, .mf, .mh, .mi, .mo { color: #fcd34d; }                  // Numbers
-  .o, .ow { color: #c084fc; }                                  // Operators
-  .p { color: #e9d5ff; }                                       // Punctuation
-  .err { color: #f87171; background: transparent; }            // Errors
-  .ge { font-style: italic; }
-  .gs { font-weight: bold; }
-  .gp { color: #a855f7; user-select: none; }                   // Prompt ($, >>>)
-  .gu { color: #c084fc; }
-  .gt { color: #f87171; }
-  .gh { color: #e9d5ff; font-weight: bold; }
-
-  // Bash-specific
-  .nb { color: #93c5fd; }       // Built-in names (bash commands)
-  .nv { color: #fcd34d; }       // Variable names
+  .c, .c1, .cm { color: #4a4560; font-style: italic; }
+  .k, .kd, .kn { color: #9d6ff7; }
+  .s, .s1, .s2 { color: #6db38a; }
+  .n, .na, .nc { color: #c4b0e0; }
+  .nf, .nt { color: #8b5cf6; }
+  .m, .mf, .mi { color: #c4a24a; }
+  .o, .ow { color: #9d6ff7; }
+  .p { color: #c4b0e0; }
+  .err { color: #e05c5c; background: transparent; }
+  .gp { color: #7c3aed; user-select: none; }
+  .nb { color: #7bafd4; }
+  .nv { color: #c4a24a; }
 }
 
-// ── Copy button + code lang label ─────────
 .copy-btn {
   position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
-  padding: 0.3rem 0.5rem;
-  background: rgba($purple-700, 0.35);
-  border: 1px solid rgba($purple-600, 0.3);
-  border-radius: $radius-sm;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.45rem;
+  background: rgba($purple-900, 0.6);
+  border: 1px solid $border;
+  border-radius: 0;
   color: $text-muted;
   cursor: pointer;
   opacity: 0;
@@ -448,22 +234,22 @@
   display: flex;
   align-items: center;
   z-index: 10;
-  &:hover { background: rgba($purple-600, 0.5); color: $purple-200; }
 }
+.copy-btn:hover { background: rgba($purple-700, 0.4); color: $purple-200; }
 pre:hover .copy-btn { opacity: 1; }
+
 .code-lang-label {
   position: absolute;
-  bottom: 0.5rem;
-  right: 0.75rem;
+  bottom: 0.4rem;
+  right: 0.65rem;
   font-family: $font-mono;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: $purple-700;
+  letter-spacing: 0.12em;
+  color: $purple-800;
   pointer-events: none;
 }
 
-// ── Back link footer ──────────────────────
 .writeup-footer-nav {
   max-width: $max-wide;
   margin: 0 auto;

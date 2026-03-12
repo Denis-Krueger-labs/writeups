@@ -1,21 +1,21 @@
 // ═══════════════════════════════════════════
-//  COLOUR PALETTE — Gothic Purple Theme
+//  COLOUR PALETTE — Gothic Brutalist Purple
 // ═══════════════════════════════════════════
 
-// Backgrounds
-$bg-void:       #050508;   // deepest black
-$bg-primary:    #080810;   // main background
-$bg-secondary:  #0d0d1a;   // slightly lighter
-$bg-card:       #100c1e;   // card backgrounds
-$bg-card-hover: #140f26;   // card hover state
-$bg-code:       #0a0618;   // code blocks
+// Backgrounds — true void
+$bg-void:       #010103;   // deepest black
+$bg-primary:    #030307;   // main background
+$bg-secondary:  #07070f;   // slightly lighter
+$bg-card:       #0b0b14;   // card backgrounds
+$bg-card-hover: #0f0f1c;   // card hover state
+$bg-code:       #050510;   // code blocks
 
 // Purple scale
-$purple-950:    #1a0a2e;
-$purple-900:    #2e1065;
-$purple-800:    #3b0764;
-$purple-700:    #4a1c7a;
-$purple-600:    #6d28d9;
+$purple-950:    #0e0520;
+$purple-900:    #1a0840;
+$purple-800:    #2d0a5c;
+$purple-700:    #3d1070;
+$purple-600:    #5b21b6;
 $purple-500:    #7c3aed;
 $purple-400:    #9333ea;
 $purple-300:    #a855f7;
@@ -23,9 +23,9 @@ $purple-200:    #c084fc;
 $purple-100:    #e9d5ff;
 
 // Accent
-$accent-magenta: #d946ef;
-$accent-pink:    #ec4899;
-$accent-rose:    #be185d;
+$accent-magenta: #c026d3;
+$accent-pink:    #a21caf;
+$accent-rose:    #86198f;
 
 // Difficulty colours
 $easy:   #22c55e;
@@ -37,17 +37,18 @@ $htb:    #9fef00;
 $thm:    #c11111;
 
 // Text
-$text-primary:   #f0e6ff;
-$text-secondary: #b8a0d0;
-$text-muted:     #7a6a90;
-$text-code:      #c4b5fd;
+$text-primary:   #ede8ff;
+$text-secondary: #9d8ab8;
+$text-muted:     #5a4d6e;
+$text-code:      #b39ddb;
 
-// Borders & glows
-$border:         rgba(168, 85, 247, 0.18);
-$border-hover:   rgba(168, 85, 247, 0.45);
-$glow-sm:        0 0 8px rgba(147, 51, 234, 0.4);
-$glow-md:        0 0 20px rgba(147, 51, 234, 0.35), 0 0 40px rgba(147, 51, 234, 0.15);
-$glow-lg:        0 0 40px rgba(147, 51, 234, 0.5), 0 0 80px rgba(147, 51, 234, 0.2);
+// Borders & glows — colder, harder
+$border:         rgba(120, 60, 200, 0.12);
+$border-hover:   rgba(168, 85, 247, 0.4);
+$border-brutal:  rgba(90, 40, 160, 0.5);
+$glow-sm:        0 0 12px rgba(120, 40, 220, 0.35);
+$glow-md:        0 0 24px rgba(120, 40, 220, 0.3), 0 0 48px rgba(90, 20, 180, 0.1);
+$glow-lg:        0 0 40px rgba(120, 40, 220, 0.45), 0 0 80px rgba(90, 20, 180, 0.2);
 
 // ═══════════════════════════════════════════
 //  TYPOGRAPHY
@@ -59,21 +60,23 @@ $font-body:     'DM Sans', 'Segoe UI', system-ui, sans-serif;
 $font-mono:     'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 
 // ═══════════════════════════════════════════
-//  SPACING & SIZING
+//  SPACING & SIZING — brutalist, zero radius
 // ═══════════════════════════════════════════
 
 $nav-height:     64px;
 $max-content:    860px;
 $max-wide:       1200px;
-$radius-sm:      6px;
-$radius-md:      10px;
-$radius-lg:      16px;
-$radius-xl:      24px;
+
+// Zero-tolerance border radius — brutalist
+$radius-sm:      0px;
+$radius-md:      2px;
+$radius-lg:      2px;
+$radius-xl:      2px;
 
 // ═══════════════════════════════════════════
-//  TRANSITIONS
+//  TRANSITIONS — slightly slower, eerier
 // ═══════════════════════════════════════════
 
-$transition-fast:   0.15s ease;
-$transition-base:   0.25s ease;
-$transition-slow:   0.4s ease;
+$transition-fast:   0.2s ease;
+$transition-base:   0.35s ease;
+$transition-slow:   0.5s ease;

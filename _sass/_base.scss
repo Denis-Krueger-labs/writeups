@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════
-//  BASE STYLES
+//  BASE STYLES — Gothic Brutalist
 // ═══════════════════════════════════════════
 
 *, *::before, *::after {
@@ -10,17 +10,17 @@
 
 :root {
   scroll-behavior: smooth;
-  --scrollbar-track: #{$bg-secondary};
-  --scrollbar-thumb: #{$purple-700};
+  --scrollbar-track: #{$bg-void};
+  --scrollbar-thumb: #{$purple-800};
 }
 
-// Custom scrollbar
-::-webkit-scrollbar { width: 6px; }
+// Custom scrollbar — thin, cold
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
-  border-radius: 3px;
-  &:hover { background: $purple-500; }
+  border-radius: 0;
+  &:hover { background: $purple-600; }
 }
 
 html {
@@ -38,6 +38,24 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+
+  // Architectural grid — liminal corridor feel
+  background-image:
+    linear-gradient(rgba(100, 40, 180, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 40, 180, 0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+// Film grain overlay — gothic texture
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  mix-blend-mode: overlay;
 }
 
 // Moth canvas — fixed background layer
@@ -46,10 +64,10 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.18;
+  opacity: 0.14;
 }
 
-// Petal rain — fixed layer above canvas
+// Petal rain — fixed layer
 #petalRain {
   position: fixed;
   inset: 0;
@@ -95,113 +113,116 @@ img {
 
 // ── Selection ──────────────────────────────
 ::selection {
-  background: rgba(147, 51, 234, 0.35);
+  background: rgba(120, 40, 220, 0.4);
   color: $text-primary;
 }
 
 // ── Focus ──────────────────────────────────
 :focus-visible {
-  outline: 2px solid $purple-400;
-  outline-offset: 3px;
-  border-radius: $radius-sm;
+  outline: 1px solid $purple-500;
+  outline-offset: 2px;
+  border-radius: 0;
 }
 
-// ── Buttons ────────────────────────────────
+// ── Buttons — sharp, brutal ─────────────────
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.65rem 1.5rem;
-  border-radius: $radius-md;
-  font-family: $font-body;
-  font-size: 0.9rem;
+  padding: 0.65rem 1.75rem;
+  border-radius: 0;
+  font-family: $font-mono;
+  font-size: 0.82rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
   border: none;
   transition: all $transition-base;
   text-decoration: none;
 
   &.btn-primary {
-    background: linear-gradient(135deg, $purple-600, $purple-400);
-    color: white;
-    box-shadow: $glow-sm;
+    background: $purple-700;
+    color: $text-primary;
+    border: 1px solid $purple-500;
+    box-shadow: inset 0 0 0 0 $purple-500;
     &:hover {
-      background: linear-gradient(135deg, $purple-500, $purple-300);
-      box-shadow: $glow-md;
+      background: $purple-600;
       color: white;
-      transform: translateY(-1px);
+      box-shadow: $glow-sm, inset 0 0 20px rgba(147,51,234,0.15);
     }
   }
 
   &.btn-ghost {
     background: transparent;
-    color: $purple-300;
-    border: 1px solid $border;
+    color: $text-muted;
+    border: 1px solid $border-brutal;
     &:hover {
       border-color: $border-hover;
       color: $purple-200;
-      background: rgba(147, 51, 234, 0.08);
+      background: rgba(90, 30, 160, 0.08);
     }
   }
 }
 
-// ── Badges ─────────────────────────────────
+// ── Badges — sharp ─────────────────────────
 .badge {
   display: inline-block;
-  padding: 0.2rem 0.65rem;
-  border-radius: 99px;
-  font-size: 0.72rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 0;
+  font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: $font-mono;
 
   &.difficulty-badge {
-    &.easy   { background: rgba(34, 197, 94, 0.15); color: $easy; border: 1px solid rgba(34,197,94,0.3); }
-    &.medium { background: rgba(245,158,11,0.15); color: $medium; border: 1px solid rgba(245,158,11,0.3); }
-    &.hard   { background: rgba(239,68,68,0.15); color: $hard; border: 1px solid rgba(239,68,68,0.3); }
+    &.easy   { background: rgba(34, 197, 94, 0.08); color: $easy; border: 1px solid rgba(34,197,94,0.25); }
+    &.medium { background: rgba(245,158,11,0.08); color: $medium; border: 1px solid rgba(245,158,11,0.25); }
+    &.hard   { background: rgba(239,68,68,0.08); color: $hard; border: 1px solid rgba(239,68,68,0.25); }
   }
 
   &.platform-badge {
-    &.htb { background: rgba(159,239,0,0.1); color: $htb; border: 1px solid rgba(159,239,0,0.25); }
-    &.thm { background: rgba(193,17,17,0.15); color: #ff6b6b; border: 1px solid rgba(193,17,17,0.3); }
+    &.htb { background: rgba(159,239,0,0.07); color: $htb; border: 1px solid rgba(159,239,0,0.2); }
+    &.thm { background: rgba(193,17,17,0.1); color: #ff6b6b; border: 1px solid rgba(193,17,17,0.25); }
   }
 
   &.os-badge {
-    background: rgba(168,85,247,0.1);
-    color: $purple-300;
+    background: rgba(90,30,160,0.1);
+    color: $text-muted;
     border: 1px solid $border;
   }
 
   &.date-badge {
     background: transparent;
     color: $text-muted;
-    border: 1px solid rgba(122,106,144,0.25);
+    border: 1px solid rgba(80,60,100,0.3);
     font-family: $font-mono;
   }
 }
 
-// ── Technique + CVE tags ───────────────────
+// ── Technique + CVE tags — sharp ───────────
 .technique-tag {
   display: inline-block;
-  padding: 0.2rem 0.6rem;
-  background: rgba(74, 28, 122, 0.25);
-  color: $purple-200;
-  border: 1px solid rgba(109, 40, 217, 0.3);
-  border-radius: $radius-sm;
-  font-size: 0.73rem;
+  padding: 0.18rem 0.55rem;
+  background: rgba(50, 15, 90, 0.4);
+  color: $text-muted;
+  border: 1px solid rgba(80, 25, 150, 0.3);
+  border-radius: 0;
+  font-size: 0.7rem;
   font-family: $font-mono;
+  letter-spacing: 0.04em;
 }
 
 .cve-tag {
   display: inline-block;
-  padding: 0.2rem 0.6rem;
-  background: rgba(239,68,68,0.1);
-  color: #fca5a5;
-  border: 1px solid rgba(239,68,68,0.25);
-  border-radius: $radius-sm;
-  font-size: 0.73rem;
+  padding: 0.18rem 0.55rem;
+  background: rgba(120, 0, 0, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(200, 50, 50, 0.25);
+  border-radius: 0;
+  font-size: 0.7rem;
   font-family: $font-mono;
   font-weight: 500;
+  letter-spacing: 0.04em;
 }

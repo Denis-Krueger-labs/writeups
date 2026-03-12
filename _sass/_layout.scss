@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════
-//  HEADER / NAV
+//  HEADER / NAV — brutalist bar
 // ═══════════════════════════════════════════
 
 .site-header {
@@ -9,14 +9,14 @@
   right: 0;
   z-index: 100;
   height: $nav-height;
-  background: rgba($bg-primary, 0.88);
-  backdrop-filter: blur(16px);
+  background: rgba($bg-void, 0.92);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid $border;
   transition: border-color $transition-base, background $transition-base;
 
   &.scrolled {
-    background: rgba($bg-void, 0.95);
-    border-bottom-color: $border-hover;
+    background: rgba($bg-void, 0.98);
+    border-bottom-color: $border-brutal;
   }
 }
 
@@ -47,13 +47,11 @@
 
   .logo-text {
     font-family: $font-display;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    background: linear-gradient(135deg, $purple-300, $accent-magenta);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $text-primary;
   }
 
   &:hover .moth-tiny {
@@ -64,23 +62,27 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0;
   list-style: none;
 }
 
 .nav-link {
-  padding: 0.4rem 0.85rem;
-  border-radius: $radius-md;
-  color: $text-secondary;
-  font-size: 0.88rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0;
+  color: $text-muted;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  font-family: $font-mono;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   transition: all $transition-fast;
   text-decoration: none;
+  border-left: 1px solid transparent;
 
   &:hover, &.active {
     color: $text-primary;
-    background: rgba(147, 51, 234, 0.1);
+    background: rgba(90, 30, 160, 0.1);
+    border-left-color: $purple-700;
   }
 
   &.active {
@@ -92,7 +94,8 @@
     align-items: center;
     padding: 0.4rem 0.6rem;
     color: $text-muted;
-    &:hover { color: $purple-300; background: rgba(147,51,234,0.1); }
+    border-left: none;
+    &:hover { color: $purple-300; background: rgba(90,30,160,0.1); }
   }
 }
 
@@ -105,16 +108,16 @@
   width: 36px;
   height: 36px;
   background: none;
-  border: 1px solid $border;
-  border-radius: $radius-sm;
+  border: 1px solid $border-brutal;
+  border-radius: 0;
   cursor: pointer;
   padding: 0 8px;
 
   span {
     display: block;
-    height: 1.5px;
+    height: 1px;
     background: $text-secondary;
-    border-radius: 1px;
+    border-radius: 0;
     transition: all $transition-base;
   }
 
@@ -137,10 +140,9 @@
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    background: rgba($bg-void, 0.97);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid $border;
-    padding: 0.75rem 1rem;
+    background: rgba($bg-void, 0.99);
+    border-bottom: 1px solid $border-brutal;
+    padding: 0.5rem 0;
     transform: translateY(-120%);
     opacity: 0;
     pointer-events: none;
@@ -153,7 +155,7 @@
     }
 
     li { width: 100%; }
-    .nav-link { width: 100%; padding: 0.75rem 1rem; display: block; }
+    .nav-link { width: 100%; padding: 0.85rem 1.5rem; display: block; border-left: none; border-bottom: 1px solid $border; }
   }
 }
 
@@ -165,8 +167,8 @@
   position: relative;
   z-index: 2;
   margin-top: 6rem;
-  border-top: 1px solid $border;
-  background: linear-gradient(0deg, $bg-void 0%, transparent 100%);
+  border-top: 1px solid $border-brutal;
+  background: $bg-void;
 }
 
 .footer-deco {
@@ -175,17 +177,17 @@
   justify-content: center;
   gap: 1rem;
   padding: 2rem 1.5rem 1rem;
-  color: $purple-600;
+  color: $purple-800;
 
   .footer-line {
     flex: 1;
     max-width: 200px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, $purple-700, transparent);
+    background: linear-gradient(90deg, transparent, $purple-800, transparent);
   }
 
-  .moth-tiny { width: 24px; height: auto; opacity: 0.7; }
-  .footer-rose { font-size: 1.1rem; opacity: 0.8; }
+  .moth-tiny { width: 24px; height: auto; opacity: 0.5; }
+  .footer-rose { font-size: 1.1rem; opacity: 0.6; }
 }
 
 .footer-inner {
@@ -204,30 +206,31 @@
 
 .footer-handle {
   font-family: $font-display;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, $purple-300, $accent-magenta);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $text-secondary;
   margin-bottom: 0.5rem;
 }
 
 .footer-tagline {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: $text-muted;
   line-height: 1.5;
+  font-family: $font-mono;
 }
 
 .footer-heading {
-  font-family: $font-body;
-  font-size: 0.75rem;
+  font-family: $font-mono;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: $purple-400;
+  letter-spacing: 0.15em;
+  color: $purple-700;
   font-weight: 600;
   margin-bottom: 0.85rem;
+  border-bottom: 1px solid $border;
+  padding-bottom: 0.5rem;
 }
 
 .footer-links {
@@ -238,9 +241,10 @@
 }
 
 .footer-link {
-  font-size: 0.85rem;
-  color: $text-secondary;
+  font-size: 0.82rem;
+  color: $text-muted;
   text-decoration: none;
+  font-family: $font-mono;
   transition: color $transition-fast;
 
   &.htb:hover { color: $htb; }
@@ -250,25 +254,27 @@
 }
 
 .footer-disclaimer {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: $text-muted;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-family: $font-mono;
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(168,85,247,0.08);
+  border-top: 1px solid $border;
   text-align: center;
   padding: 1rem;
 }
 
 .footer-copy {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: $text-muted;
   font-family: $font-mono;
+  opacity: 0.6;
 }
 
 // ═══════════════════════════════════════════
-//  HERO SECTION
+//  HERO SECTION — liminal void
 // ═══════════════════════════════════════════
 
 .hero {
@@ -278,94 +284,132 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: calc($nav-height + 4rem) 1.5rem 5rem;
+  padding: calc($nav-height + 5rem) 1.5rem 6rem;
   text-align: center;
   overflow: hidden;
 
-  // Purple gradient background
+  // Cold void — single deep vignette, no warm spread
   background:
-    radial-gradient(ellipse 80% 60% at 50% 40%, rgba($purple-900, 0.6) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 20% 80%, rgba($accent-magenta, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 80% 20%, rgba($purple-600, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 30%, rgba($purple-900, 0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 60% at 50% 100%, rgba($bg-void, 0.9) 0%, transparent 80%),
     $bg-primary;
+
+  // Vertical structural line — liminal corridor feel
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba($purple-800, 0.15) 20%,
+      rgba($purple-700, 0.08) 50%,
+      rgba($purple-800, 0.15) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
 }
 
 .hero-moth {
-  margin-bottom: 1.5rem;
-  animation: mothFloat 6s ease-in-out infinite;
-  filter: drop-shadow(0 0 30px rgba(147,51,234,0.5)) drop-shadow(0 0 60px rgba(147,51,234,0.2));
+  margin-bottom: 2rem;
+  animation: mothFloat 9s ease-in-out infinite, glowPulse 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(120,40,220,0.4)) drop-shadow(0 0 50px rgba(90,20,160,0.15));
 
-  .moth-hero { width: clamp(220px, 40vw, 320px); height: auto; }
+  .moth-hero { width: clamp(180px, 32vw, 280px); height: auto; }
 }
 
 .hero-content {
-  max-width: 680px;
+  max-width: 640px;
 }
 
 .hero-handle {
   font-family: $font-mono;
-  font-size: 0.85rem;
-  letter-spacing: 0.25em;
-  color: $purple-400;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: $purple-700;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 
-  &::before { content: '> '; color: $accent-magenta; }
+  &::before { content: '// '; color: $purple-800; }
 }
 
 .hero-title {
   font-family: $font-display;
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
   font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, $text-primary 0%, $purple-200 50%, $accent-magenta 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.0;
+  margin-bottom: 1.25rem;
+  color: $text-primary;
+  // No gradient — stark, white on void
 }
 
 .hero-subtitle {
-  font-size: 1rem;
-  color: $text-secondary;
-  margin-bottom: 2rem;
-  letter-spacing: 0.02em;
+  font-size: 0.82rem;
+  font-family: $font-mono;
+  color: $text-muted;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
+  padding: 0.75rem 0;
 }
 
 .hero-stats {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0;
   flex-wrap: wrap;
   margin-bottom: 2.5rem;
+  border: 1px solid $border;
 
   .stat {
-    font-size: 0.82rem;
+    font-size: 0.72rem;
     color: $text-muted;
     font-family: $font-mono;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.25rem;
+    border-right: 1px solid $border;
+
+    &:last-of-type { border-right: none; }
   }
   .stat-num { color: $purple-300; font-weight: 600; }
-  .stat-divider { color: $purple-700; font-size: 0.5rem; }
+  .stat-divider { display: none; }
 }
 
 .hero-actions {
   display: flex;
-  gap: 1rem;
+  gap: 0;
   justify-content: center;
   flex-wrap: wrap;
+  border: 1px solid $border-brutal;
+
+  .btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 160px;
+
+    &:first-child { border-right: 1px solid $border-brutal; }
+  }
 }
 
 .hero-rose {
   position: absolute;
   right: clamp(1rem, 5vw, 6rem);
-  bottom: 3rem;
-  opacity: 0.55;
-  animation: roseFloat 8s ease-in-out infinite;
+  bottom: 4rem;
+  opacity: 0.35;
+  animation: roseFloat 10s ease-in-out infinite;
   pointer-events: none;
+  filter: grayscale(0.3) brightness(0.8);
 
-  .rose-svg { width: clamp(60px, 10vw, 110px); height: auto; }
+  .rose-svg { width: clamp(50px, 8vw, 90px); height: auto; }
 
   @media (max-width: 640px) { display: none; }
 }
@@ -380,20 +424,20 @@
   justify-content: center;
   gap: 1.5rem;
   padding: 0.5rem 2rem;
-  color: $purple-600;
+  color: $purple-800;
 
   .divider-line {
     flex: 1;
     max-width: 320px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, $purple-700, transparent);
+    background: linear-gradient(90deg, transparent, $purple-800, transparent);
   }
 
-  .divider-rose { font-size: 1.2rem; animation: roseSpin 20s linear infinite; }
+  .divider-rose { font-size: 1rem; animation: roseSpin 24s linear infinite; opacity: 0.5; }
 }
 
 // ═══════════════════════════════════════════
-//  WRITEUPS SECTION (landing page)
+//  WRITEUPS SECTION
 // ═══════════════════════════════════════════
 
 .writeups-section {
@@ -404,29 +448,34 @@
 
 .section-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1.5rem;
   margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid $border;
 
   h2 {
     font-family: $font-display;
-    font-size: clamp(1.4rem, 3vw, 1.9rem);
-    letter-spacing: 0.04em;
-    background: linear-gradient(135deg, $text-primary, $purple-300);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $text-primary;
+    font-weight: 700;
+    // Structural left accent
+    padding-left: 1rem;
+    border-left: 3px solid $purple-600;
   }
 }
 
+// Filter tabs — sharp, architectural
 .filter-tabs {
   display: flex;
-  gap: 0.35rem;
-  background: rgba(16, 12, 30, 0.8);
-  padding: 0.35rem;
-  border-radius: $radius-lg;
+  gap: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
   border: 1px solid $border;
 }
 
@@ -434,82 +483,85 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.4rem 1rem;
+  padding: 0.45rem 1rem;
   border: none;
-  border-radius: $radius-md;
+  border-right: 1px solid $border;
+  border-radius: 0;
   background: transparent;
   color: $text-muted;
-  font-size: 0.83rem;
-  font-family: $font-body;
+  font-size: 0.72rem;
+  font-family: $font-mono;
   font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all $transition-fast;
 
+  &:last-child { border-right: none; }
+
   .count {
-    font-size: 0.7rem;
-    background: rgba(168,85,247,0.15);
-    color: $purple-300;
-    padding: 0.05rem 0.4rem;
-    border-radius: 99px;
+    font-size: 0.65rem;
+    color: $purple-700;
     font-family: $font-mono;
   }
 
-  &:hover { color: $text-secondary; }
+  &:hover { color: $text-secondary; background: rgba(60, 20, 100, 0.15); }
 
   &.active {
-    background: linear-gradient(135deg, $purple-700, $purple-500);
-    color: white;
-    box-shadow: $glow-sm;
-    .count { background: rgba(255,255,255,0.2); color: white; }
+    background: rgba(60, 20, 120, 0.25);
+    color: $purple-300;
+    border-bottom: 2px solid $purple-500;
+    .count { color: $purple-400; }
   }
 }
 
-// ── Writeup card grid ─────────────────────
+// ── Writeup card grid — brutalist ──────────
 .writeup-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.25rem;
+  gap: 1px; // hairline gap — tiles instead of floated cards
+  background: $border; // grid lines show through gaps
 }
 
 .writeup-card {
   display: block;
   background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  transition: all $transition-base;
+  transition: background $transition-base;
   position: relative;
 
+  // Left border = difficulty indicator (brutalist)
+  border-left: 3px solid transparent;
+
+  &[data-difficulty="easy"]   { border-left-color: rgba(34, 197, 94, 0.4); }
+  &[data-difficulty="medium"] { border-left-color: rgba(245,158,11, 0.4); }
+  &[data-difficulty="hard"]   { border-left-color: rgba(239,68,68, 0.4); }
+
   &:hover {
-    border-color: $border-hover;
     background: $bg-card-hover;
-    box-shadow: $glow-sm, 0 8px 32px rgba(0,0,0,0.4);
-    transform: translateY(-3px);
+
+    &[data-difficulty="easy"]   { border-left-color: $easy; }
+    &[data-difficulty="medium"] { border-left-color: $medium; }
+    &[data-difficulty="hard"]   { border-left-color: $hard; }
 
     .read-link .arrow { transform: translateX(4px); }
-    .card-difficulty-bar { opacity: 1; }
   }
-
-  &[data-difficulty="easy"]   .card-difficulty-bar { background: $easy; }
-  &[data-difficulty="medium"] .card-difficulty-bar { background: $medium; }
-  &[data-difficulty="hard"]   .card-difficulty-bar { background: $hard; }
 
   &.hidden { display: none; }
 }
 
-.card-difficulty-bar {
-  height: 3px;
-  opacity: 0.7;
-  transition: opacity $transition-fast;
-}
+// Remove old difficulty bar
+.card-difficulty-bar { display: none; }
 
 .card-body {
-  padding: 1.25rem;
+  padding: 1.4rem 1.4rem 1.4rem 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.7rem;
 }
 
 .card-header-row {
@@ -520,9 +572,11 @@
 }
 
 .card-title {
-  font-family: $font-heading;
-  font-size: 1.15rem;
+  font-family: $font-display;
+  font-size: 1rem;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: $text-primary;
   line-height: 1.2;
 }
@@ -530,7 +584,7 @@
 .card-meta {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   flex-wrap: wrap;
 }
 
@@ -547,8 +601,8 @@
 }
 
 .card-footer {
-  padding-top: 0.25rem;
-  border-top: 1px solid rgba(168,85,247,0.08);
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(80, 40, 120, 0.15);
   margin-top: auto;
 }
 
@@ -556,12 +610,16 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.82rem;
-  color: $purple-300;
+  font-size: 0.72rem;
+  font-family: $font-mono;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $text-muted;
   font-weight: 500;
 
   .arrow {
     display: inline-block;
     transition: transform $transition-fast;
+    color: $purple-600;
   }
 }

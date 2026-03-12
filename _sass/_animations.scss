@@ -1,27 +1,27 @@
 // ═══════════════════════════════════════════
-//  ANIMATIONS
+//  ANIMATIONS — eerie, slow, liminal
 // ═══════════════════════════════════════════
 
-// ── Moth floating (hero) ──────────────────
+// ── Moth floating (hero) — slow drift ─────
 @keyframes mothFloat {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  25%       { transform: translateY(-12px) rotate(-1.5deg); }
-  50%       { transform: translateY(-6px) rotate(0.5deg); }
-  75%       { transform: translateY(-16px) rotate(1deg); }
+  20%       { transform: translateY(-10px) rotate(-1deg); }
+  50%       { transform: translateY(-18px) rotate(0.5deg); }
+  75%       { transform: translateY(-8px) rotate(1.2deg); }
 }
 
 // ── Moth hover (nav logo) ─────────────────
 @keyframes mothHover {
   0%   { transform: scale(1) rotate(0deg); }
-  30%  { transform: scale(1.2) rotate(-5deg); }
-  60%  { transform: scale(1.15) rotate(3deg); }
+  30%  { transform: scale(1.15) rotate(-4deg); }
+  60%  { transform: scale(1.1) rotate(2deg); }
   100% { transform: scale(1) rotate(0deg); }
 }
 
 // ── Rose floating ─────────────────────────
 @keyframes roseFloat {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50%       { transform: translateY(-10px) rotate(2deg); }
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-12px) rotate(3deg); }
 }
 
 // ── Rose spin (divider) ───────────────────
@@ -36,8 +36,8 @@
     transform: translateY(-20px) translateX(0) rotate(0deg);
     opacity: 0;
   }
-  10% { opacity: 1; }
-  90% { opacity: 0.6; }
+  8% { opacity: 0.7; }
+  92% { opacity: 0.3; }
   100% {
     transform: translateY(100vh) translateX(var(--drift)) rotate(var(--spin));
     opacity: 0;
@@ -58,43 +58,48 @@
   &.petal-4  { --spin: -200deg; --drift: -50px; border-radius: 0 0 50% 50%; }
 }
 
-// ── Gradient shift (hero bg) ──────────────
-@keyframes gradShift {
-  0%, 100% { background-position: 0% 50%; }
-  50%       { background-position: 100% 50%; }
-}
-
-// ── Glow pulse ────────────────────────────
+// ── Glow pulse — cold purple breathe ──────
 @keyframes glowPulse {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(147,51,234,0.4)) drop-shadow(0 0 40px rgba(147,51,234,0.15)); }
-  50%       { filter: drop-shadow(0 0 30px rgba(147,51,234,0.65)) drop-shadow(0 0 60px rgba(147,51,234,0.3)) drop-shadow(0 0 90px rgba(217,70,239,0.15)); }
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 16px rgba(100, 30, 200, 0.35))
+      drop-shadow(0 0 40px rgba(80, 15, 160, 0.12));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 28px rgba(120, 40, 220, 0.55))
+      drop-shadow(0 0 60px rgba(100, 20, 190, 0.25))
+      drop-shadow(0 0 100px rgba(160, 50, 240, 0.1));
+  }
 }
 
-// ── Hero moth glow pulse ──────────────────
+// ── Hero moth — slow combined animation ───
 .hero-moth {
-  animation: mothFloat 6s ease-in-out infinite, glowPulse 4s ease-in-out infinite;
+  animation: mothFloat 9s ease-in-out infinite, glowPulse 6s ease-in-out infinite;
 }
 
-// ── Card entrance ─────────────────────────
+// ── Card entrance — slower, heavier ───────
 @keyframes cardEnter {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
+    background: $bg-void;
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    background: $bg-card;
   }
 }
 
 .writeup-card {
-  animation: cardEnter 0.4s ease forwards;
+  animation: cardEnter 0.5s ease forwards;
 }
 
 // Stagger card entrance
 @for $i from 1 through 20 {
   .writeup-card:nth-child(#{$i}) {
-    animation-delay: #{($i - 1) * 0.06}s;
+    animation-delay: #{($i - 1) * 0.07}s;
     opacity: 0;
   }
 }
@@ -109,38 +114,38 @@
     bottom: 0;
     width: 0;
     height: 1px;
-    background: $purple-500;
+    background: $purple-600;
     transition: width $transition-fast;
   }
   &:hover::after, &.active::after { width: 100%; }
 }
 
-// ── Moth wing flutter (hover on moth svgs) ─
+// ── Moth wing flutter ─────────────────────
 .moth-svg {
   transition: filter $transition-slow;
   &:hover {
-    filter: drop-shadow(0 0 12px rgba(147,51,234,0.7));
+    filter: drop-shadow(0 0 10px rgba(100, 30, 200, 0.6));
   }
 }
 
 // ── Page fade-in ──────────────────────────
 @keyframes pageFade {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .site-main {
-  animation: pageFade 0.5s ease forwards;
+  animation: pageFade 0.6s ease forwards;
 }
 
 // ── Typewriter cursor (handle) ────────────
 .hero-handle::after {
   content: '█';
   display: inline-block;
-  animation: blink 1.2s step-end infinite;
-  margin-left: 2px;
-  color: $accent-magenta;
-  font-size: 0.7em;
+  animation: blink 1.4s step-end infinite;
+  margin-left: 3px;
+  color: $purple-700;
+  font-size: 0.75em;
   vertical-align: middle;
 }
 
@@ -149,14 +154,39 @@
   50%       { opacity: 0; }
 }
 
-// ── Scroll-reveal class (applied via JS) ──
+// ── Scroll-reveal ─────────────────────────
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 
   &.visible {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+// ── Liminal scan line (subtle) ────────────
+@keyframes scanLine {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.site-main::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba($purple-700, 0) 30%,
+    rgba($purple-600, 0.06) 50%,
+    rgba($purple-700, 0) 70%,
+    transparent 100%
+  );
+  animation: scanLine 12s linear infinite;
+  pointer-events: none;
+  z-index: 10;
 }
