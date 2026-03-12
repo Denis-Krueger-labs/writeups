@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-description: "About 0N1S3C2 — Denis, Information Security student at THWS Würzburg, red teamer, HTB/THM top-tier."
+description: "Denis Krüger — Information Security student at THWS Würzburg, focused on offensive security and attack chain construction."
 ---
 
 <div class="about-page">
@@ -11,8 +11,8 @@ description: "About 0N1S3C2 — Denis, Information Security student at THWS Wür
     <div class="about-moth" aria-hidden="true">{% include moth.svg %}</div>
     <div class="about-intro">
       <div class="about-handle">0N1S3C2</div>
-      <h1 class="about-name">Denis</h1>
-      <p class="about-bio">Information Security student at THWS Würzburg. I document every machine I solve — not just the flags, but <em>why</em> vulnerabilities exist and how defenders can detect them.</p>
+      <h1 class="about-name">Denis Krüger</h1>
+      <p class="about-bio">Information Security student at THWS Würzburg, focused on offensive security and understanding how attack chains are constructed end-to-end. I value understanding <em>why</em> an exploit works — not just how to reproduce it.</p>
       <div class="about-links">
         <a href="{{ site.author.htb }}" class="btn btn-ghost" target="_blank" rel="noopener">HackTheBox</a>
         <a href="{{ site.author.thm }}" class="btn btn-ghost" target="_blank" rel="noopener">TryHackMe</a>
@@ -26,30 +26,73 @@ description: "About 0N1S3C2 — Denis, Information Security student at THWS Wür
 
 <section class="about-section reveal">
 
-## Focus Areas
+## About
 
-- **Web Exploitation** — SQLi, SSTI, LFI/RFI, business logic flaws, authentication bypasses
-- **Privilege Escalation** — sudo misconfigurations, SUID binaries, cronjob hijacking, GTFOBins
-- **Active Directory** — Kerberoasting, Pass-the-Hash, BadSuccessor, MSSQL impersonation chains
-- **CVE Research** — understanding root causes, not just running PoCs
-- **Defensive Analysis** — every exploit comes with IOCs and hardening recommendations
+I approach security through structured reconnaissance, deep enumeration, and controlled exploitation in lab environments.
+
+Currently working through TryHackMe and HackTheBox alongside my studies, with a focus on building practical skills in web application testing, privilege escalation, and attack documentation.
+
+**Interests:**
+- Web Application Exploitation
+- Linux & Windows Privilege Escalation
+- Wireless & Network Attack Surface Analysis
+- Embedded & IoT Security
+- Active Directory Fundamentals
 
 </section>
 
 <section class="about-section reveal">
 
-## Report Format
+## Projects
 
-Every writeup follows the same structured methodology — reproducible, technical, and defensive-minded:
+### [pwgen-lite](https://github.com/Denis-Krueger-labs/pwgen-lite) — Python
 
-| Section | Purpose |
-|---------|---------|
-| Executive Summary | High-level impact assessment |
-| Attack Chain | Visual flow from recon to root |
-| Detailed Walkthrough | Step-by-step with commands and reasoning |
-| Findings Table | Severity-rated vulnerability list |
-| Defensive Considerations | IOCs, detection opportunities, hardening |
-| Lessons Learned | What I got wrong, what I learned |
+Minimal CLI password generator built around secure randomness and cryptographic correctness. Implements `secrets`-based generation, HMAC-SHA256 deterministic mode with rejection sampling to avoid modulo bias, entropy estimation, and brute-force time modelling. Includes a full pytest suite and proper exit codes.
+
+### [mfind](https://github.com/Denis-Krueger-labs/mfind) — C
+
+Simplified reimplementation of the Unix `find` utility, written in C as part of a university systems programming project. Supports recursive directory traversal, name/type/size/depth filtering, and optional parallel traversal across start directories using POSIX threads. Verified memory-safe with Valgrind (zero leaks).
+
+### [writeups](https://github.com/Denis-Krueger-labs/writeups)
+
+Structured technical reports documenting lab-based security assessments. Each writeup follows a standardized methodology covering reconnaissance, exploitation, privilege escalation, and defensive considerations.
+
+</section>
+
+<section class="about-section reveal">
+
+## Assessment Workflow
+
+```
+Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc → Documentation
+```
+
+</section>
+
+<section class="about-section reveal">
+
+## Practice Platforms
+
+<div class="platform-badges">
+  <a href="https://tryhackme.com/p/0N1S3C" target="_blank" rel="noopener">
+    <img src="https://tryhackme-badges.s3.amazonaws.com/0N1S3C.png?v=3" alt="TryHackMe Badge" />
+  </a>
+  <a href="https://app.hackthebox.com/public/users/3188353" target="_blank" rel="noopener">
+    <img src="https://www.hackthebox.eu/badge/image/3188353" alt="HackTheBox Badge" />
+  </a>
+</div>
+
+</section>
+
+<section class="about-section reveal">
+
+## Tools & Technologies
+
+| Category | Tools |
+|----------|-------|
+| Languages | Python · C · Bash · Java · SQL |
+| Security | Kali Linux · Burp Suite · Nmap · Gobuster · ffuf · SQLMap · Metasploit · Wireshark |
+| Systems | Linux · Git |
 
 </section>
 
@@ -71,38 +114,13 @@ Every writeup follows the same structured methodology — reproducible, technica
 
 <section class="about-section reveal">
 
-## Stats
-
-| Platform | Status |
-|----------|--------|
-| HackTheBox | Premium member · 10+ boxes solved |
-| TryHackMe | Top 1% · Gold League #1 · 1,069 pts · 211+ rooms |
-
-</section>
-
-<section class="about-section reveal">
-
-## Methodology
-
-The full assessment framework I use is documented in [methodology.md](https://github.com/Denis-Krueger-labs/writeups/blob/main/mythology.md) in this repository.
-
-**Core principles:**
-
-- **Enumeration-first** — exhaustive service discovery before exploitation
-- **Source code analysis** — read actual implementations when documentation isn't enough
-- **Defensive thinking** — every exploit includes detection and hardening guidance
-- **Documentation rigor** — reproducible steps, sanitized outputs, proper CVE attribution
-- **Root cause analysis** — understand *why* vulnerabilities exist, not just *how* to exploit them
-
-</section>
-
-<section class="about-section reveal">
-
 ## Disclaimer
 
 All activities documented in this repository were conducted exclusively within authorized lab environments (HackTheBox and TryHackMe). No real-world systems were accessed or harmed. Flags and sensitive credential values have been redacted from all reports.
 
 *Full versions with flags are published after box retirement.*
+
+> ᓚ₍⑅^..^₎♡ just enumerating quietly
 
 </section>
 
@@ -113,10 +131,9 @@ All activities documented in this repository were conducted exclusively within a
 .about-page { padding-top: 64px; }
 
 .about-header {
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(46,16,101,0.6) 0%, transparent 70%),
-    #0d0d1a;
-  border-bottom: 1px solid rgba(168,85,247,0.18);
+  background: #010103;
+  border-bottom: 1px solid rgba(90,40,160,0.5);
+  border-top: 2px solid rgba(61,16,112,0.8);
   padding: 4rem 1.5rem 3rem;
 }
 .about-header-inner {
@@ -125,43 +142,62 @@ All activities documented in this repository were conducted exclusively within a
   display: flex;
   align-items: center;
   gap: 3rem;
-  @media (max-width: 640px) { flex-direction: column; text-align: center; }
+}
+@media (max-width: 640px) {
+  .about-header-inner { flex-direction: column; text-align: center; }
 }
 .about-moth {
   flex-shrink: 0;
-  opacity: 0.7;
-  filter: drop-shadow(0 0 20px rgba(147,51,234,0.5));
-  animation: mothFloat 6s ease-in-out infinite;
-  .moth-hero { width: 180px; height: auto; }
-  @media (max-width: 640px) { .moth-hero { width: 120px; } }
+  opacity: 0.55;
+  filter: drop-shadow(0 0 16px rgba(100,30,200,0.4));
+  animation: mothFloat 9s ease-in-out infinite;
 }
+.about-moth .moth-hero { width: 160px; height: auto; }
+@media (max-width: 640px) { .about-moth .moth-hero { width: 100px; } }
 .about-handle {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  color: #a855f7;
-  margin-bottom: 0.4rem;
-  &::before { content: '> '; color: #d946ef; }
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #5b21b6;
+  margin-bottom: 0.6rem;
 }
+.about-handle::before { content: '// '; color: #3d1070; }
 .about-name {
   font-family: 'Cinzel', serif;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 700;
-  letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #f0e6ff, #c084fc, #d946ef);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ede8ff;
   margin-bottom: 1rem;
 }
 .about-bio {
-  color: #b8a0d0;
-  font-size: 1rem;
-  line-height: 1.7;
+  color: #9d8ab8;
+  font-size: 0.92rem;
+  line-height: 1.75;
   margin-bottom: 1.5rem;
   max-width: 520px;
+  font-family: 'JetBrains Mono', monospace;
+  border-left: 2px solid #3d1070;
+  padding-left: 1rem;
 }
-.about-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.about-links { display: flex; gap: 0; flex-wrap: wrap; border: 1px solid rgba(90,40,160,0.5); width: fit-content; }
+.about-links .btn { border: none; border-right: 1px solid rgba(90,40,160,0.5); }
+.about-links .btn:last-child { border-right: none; }
+
+.platform-badges {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: 0.5rem;
+}
+.platform-badges img {
+  filter: brightness(0.9) contrast(1.05);
+  border: 1px solid rgba(90,40,160,0.3);
+  max-width: 350px;
+}
 
 .about-content {
   max-width: 860px;
@@ -171,68 +207,107 @@ All activities documented in this repository were conducted exclusively within a
 
 .about-section {
   margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(61,16,112,0.25);
+}
+.about-section:last-child { border-bottom: none; }
 
-  h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.3rem;
-    letter-spacing: 0.05em;
-    color: #c084fc;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(168,85,247,0.18);
-  }
-  p, li { color: #b8a0d0; font-size: 0.94rem; line-height: 1.75; }
-  strong { color: #f0e6ff; }
-  em { color: #c084fc; font-style: italic; }
+.about-section h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9d8ab8;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(61,16,112,0.4);
+  padding-left: 0.75rem;
+  border-left: 3px solid #3d1070;
+}
+.about-section h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a855f7;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.about-section p { color: #9d8ab8; font-size: 0.92rem; line-height: 1.8; }
+.about-section li { color: #9d8ab8; font-size: 0.92rem; line-height: 1.8; }
+.about-section strong { color: #ede8ff; }
+.about-section em { color: #a855f7; font-style: italic; }
 
-  ul {
-    list-style: none;
-    padding: 0;
-    li {
-      padding: 0.35rem 0;
-      padding-left: 1.25rem;
-      position: relative;
-      &::before { content: '◆'; position: absolute; left: 0; color: #7c3aed; font-size: 0.5rem; top: 0.6rem; }
-    }
-  }
+.about-section ul {
+  list-style: none;
+  padding: 0;
+}
+.about-section ul li {
+  padding: 0.3rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.about-section ul li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: #3d1070;
+  font-size: 0.45rem;
+  top: 0.65rem;
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1rem 0;
-    font-size: 0.88rem;
-    th {
-      background: rgba(74,28,122,0.25);
-      color: #c084fc;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.65rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(168,85,247,0.18);
-    }
-    td {
-      padding: 0.6rem 1rem;
-      color: #b8a0d0;
-      border-bottom: 1px solid rgba(168,85,247,0.06);
-    }
-    tr:last-child td { border-bottom: none; }
-  }
+.about-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.86rem;
+  border: 1px solid rgba(61,16,112,0.4);
+}
+.about-section th {
+  background: rgba(26,8,64,0.6);
+  color: #5a4d6e;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(90,40,160,0.4);
+}
+.about-section td {
+  padding: 0.6rem 1rem;
+  color: #9d8ab8;
+  border-bottom: 1px solid rgba(61,16,112,0.15);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+}
+.about-section tr:last-child td { border-bottom: none; }
 
-  pre {
-    background: #0a0618;
-    border: 1px solid rgba(109,40,217,0.35);
-    border-radius: 10px;
-    padding: 1.25rem;
-    overflow-x: auto;
-    code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: #c4b5fd;
-    }
-  }
+.about-section pre {
+  background: #050510;
+  border: 1px solid rgba(61,16,112,0.4);
+  border-left: 3px solid #3d1070;
+  border-radius: 0;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+.about-section pre code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.81rem;
+  color: #b39ddb;
+}
+.about-section a { color: #7c3aed; }
+.about-section a:hover { color: #a855f7; }
 
-  a { color: #a855f7; &:hover { color: #c084fc; } }
+blockquote {
+  border-left: 2px solid #3d1070;
+  padding: 0.6rem 1rem;
+  margin: 1.5rem 0 0;
+  background: transparent;
+}
+blockquote p {
+  color: #5a4d6e !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem !important;
 }
 </style>
