@@ -157,6 +157,51 @@
     }
   }
 
+  // ── ASCII moth glyphs drifting through bg ─
+  function createMothGlyphs() {
+    const rain = document.getElementById('petalRain');
+    if (!rain) return;
+
+    const glyphs = ['Ƹ̵̡Ӝ̵̨̄Ʒ', 'ཐིཋྀ', 'ʚïɞ', 'ཐི༏ཋྀ', 'Ƹ̵̡Ӝ̵̨̄Ʒ', 'ʚïɞ'];
+    const colors = [
+      'rgba(168,85,247,0.55)',
+      'rgba(139,92,246,0.45)',
+      'rgba(192,132,252,0.4)',
+      'rgba(109,40,217,0.5)',
+      'rgba(221,214,254,0.28)',
+    ];
+
+    for (let i = 0; i < 8; i++) {
+      const el    = document.createElement('span');
+      const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const rtl   = Math.random() > 0.5;
+      const top   = 4 + Math.random() * 88;
+      const dur   = 28 + Math.random() * 32;
+      const delay = Math.random() * 22;
+      const size  = 0.65 + Math.random() * 0.75;
+      const op    = 0.1 + Math.random() * 0.18;
+
+      el.textContent = glyph;
+      el.setAttribute('aria-hidden', 'true');
+      el.style.cssText = [
+        'position:absolute',
+        `left:${rtl ? '105%' : '-5%'}`,
+        `top:${top}%`,
+        `font-size:${size}rem`,
+        `color:${color}`,
+        `text-shadow:0 0 8px ${color}`,
+        `--moth-op:${op}`,
+        'pointer-events:none',
+        'user-select:none',
+        'white-space:nowrap',
+        `animation:${rtl ? 'mothGlyphFloatRTL' : 'mothGlyphFloat'} ${dur}s ${delay}s linear infinite`,
+      ].join(';');
+
+      rain.appendChild(el);
+    }
+  }
+
   // ── Main animation loop ──────────────────
   function loop() {
     ctx.clearRect(0, 0, W, H);
@@ -169,6 +214,7 @@
     resize();
     moths = Array.from({ length: MOTH_COUNT }, () => new Moth());
     createPetals();
+    createMothGlyphs();
     loop();
   }
 

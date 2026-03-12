@@ -166,6 +166,28 @@
   }
 }
 
+// ── ASCII moth glyphs drifting L→R ────────
+@keyframes mothGlyphFloat {
+  0%   { transform: translateX(0) translateY(0) rotate(-2deg); opacity: 0; }
+  8%   { opacity: var(--moth-op); }
+  25%  { transform: translateX(25vw) translateY(-18px) rotate(2deg); }
+  50%  { transform: translateX(50vw) translateY(6px) rotate(-1deg); }
+  75%  { transform: translateX(75vw) translateY(-12px) rotate(3deg); }
+  92%  { opacity: var(--moth-op); }
+  100% { transform: translateX(102vw) translateY(0) rotate(-2deg); opacity: 0; }
+}
+
+// ── ASCII moth glyphs drifting R→L ────────
+@keyframes mothGlyphFloatRTL {
+  0%   { transform: translateX(0) translateY(0) rotate(2deg); opacity: 0; }
+  8%   { opacity: var(--moth-op); }
+  25%  { transform: translateX(-25vw) translateY(-14px) rotate(-2deg); }
+  50%  { transform: translateX(-50vw) translateY(8px) rotate(1deg); }
+  75%  { transform: translateX(-75vw) translateY(-10px) rotate(-3deg); }
+  92%  { opacity: var(--moth-op); }
+  100% { transform: translateX(-102vw) translateY(0) rotate(2deg); opacity: 0; }
+}
+
 // ── Liminal scan line (subtle) ────────────
 @keyframes scanLine {
   0%   { transform: translateY(-100%); }
