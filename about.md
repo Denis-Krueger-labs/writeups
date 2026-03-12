@@ -10,7 +10,7 @@ description: "Denis Krüger — Information Security student at THWS Würzburg, 
   <div class="about-header-inner">
     <div class="about-moth" aria-hidden="true">{% include moth.svg %}</div>
     <div class="about-intro">
-      <div class="about-handle">0N1S3C2</div>
+      <div class="about-handle">0N1S3C</div>
       <h1 class="about-name">Denis Krüger</h1>
       <p class="about-bio">Information Security student at THWS Würzburg, focused on offensive security and understanding how attack chains are constructed end-to-end. I value understanding <em>why</em> an exploit works — not just how to reproduce it.</p>
       <div class="about-links">
