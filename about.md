@@ -22,9 +22,9 @@ description: "Denis Krüger — Information Security student at THWS Würzburg, 
   </div>
 </header>
 
-<div class="about-content">
+<div class="about-content" markdown="1">
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## About
 
@@ -41,7 +41,7 @@ Currently working through TryHackMe and HackTheBox alongside my studies, with a 
 
 </section>
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## Projects
 
@@ -59,7 +59,7 @@ Structured technical reports documenting lab-based security assessments. Each wr
 
 </section>
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## Assessment Workflow
 
@@ -69,7 +69,7 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
 
 </section>
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## Practice Platforms
 
@@ -84,7 +84,7 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
 
 </section>
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## Tools & Technologies
 
@@ -96,7 +96,7 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
 
 </section>
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## Certification Path
 
@@ -112,7 +112,7 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
 
 </section>
 
-<section class="about-section reveal">
+<section class="about-section reveal" markdown="1">
 
 ## Disclaimer
 
