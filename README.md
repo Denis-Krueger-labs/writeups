@@ -1,10 +1,10 @@
-# HTB & THM Writeups — 0N1S3C2
+# HTB & THM Writeups — 0N1S3C
 
 > Technical documentation of HackTheBox and TryHackMe machines solved during my Information Security degree and red team certification prep.
 
 Structured reports demonstrating methodical penetration testing, privilege escalation techniques, and defensive analysis.
 
-**Author:** Denis (0N1S3C2) | Information Security @ THWS Würzburg  
+**Author:** (0N1S3C) | Information Security @ THWS Würzburg  
 **HTB Handle:** 0N1S3C2 | **THM Handle:** 0N1S3C  
 **Focus:** Red teaming, web exploitation, Active Directory, Linux/Windows privilege escalation  
 **Cert Path:** CWES → CWEE → CPTS
