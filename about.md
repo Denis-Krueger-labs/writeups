@@ -74,7 +74,7 @@ Reconnaissance → Enumeration → Vulnerability ID → Exploitation → Privesc
 ## Practice Platforms
 
 <a href="https://tryhackme.com/p/0N1S3C">
-  <img src="https://tryhackme-badges.s3.amazonaws.com/0N1S3C.png?v=3"
+  <img src="https://tryhackme-badges.s3.amazonaws.com/0N1S3C.png?v=5"
        alt="TryHackMe Badge"
        width="350" />
 </a>
