@@ -37,7 +37,7 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 | [Pterodactyl](./medium/Pterodactyl/report.md) | HTB | Linux | CVE-2025-49132 + PEAR RCE, CVE-2025-6018/6019 PAM/udisks chain | 2026-03-12 |
 | [Jarvis](./medium/Jarvis/report.md) | HTB | Linux | SQLi → phpMyAdmin CVE-2018-12613 LFI → Command injection bypass → SUID systemctl | 2026-03-12 |
 | [Browsed](./medium/Browsed/report.md) | HTB | Linux | Chrome Extension Upload → SSRF to localhost:5000 → Flask Bash Injection → Reverse Shell (larry) → Python __pycache__ Poisoning |  2026-03-13 |
-| [Injectics](./medium/Injectics/report.md) | THM | Linux | Profile Input SSTI → Hardened Twig Sandbox Enumeration → sort Filter Callback Bypass → RCE (www-data) | 2026-03-14 |
+| [Injectics](./medium/Injectics/report.md) | THM | Linux | mail.log Disclosure → SQLi Auth Bypass → DROP TABLE → Twig SSTI Sandbox Escape (sort Filter) → RCE |  2026-03-14 |
 ### Hard
 
 | Box | Platform | OS | Key Techniques | Date |
