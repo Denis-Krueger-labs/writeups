@@ -361,6 +361,7 @@ Welcome, THM{5735172b6c147f4dd649872f73e0fdea} Array!
 
 **Severity Scale:**
 `🔴 Critical` → `🟠 High` → `🟡 Medium` → `🔵 Low` → `⚪ Info`
+
 ---
 
 ## 12. Defensive Considerations
@@ -371,7 +372,7 @@ Welcome, THM{5735172b6c147f4dd649872f73e0fdea} Array!
 ```
 POST /functions.php - 200 - "username=' or 'x'='x'#"
 POST /adminLogin007.php - 200 - "mail=USA'; DROP TABLE users;--"
-POST /update_profile.php - 200 - "fname={{['ls -la flags', '']|sort('passthru')}}"
+POST /update_profile.php - 200 - "fname={% raw %}{{['ls -la flags', '']|sort('passthru')}}{% endraw %}"
 ```
 
 **Database Logs (MySQL):**
