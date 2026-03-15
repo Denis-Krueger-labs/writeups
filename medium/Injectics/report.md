@@ -361,7 +361,6 @@ Welcome, THM{5735172b6c147f4dd649872f73e0fdea} Array!
 
 **Severity Scale:**
 `🔴 Critical` → `🟠 High` → `🟡 Medium` → `🔵 Low` → `⚪ Info`
-
 ---
 
 ## 12. Defensive Considerations
