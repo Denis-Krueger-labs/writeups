@@ -9,7 +9,7 @@ cve: []
 description: "UDP enumeration exposed IKE and TFTP, allowing retrieval of a router configuration and cracking of the IKE pre-shared key; reused credentials granted SSH access, and a custom sudo client was then redirected to a permissive remote policy server to obtain root."
 ---
 
-# Expressway — Technical Report
+# Expressway - Technical Report
 
 > **Platform:** Hack The Box \
 > **Difficulty:** `Easy` \
