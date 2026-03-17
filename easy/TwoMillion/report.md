@@ -11,7 +11,7 @@ description: "Invite-code abuse led to account creation, mass assignment enabled
 
 # TwoMillion - Technical Report
 
-> **Platform:** Hack The Box \
+> **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
 > **Date:** 2026-03-16 \
 > **Author:** 0N1S3C \
