@@ -9,7 +9,7 @@ cve: ["CVE-2025-64714", "CVE-2026-23944"]
 description: "MCPJam Inspector unauthenticated RCE → PrivateBin template cookie LFI → config directory swap to leak credentials → Arcane Docker management admin login → privileged container with host root mount → root"
 ---
 
-# Kobold — Technical Report
+# Kobold  Technical Report
 
 > **Platform:** Hack The Box (Season 10) \
 > **Difficulty:** `Easy` \
@@ -21,7 +21,7 @@ description: "MCPJam Inspector unauthenticated RCE → PrivateBin template cooki
 
 ## 0. Executive Summary
 
-> The "Kobold" machine hosted three web services: MCPJam Inspector, PrivateBin, and Arcane Docker Management. An unauthenticated command injection in MCPJam Inspector provided initial access. A path traversal in PrivateBin's template cookie enabled PHP code execution inside the PrivateBin Docker container. By exploiting a world-writable parent directory (missing sticky bit) on the host, the PrivateBin configuration directory was swapped, revealing the original config — which contained the Arcane admin password — through the container's bind mount. With Arcane admin access, a privileged Docker container was created with the host root filesystem mounted, achieving full system compromise. Immediate remediation of unauthenticated RCE endpoints and credential storage practices is recommended.
+> The "Kobold" machine hosted three web services: MCPJam Inspector, PrivateBin, and Arcane Docker Management. An unauthenticated command injection in MCPJam Inspector provided initial access. A path traversal in PrivateBin's template cookie enabled PHP code execution inside the PrivateBin Docker container. By exploiting a world-writable parent directory (missing sticky bit) on the host, the PrivateBin configuration directory was swapped, revealing the original config  which contained the Arcane admin password  through the container's bind mount. With Arcane admin access, a privileged Docker container was created with the host root filesystem mounted, achieving full system compromise. Immediate remediation of unauthenticated RCE endpoints and credential storage practices is recommended.
 
 ---
 
@@ -49,9 +49,9 @@ Nmap → Vhost Discovery → MCPJam Inspector RCE (ben) → PrivateBin Template 
 
 | Time (UTC) | Duration | Phase | Activity |
 |------------|----------|-------|----------|
-| ~19:11 | — | Recon | Initial nmap scan, discovered ports 22, 80, 443, 3552 |
+| ~19:11 |  | Recon | Initial nmap scan, discovered ports 22, 80, 443, 3552 |
 | ~19:13 | ~5 min | Recon | Gobuster directory enumeration on kobold.htb |
-| ~19:15 | ~10 min | Recon | Vhost discovery — found `mcp.kobold.htb` and `bin.kobold.htb` |
+| ~19:15 | ~10 min | Recon | Vhost discovery  found `mcp.kobold.htb` and `bin.kobold.htb` |
 | ~19:30 | ~15 min | Enumeration | Explored MCPJam Inspector UI, PrivateBin, Arcane API |
 | ~19:45 | ~15 min | Enumeration | Retrieved Arcane OpenAPI spec, mapped all endpoints |
 | ~20:00 | ~5 min | **Foothold** | **MCPJam Inspector RCE → reverse shell as ben** |
@@ -62,23 +62,23 @@ Nmap → Vhost Discovery → MCPJam Inspector RCE (ben) → PrivateBin Template 
 | ~20:40 | ~20 min | **PrivateBin RCE** | **Exploited template cookie LFI (CVE-2025-64714), established PHP webshell in container** |
 | ~21:00 | ~15 min | Container enum | Enumerated container: Alpine, nobody:82, no docker.sock, bind mounts identified |
 | ~21:10 | ~20 min | Dead end | Tried accessing Arcane from container (no curl, found php84), all returned 401 |
-| ~21:30 | ~15 min | Dead end | Tried default Arcane credentials (arcane/arcane-admin, admin/admin, etc.) — all failed |
-| ~21:40 | ~20 min | Dead end | SSRF exploration via `/api/templates/fetch` — confirmed working but couldn't bypass auth |
-| ~21:50 | ~15 min | Dead end | JWT forgery with ENCRYPTION_KEY — tried raw and base64-decoded, various claim formats — all 401 |
-| ~22:00 | ~10 min | CVE Research | Found CVE-2026-23520 (fixed in our version) and CVE-2026-23944 (auth bypass — our version vulnerable!) |
+| ~21:30 | ~15 min | Dead end | Tried default Arcane credentials (arcane/arcane-admin, admin/admin, etc.)  all failed |
+| ~21:40 | ~20 min | Dead end | SSRF exploration via `/api/templates/fetch`  confirmed working but couldn't bypass auth |
+| ~21:50 | ~15 min | Dead end | JWT forgery with ENCRYPTION_KEY  tried raw and base64-decoded, various claim formats  all 401 |
+| ~22:00 | ~10 min | CVE Research | Found CVE-2026-23520 (fixed in our version) and CVE-2026-23944 (auth bypass  our version vulnerable!) |
 | ~22:05 | ~15 min | CVE Exploit | Confirmed CVE-2026-23944 auth bypass working on non-zero environment IDs + Docker sub-paths. But no remote environment exists |
-| ~22:15 | ~5 min | Dead end | Attempted environment pairing — API key unknown, ENCRYPTION_KEY rejected |
-| ~22:20 | ~10 min | Dead end | No-sticky-bit directory rename on e3 — worked! But still couldn't read contents (drwx------) |
-| ~22:30 | ~10 min | Dead end | Tried brute-forcing e3 subdirectory names, tar, debugfs, setfacl — all failed |
-| ~22:40 | ~5 min | Dead end | Checked SUID, capabilities, cron, timers — all standard |
-| ~22:49 | ~5 min | Dead end | Found `/tmp/pb.key` — turned out to be PrivateBin TLS private key, not SSH |
+| ~22:15 | ~5 min | Dead end | Attempted environment pairing  API key unknown, ENCRYPTION_KEY rejected |
+| ~22:20 | ~10 min | Dead end | No-sticky-bit directory rename on e3  worked! But still couldn't read contents (drwx------) |
+| ~22:30 | ~10 min | Dead end | Tried brute-forcing e3 subdirectory names, tar, debugfs, setfacl  all failed |
+| ~22:40 | ~5 min | Dead end | Checked SUID, capabilities, cron, timers  all standard |
+| ~22:49 | ~5 min | Dead end | Found `/tmp/pb.key`  turned out to be PrivateBin TLS private key, not SSH |
 | ~22:55 | ~10 min | **Breakthrough** | **Renamed `/privatebin-data/cfg` → `cfg_bak`, created new cfg dir. Container bind mount still references original inode!** |
-| ~23:05 | ~5 min | **Cred found** | **Read original config via container PHP shell — found `pwd = "[REDACTED]"`** |
+| ~23:05 | ~5 min | **Cred found** | **Read original config via container PHP shell  found `pwd = "[REDACTED]"`** |
 | ~23:10 | ~5 min | Pivot | Tested password: failed for ben sudo, failed for alice su |
-| ~23:13 | ~2 min | **Arcane auth** | **Password worked for Arcane login as `arcane` user — admin JWT obtained!** |
+| ~23:13 | ~2 min | **Arcane auth** | **Password worked for Arcane login as `arcane` user  admin JWT obtained!** |
 | ~23:16 | ~3 min | Enumeration | Listed containers and images via Arcane API (found mysql:latest, privatebin images) |
 | ~23:18 | ~2 min | **Root** | **Created privileged Docker container with host root mounted, copied root flag to /tmp** |
-| ~23:19 | — | **Done** | **Root flag obtained from `/tmp/rootflag.txt`** |
+| ~23:19 |  | **Done** | **Root flag obtained from `/tmp/rootflag.txt`** |
 
 **Total time: ~4 hours** (19:11 → 23:19 UTC)
 **Active exploitation: ~30 minutes** (foothold + user: ~5 min, config swap + root: ~25 min)
@@ -115,7 +115,7 @@ nmap -sC -sV -p- -oA all_ports 10.129.12.70
 |------|---------|---------|-------|
 | 22 | SSH | OpenSSH 9.6p1 Ubuntu | Standard SSH |
 | 80 | HTTP | nginx | Redirects to HTTPS |
-| 443 | HTTPS | nginx | SSL cert for `kobold.htb` + `*.kobold.htb` — "Kobold Operations Suite" |
+| 443 | HTTPS | nginx | SSL cert for `kobold.htb` + `*.kobold.htb`  "Kobold Operations Suite" |
 | 3552 | HTTP | Arcane v1.13.0 | Go + SvelteKit Docker management panel |
 
 **Key Observations:**
@@ -141,22 +141,22 @@ Using the wildcard cert as a hint, vhost fuzzing discovered:
 
 MCPJam Inspector is a web-based tool for testing Model Context Protocol (MCP) servers. The UI presented a login page but also exposed API endpoints. Key discovery:
 
-- `POST /api/mcp/connect` — accepts a `serverConfig` object with `command` and `args` fields
+- `POST /api/mcp/connect`  accepts a `serverConfig` object with `command` and `args` fields
 - No authentication required on this endpoint
 - The endpoint passes the command directly to the OS for execution
 
 ### 5.2 PrivateBin (`bin.kobold.htb`)
 
-PrivateBin 2.0.2 — a zero-knowledge paste bin. Configuration had `templateselection = true`, enabling a template cookie that controls which PHP template file is included.
+PrivateBin 2.0.2  a zero-knowledge paste bin. Configuration had `templateselection = true`, enabling a template cookie that controls which PHP template file is included.
 
 ### 5.3 Arcane (`kobold.htb:3552`)
 
-Arcane v1.13.0 — a Docker management interface. Full OpenAPI spec available at `/api/openapi.json`. Key unauthenticated endpoints:
-- `GET /api/health` — health check
-- `GET /api/version` — version info (v1.13.0)
-- `GET /api/environments/{id}/settings/public` — revealed `dockerHost: unix:///var/run/docker.sock`
-- `GET /api/templates/fetch?url=...` — SSRF (fetches arbitrary HTTP URLs)
-- `POST /api/environments/pair` — environment pairing (requires valid X-API-Key)
+Arcane v1.13.0  a Docker management interface. Full OpenAPI spec available at `/api/openapi.json`. Key unauthenticated endpoints:
+- `GET /api/health`  health check
+- `GET /api/version`  version info (v1.13.0)
+- `GET /api/environments/{id}/settings/public`  revealed `dockerHost: unix:///var/run/docker.sock`
+- `GET /api/templates/fetch?url=...`  SSRF (fetches arbitrary HTTP URLs)
+- `POST /api/environments/pair`  environment pairing (requires valid X-API-Key)
 
 ### 5.4 Internal Services (discovered after foothold)
 
@@ -164,15 +164,15 @@ Arcane v1.13.0 — a Docker management interface. Full OpenAPI spec available at
 |------|---------|---------|
 | 8080 | 127.0.0.1 | PrivateBin (Docker container) |
 | 6274 | 127.0.0.1 | MCPJam Inspector (Node.js) |
-| 35715 | 127.0.0.1 | Unknown (returned 404 on all paths — possibly Arcane internal) |
+| 35715 | 127.0.0.1 | Unknown (returned 404 on all paths  possibly Arcane internal) |
 
 ---
 
-## 6. Initial Access — MCPJam Inspector RCE
+## 6. Initial Access  MCPJam Inspector RCE
 
 ### 6.1 Vulnerability Identification
 
-**Vulnerability:** MCPJam Inspector ≤1.4.2 — Unauthenticated Remote Code Execution
+**Vulnerability:** MCPJam Inspector ≤1.4.2  Unauthenticated Remote Code Execution
 **Location:** `POST /api/mcp/connect`
 **Reasoning:** The endpoint accepts arbitrary OS commands via the `serverConfig.command` and `serverConfig.args` fields, intended for launching MCP server processes. No authentication is required. The command is executed directly by the server process.
 
@@ -206,11 +206,11 @@ export TERM=xterm
 
 ---
 
-## 7. Lateral Movement — PrivateBin Container RCE
+## 7. Lateral Movement  PrivateBin Container RCE
 
 ### 7.1 Vulnerability Identification
 
-**Vulnerability:** CVE-2025-64714 — PrivateBin 2.0.2 Template Cookie Path Traversal → PHP Local File Inclusion → RCE
+**Vulnerability:** CVE-2025-64714  PrivateBin 2.0.2 Template Cookie Path Traversal → PHP Local File Inclusion → RCE
 **Location:** `template` cookie value used in PHP `include()` without sanitization
 **Reasoning:** With `templateselection = true` in the PrivateBin config, the application reads a `template` cookie to select which PHP template to include. The value is not sanitized, allowing `../` traversal to include arbitrary `.php` files on the filesystem.
 
@@ -239,7 +239,7 @@ pb() {
 
 # Proof of execution
 pb 'id'
-# uid=65534(nobody) gid=82(www-data) — inside Docker container
+# uid=65534(nobody) gid=82(www-data)  inside Docker container
 ```
 
 ### 7.4 Container Enumeration Results
@@ -274,13 +274,13 @@ pb 'id'
 
 1. **Arcane runs as root** with `ENCRYPTION_KEY="[REDACTED]"` set in `/etc/systemd/system/arcane.service`. No `JWT_SECRET` was set.
 
-2. **alice is in the docker group** — getting alice's credentials or Arcane admin access would provide a path to root via Docker.
+2. **alice is in the docker group**  getting alice's credentials or Arcane admin access would provide a path to root via Docker.
 
-3. **`/privatebin-data/data/` has NO sticky bit** (`drwxrwxrwx` not `drwxrwxrwt`) — any user can rename/move files within it regardless of ownership.
+3. **`/privatebin-data/data/` has NO sticky bit** (`drwxrwxrwx` not `drwxrwxrwt`)  any user can rename/move files within it regardless of ownership.
 
-4. **`/privatebin-data/data/e3/`** — a PrivateBin paste directory owned by `root:operator` with `drwx------` permissions. Completely unreadable by ben (despite being in operator group — no group read bit).
+4. **`/privatebin-data/data/e3/`**  a PrivateBin paste directory owned by `root:operator` with `drwx------` permissions. Completely unreadable by ben (despite being in operator group  no group read bit).
 
-5. **`/privatebin-data/cfg/`** — PrivateBin config directory, `root:82 drwxr-x---`. Not readable by ben, but ben can rename it since `/privatebin-data/` is `drwxrwx--- root:operator` (ben is in operator).
+5. **`/privatebin-data/cfg/`**  PrivateBin config directory, `root:82 drwxr-x---`. Not readable by ben, but ben can rename it since `/privatebin-data/` is `drwxrwx--- root:operator` (ben is in operator).
 
 ### 8.2 Dead Ends Explored
 
@@ -300,7 +300,7 @@ Before finding the correct path, significant time was spent on:
 - **Process memory/fd reading** (`/proc/1498/exe`, `/proc/1498/environ`) → permission denied (root process)
 - **SSH with `/tmp/pb.key`** → this was just the PrivateBin TLS private key, not an SSH key
 
-### 8.3 The Breakthrough — Config Directory Swap
+### 8.3 The Breakthrough  Config Directory Swap
 
 The critical insight was combining two facts:
 1. `/privatebin-data/` is writable by the operator group (`drwxrwx---`)
@@ -325,7 +325,7 @@ A new empty `cfg` directory now exists at the original path, owned by ben.
 
 **Step 3: Understand the bind mount behavior**
 
-The Docker container's bind mount for `/srv/cfg` was created when the container started, pointing to the **inode** of the original `/privatebin-data/cfg` directory. After the rename, the container's `/srv/cfg` still points to the original directory (now called `cfg_bak` on the host). The host path `/privatebin-data/cfg` now points to ben's new empty directory, but the container doesn't care — it follows the inode.
+The Docker container's bind mount for `/srv/cfg` was created when the container started, pointing to the **inode** of the original `/privatebin-data/cfg` directory. After the rename, the container's `/srv/cfg` still points to the original directory (now called `cfg_bak` on the host). The host path `/privatebin-data/cfg` now points to ben's new empty directory, but the container doesn't care  it follows the inode.
 
 **Step 4: Read the original config through the container**
 
@@ -465,4 +465,4 @@ cat /tmp/rootflag.txt
 ---
 
 *End of Report*
-*Classification: Public — flags and sensitive values omitted*
+*Classification: Public  flags and sensitive values omitted*
