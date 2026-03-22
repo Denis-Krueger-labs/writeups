@@ -47,7 +47,7 @@ layout: default
       </div>
 
       <div class="writeup-header-deco" aria-hidden="true">
-        {% include moth-small.svg %}
+        <img src="{{ '/assets/img/moth-logo.svg' | prepend: site.baseurl }}" alt="" width="110" height="110" style="width:110px;height:110px;object-fit:contain;">
       </div>
 
     </div>
@@ -77,83 +77,12 @@ layout: default
     </div>
   </div>
 
-  <!-- Prev / Next navigation -->
-  {% assign sorted_wu = site.pages | where: 'layout', 'writeup' | sort: 'date' %}
-  {% assign prev_wu = nil %}
-  {% assign next_wu = nil %}
-  {% assign found_current = false %}
-  {% for wu in sorted_wu %}
-    {% unless found_current %}
-      {% if wu.url == page.url %}
-        {% assign found_current = true %}
-      {% else %}
-        {% assign prev_wu = wu %}
-      {% endif %}
-    {% else %}
-      {% unless next_wu %}
-        {% assign next_wu = wu %}
-      {% endunless %}
-    {% endunless %}
-  {% endfor %}
-
-  {% if prev_wu or next_wu %}
-  <nav class="writeup-prevnext" aria-label="Writeup navigation">
-    {% if prev_wu %}
-    <a href="{{ prev_wu.url | prepend: site.baseurl }}" class="prevnext-link prevnext-prev">
-      <span class="pn-dir">← Previous</span>
-      <span class="pn-title">{{ prev_wu.title }}</span>
-      <span class="badge difficulty-badge {{ prev_wu.difficulty }}">{{ prev_wu.difficulty | capitalize }}</span>
-    </a>
-    {% else %}<div class="prevnext-placeholder"></div>{% endif %}
-
-    {% if next_wu %}
-    <a href="{{ next_wu.url | prepend: site.baseurl }}" class="prevnext-link prevnext-next">
-      <span class="pn-dir">Next →</span>
-      <span class="pn-title">{{ next_wu.title }}</span>
-      <span class="badge difficulty-badge {{ next_wu.difficulty }}">{{ next_wu.difficulty | capitalize }}</span>
-    </a>
-    {% else %}<div class="prevnext-placeholder"></div>{% endif %}
-  </nav>
-  {% endif %}
-
-  <!-- Related writeups (same difficulty) -->
-  {% assign related_pool = site.pages | where: 'layout', 'writeup' | where: 'difficulty', page.difficulty | sort: 'date' | reverse %}
-  {% assign rel_count = 0 %}
-  {% for wu in related_pool %}
-    {% if wu.url != page.url and rel_count < 3 %}
-      {% assign rel_count = rel_count | plus: 1 %}
-    {% endif %}
-  {% endfor %}
-
-  {% if rel_count > 0 %}
-  <section class="writeup-related">
-    <h3 class="related-heading">◆ More {{ page.difficulty | capitalize }} Writeups</h3>
-    <div class="related-grid">
-      {% assign shown = 0 %}
-      {% for wu in related_pool %}
-        {% if wu.url != page.url and shown < 3 %}
-        <a href="{{ wu.url | prepend: site.baseurl }}" class="related-card">
-          <span class="related-title">{{ wu.title }}</span>
-          <span class="badge platform-badge {{ wu.platform | downcase }}">{{ wu.platform }}</span>
-        </a>
-        {% assign shown = shown | plus: 1 %}
-        {% endif %}
-      {% endfor %}
-    </div>
-  </section>
-  {% endif %}
-
   <!-- End-of-writeup contact note -->
   <div class="writeup-endnote">
     <span class="endnote-label">◆</span>
     Questions, corrections, or discussion?
     <a href="{{ site.author.github }}" target="_blank" rel="noopener">GitHub</a>
     · <a href="https://discord.gg/5BhCVQhu" target="_blank" rel="noopener">Discord</a>
-  </div>
-
-  <!-- Back link -->
-  <div class="writeup-footer-nav">
-    <a href="{{ site.baseurl }}/#writeups" class="btn btn-ghost">← Back to Writeups</a>
   </div>
 
 </article>
