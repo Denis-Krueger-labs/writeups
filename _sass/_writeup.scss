@@ -81,13 +81,13 @@
   padding: 1rem 2rem;
   color: $purple-800;
   .divider-line { flex: 1; max-width: 400px; height: 1px; background: linear-gradient(90deg, transparent, $purple-800, transparent); }
-  .divider-rose { font-size: 0.85rem; opacity: 0.5; }
+  .divider-moon { width: 18px; height: 18px; object-fit: contain; opacity: 0.5; }
 }
 
 .writeup-content-wrapper {
   display: grid;
   grid-template-columns: 220px 1fr;
-  gap: 0;
+  gap: 2.5rem;
   max-width: $max-wide;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
