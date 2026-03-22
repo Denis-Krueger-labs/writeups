@@ -39,5 +39,19 @@
   <script data-goatcounter="https://{{ site.goatcounter_code }}.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
   {% endif %}
+
+  {% if site.lanyard_user_id and site.lanyard_user_id != "" %}
+  <aside class="spotify-widget" id="spotifyWidget"
+         data-user-id="{{ site.lanyard_user_id }}"
+         aria-label="Now playing">
+    <div class="sw-bar">┌── Now Playing ──────────────┐</div>
+    <div class="sw-line" id="sw-status">&gt; idle</div>
+    <div class="sw-line sw-song" id="sw-song">—</div>
+    <div class="sw-line sw-artist" id="sw-artist"></div>
+    <div class="sw-line sw-progress" id="sw-progress"></div>
+    <div class="sw-bar">└─────────────────────────────┘</div>
+  </aside>
+  <script src="{{ '/assets/js/spotify-widget.js' | prepend: site.baseurl }}"></script>
+  {% endif %}
 </body>
 </html>

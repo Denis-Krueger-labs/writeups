@@ -41,7 +41,8 @@
     <span class="footer-ai-note">This site was designed and refined with AI assistance.</span>
     {% if site.enable_visitor_counter and site.goatcounter_code != "" %}
     <span class="footer-visits">
-      <a href="https://{{ site.goatcounter_code }}.goatcounter.com" target="_blank" rel="noopener" title="Visitor stats (GoatCounter)">visits ↗</a>
+      <img src="https://{{ site.goatcounter_code }}.goatcounter.com/counter/.svg"
+           alt="visitor count" class="gc-badge" loading="lazy">
     </span>
     {% endif %}
   </div>

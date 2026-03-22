@@ -291,6 +291,8 @@
   a { color: $text-muted; &:hover { color: $purple-300; } }
 }
 
+.gc-badge { height: 16px; width: auto; vertical-align: middle; opacity: 0.7; }
+
 // ── About strip (homepage only) ───────────
 .about-strip {
   background: linear-gradient(135deg, rgba(26, 10, 46, 0.6), rgba(13, 13, 26, 0.8));
@@ -475,7 +477,7 @@
   animation: mothFloat 14s ease-in-out infinite;
   pointer-events: none;
 
-  .hero-moon-img { width: clamp(60px, 10vw, 110px); height: auto; }
+  .hero-moon-img { width: clamp(36px, 5vw, 56px); height: auto; }
 
   @media (max-width: 640px) { display: none; }
 }
@@ -489,7 +491,7 @@
   border: 1px solid $border-brutal;
   border-left: 3px solid $purple-700;
   padding: 0.9rem 1.4rem;
-  margin: 1.75rem auto 0;
+  margin: 1.75rem auto 2.25rem;
   max-width: 400px;
   text-align: left;
   display: inline-flex;
@@ -542,7 +544,7 @@
     background: linear-gradient(90deg, transparent, $purple-800, transparent);
   }
 
-  .divider-moon { width: 22px; height: auto; animation: mothFloat 14s ease-in-out infinite; opacity: 0.45; }
+  .divider-moon { width: 20px; height: 20px; object-fit: contain; animation: mothFloat 14s ease-in-out infinite; opacity: 0.45; }
 }
 
 // ═══════════════════════════════════════════
@@ -732,3 +734,44 @@
     color: $purple-600;
   }
 }
+
+// ── Spotify / Now Playing widget ──────────
+.spotify-widget {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 2rem;
+  z-index: 50;
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  color: $text-secondary;
+  background: rgba(3, 2, 12, 0.88);
+  border: 1px solid $border-brutal;
+  border-left: 3px solid $purple-700;
+  padding: 0.6rem 0.85rem;
+  min-width: 220px;
+  max-width: 260px;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  transition: opacity 0.4s;
+
+  &.sw-idle { opacity: 0.35; }
+
+  @media (max-width: 900px) { display: none; }
+}
+
+.sw-bar {
+  color: $text-muted;
+  white-space: pre;
+  line-height: 1.4;
+}
+
+.sw-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.7;
+}
+
+.sw-song     { color: $text-primary; font-weight: 600; }
+.sw-artist   { color: $purple-400; }
+.sw-progress { color: $purple-700; letter-spacing: 0.01em; }

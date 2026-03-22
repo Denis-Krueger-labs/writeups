@@ -21,6 +21,9 @@ github_profile: "https://github.com/Denis-Krueger-labs"
 enable_visitor_counter: false
 goatcounter_code: ""                      # fill in your GoatCounter site code to enable
 
+# Spotify "Now Playing" widget (via Lanyard Discord presence — https://discord.gg/lfTVCfKTys)
+lanyard_user_id: ""                       # your Discord numeric user ID
+
 permalink: pretty
 markdown: kramdown
 kramdown:
