@@ -22,7 +22,7 @@ enable_visitor_counter: false
 goatcounter_code: ""                      # fill in your GoatCounter site code to enable
 
 # Spotify "Now Playing" widget (via Lanyard Discord presence — https://discord.gg/lfTVCfKTys)
-lanyard_user_id: ""                       # your Discord numeric user ID
+lanyard_user_id: "536248721189371904"     # Discord user ID — streetfighter_lp
 
 permalink: pretty
 markdown: kramdown
