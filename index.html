@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-description: "HTB & THM penetration testing writeups by 0N1S3C2 — red team methodology, privilege escalation, Active Directory attacks."
+description: "HTB & THM penetration testing writeups by 0N1S3C — red team methodology, privilege escalation, Active Directory attacks."
 ---
 
 <!-- ═══ HERO ════════════════════════════════════════════════════════ -->
@@ -12,7 +12,7 @@ description: "HTB & THM penetration testing writeups by 0N1S3C2 — red team met
   </div>
 
   <div class="hero-content reveal">
-    <div class="hero-handle">0N1S3C2</div>
+    <div class="hero-handle">0N1S3C</div>
     <h1 class="hero-title">Cybersecurity<br>Writeups</h1>
     <p class="hero-subtitle">HackTheBox &amp; TryHackMe — Red Team Methodology</p>
 
@@ -26,14 +26,34 @@ description: "HTB & THM penetration testing writeups by 0N1S3C2 — red team met
       <span class="stat">CWES <span class="stat-num">→</span> CPTS</span>
     </div>
 
+    <div class="terminal-quote" aria-label="Terminal prompt">
+      <span class="tq-line">┌──(0N1S3C㉿kali)-[~]</span>
+      <span class="tq-line">└─$ information wants to be free...<span class="terminal-cursor">█</span></span>
+    </div>
+
     <div class="hero-actions">
       <a href="#writeups" class="btn btn-primary">View Writeups</a>
       <a href="{{ site.baseurl }}/about" class="btn btn-ghost">About Me</a>
+      <a href="{{ site.github_profile | default: site.author.github }}" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      {% if site.main_site_url and site.main_site_url != "" %}
+      <a href="{{ site.main_site_url }}" class="btn btn-ghost" target="_blank" rel="noopener">{{ site.portfolio_label | default: "Main Site" }} ↗</a>
+      {% endif %}
+    </div>
+
+    <div class="hero-contact">
+      <span>
+        <a href="{{ site.github_profile | default: site.author.github }}" target="_blank" rel="noopener">
+          github/Denis-Krueger-labs
+        </a>
+      </span>
+      <span class="hc-sep">◆</span>
+      <span>discord: {{ site.discord_handle | default: "streetfighter_lp" }}</span>
     </div>
   </div>
 
-  <div class="hero-rose" aria-hidden="true">
-    {% include rose.svg %}
+  <div class="hero-moon" aria-hidden="true">
+    <img src="{{ '/assets/img/moon-accent.svg' | prepend: site.baseurl }}"
+         alt="" class="hero-moon-img">
   </div>
 
 </section>
@@ -126,47 +146,3 @@ description: "HTB & THM penetration testing writeups by 0N1S3C2 — red team met
     </div>
   </div>
 </section>
-
-<style>
-/* About strip (landing-page-only component) */
-.about-strip {
-  background: linear-gradient(135deg, rgba(26,10,46,0.6), rgba(13,13,26,0.8));
-  border-top: 1px solid rgba(168,85,247,0.15);
-  border-bottom: 1px solid rgba(168,85,247,0.15);
-  margin: 2rem 0;
-  padding: 4rem 1.5rem;
-}
-.about-strip-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
-}
-.about-strip-text {
-  max-width: 600px;
-  h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.6rem;
-    letter-spacing: 0.04em;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #f0e6ff, #c084fc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  p {
-    color: #b8a0d0;
-    line-height: 1.75;
-    margin-bottom: 1.5rem;
-    font-size: 0.94rem;
-  }
-}
-.about-strip-moth {
-  opacity: 0.5;
-  animation: mothFloat 7s ease-in-out infinite;
-  .moth-small { width: 140px; height: auto; }
-  @media (max-width: 640px) { display: none; }
-}
-</style>

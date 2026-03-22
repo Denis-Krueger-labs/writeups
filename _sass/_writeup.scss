@@ -255,3 +255,103 @@ pre:hover .copy-btn { opacity: 1; }
   margin: 0 auto;
   padding: 0 1.5rem 4rem;
 }
+
+// ── Prev / Next navigation ────────────────
+.writeup-prevnext {
+  display: flex;
+  max-width: $max-wide;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+  gap: 0;
+  border: 1px solid $border;
+}
+
+.prevnext-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  border-right: 1px solid $border;
+  transition: background $transition-fast;
+
+  &:last-child { border-right: none; }
+  &:hover { background: $bg-card-hover; }
+  &.prevnext-next { text-align: right; align-items: flex-end; }
+}
+
+.pn-dir {
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  color: $text-muted;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pn-title {
+  font-family: $font-display;
+  font-size: 0.85rem;
+  color: $text-primary;
+}
+
+.prevnext-placeholder { flex: 1; }
+
+// ── Related writeups ──────────────────────
+.writeup-related {
+  max-width: $max-wide;
+  margin: 2.5rem auto 0;
+  padding: 1.75rem 1.5rem 0;
+  border-top: 1px solid $border;
+}
+
+.related-heading {
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $text-muted;
+  margin-bottom: 1rem;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: $border;
+}
+
+.related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.9rem 1rem;
+  background: $bg-card;
+  text-decoration: none;
+  transition: background $transition-fast;
+
+  &:hover { background: $bg-card-hover; }
+}
+
+.related-title {
+  font-family: $font-display;
+  font-size: 0.85rem;
+  color: $text-primary;
+}
+
+// ── End-of-writeup note ───────────────────
+.writeup-endnote {
+  max-width: $max-wide;
+  margin: 2rem auto 0;
+  padding: 0.75rem 2.5rem;
+  border: 1px solid $border;
+  font-family: $font-mono;
+  font-size: 0.74rem;
+  color: $text-muted;
+  letter-spacing: 0.05em;
+
+  .endnote-label { color: $purple-700; margin-right: 0.5rem; }
+  a { color: $purple-500; }
+  a:hover { color: $purple-300; }
+  code { color: $purple-300; font-size: 0.72rem; background: none; padding: 0; }
+}

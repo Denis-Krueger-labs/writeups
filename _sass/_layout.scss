@@ -273,6 +273,73 @@
   opacity: 0.6;
 }
 
+.footer-ai-note {
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  color: $text-muted;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+  display: block;
+  margin-top: 0.3rem;
+}
+
+.footer-visits {
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  color: $text-muted;
+
+  a { color: $text-muted; &:hover { color: $purple-300; } }
+}
+
+// ── About strip (homepage only) ───────────
+.about-strip {
+  background: linear-gradient(135deg, rgba(26, 10, 46, 0.6), rgba(13, 13, 26, 0.8));
+  border-top: 1px solid rgba(168, 85, 247, 0.15);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+  margin: 2rem 0;
+  padding: 4rem 1.5rem;
+}
+
+.about-strip-inner {
+  max-width: $max-wide;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.about-strip-text {
+  max-width: 600px;
+
+  h2 {
+    font-family: $font-display;
+    font-size: 1.6rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #f0e6ff, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    color: #b8a0d0;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    font-size: 0.94rem;
+  }
+}
+
+.about-strip-moth {
+  opacity: 0.5;
+  animation: mothFloat 7s ease-in-out infinite;
+
+  .moth-small { width: 140px; height: auto; }
+
+  @media (max-width: 640px) { display: none; }
+}
+
 // ═══════════════════════════════════════════
 //  HERO SECTION — liminal void
 // ═══════════════════════════════════════════
@@ -394,24 +461,66 @@
   .btn {
     flex: 1;
     justify-content: center;
-    min-width: 160px;
-
-    &:first-child { border-right: 1px solid $border-brutal; }
+    min-width: 140px;
+    border-right: 1px solid $border-brutal;
+    &:last-child { border-right: none; }
   }
 }
 
-.hero-rose {
+.hero-moon {
   position: absolute;
   right: clamp(1rem, 5vw, 6rem);
   bottom: 4rem;
-  opacity: 0.35;
-  animation: roseFloat 10s ease-in-out infinite;
+  opacity: 0.22;
+  animation: mothFloat 14s ease-in-out infinite;
   pointer-events: none;
-  filter: grayscale(0.3) brightness(0.8);
 
-  .rose-svg { width: clamp(50px, 8vw, 90px); height: auto; }
+  .hero-moon-img { width: clamp(60px, 10vw, 110px); height: auto; }
 
   @media (max-width: 640px) { display: none; }
+}
+
+// ── Terminal quote (hero) ─────────────────
+.terminal-quote {
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  color: $text-secondary;
+  background: rgba(5, 5, 16, 0.75);
+  border: 1px solid $border-brutal;
+  border-left: 3px solid $purple-700;
+  padding: 0.9rem 1.4rem;
+  margin: 1.75rem auto 0;
+  max-width: 400px;
+  text-align: left;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  letter-spacing: 0.02em;
+}
+
+.tq-line {
+  display: block;
+  white-space: pre;
+  line-height: 1.6;
+  &:first-child { color: $text-muted; }
+}
+
+// ── Hero contact strip ────────────────────
+.hero-contact {
+  margin-top: 1.25rem;
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: $text-muted;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  a { color: $purple-500; text-decoration: none; }
+  a:hover { color: $purple-300; }
+
+  .hc-sep { color: $purple-800; }
 }
 
 // ═══════════════════════════════════════════

@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(bash --version)",
-      "Bash(/c/Users/dkrue/OneDrive/Desktop/writeups/.gitignore:*)"
+      "Bash(/c/Users/dkrue/OneDrive/Desktop/writeups/.gitignore:*)",
+      "Bash(find /d/writeups -not -path */.git/* -not -path */.github/* -not -path */.claude/*)",
+      "Bash(grep -r ' AI ' /d/writeups --include=*.md --include=*.html --include=*.yml -n)"
     ]
   }
 }

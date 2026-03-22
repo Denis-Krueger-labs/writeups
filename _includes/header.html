@@ -3,7 +3,7 @@
 
     <a class="nav-logo" href="{{ site.baseurl }}/" aria-label="{{ site.title }}">
       <span class="logo-moth" aria-hidden="true">{% include moth-tiny.svg %}</span>
-      <span class="logo-text">0N1S3C2</span>
+      <span class="logo-text">0N1S3C</span>
     </a>
 
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
@@ -14,6 +14,13 @@
       <li><a href="{{ site.baseurl }}/" class="nav-link {% if page.url == '/' %}active{% endif %}">Home</a></li>
       <li><a href="{{ site.baseurl }}/#writeups" class="nav-link">Writeups</a></li>
       <li><a href="{{ site.baseurl }}/about" class="nav-link {% if page.url contains 'about' %}active{% endif %}">About</a></li>
+      {% if site.main_site_url and site.main_site_url != "" %}
+      <li>
+        <a href="{{ site.main_site_url }}" class="nav-link nav-link-external" target="_blank" rel="noopener">
+          {{ site.portfolio_label | default: "Main Site" }} ↗
+        </a>
+      </li>
+      {% endif %}
       <li>
         <a href="{{ site.author.github }}" class="nav-link nav-link-external" target="_blank" rel="noopener" aria-label="GitHub">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

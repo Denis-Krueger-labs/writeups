@@ -34,5 +34,10 @@
 
   <script src="{{ '/assets/js/particles.js' | prepend: site.baseurl }}"></script>
   <script src="{{ '/assets/js/site.js' | prepend: site.baseurl }}"></script>
+
+  {% if site.enable_visitor_counter and site.goatcounter_code != "" %}
+  <script data-goatcounter="https://{{ site.goatcounter_code }}.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  {% endif %}
 </body>
 </html>

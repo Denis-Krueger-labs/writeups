@@ -11,6 +11,11 @@
     <div class="footer-col">
       <div class="footer-handle">0N1S3C</div>
       <p class="footer-tagline">Red team methodology • Gothic aesthetic • Perpetual student</p>
+      {% if site.main_site_url and site.main_site_url != "" %}
+      <p class="footer-tagline" style="margin-top:0.6rem;">
+        <a href="{{ site.main_site_url }}" target="_blank" rel="noopener" class="footer-link">{{ site.portfolio_label | default: "Main Site" }} ↗</a>
+      </p>
+      {% endif %}
     </div>
 
     <div class="footer-col">
@@ -19,6 +24,9 @@
         <li><a href="{{ site.author.htb }}" target="_blank" rel="noopener" class="footer-link htb">HackTheBox</a></li>
         <li><a href="{{ site.author.thm }}" target="_blank" rel="noopener" class="footer-link thm">TryHackMe</a></li>
         <li><a href="{{ site.author.github }}" target="_blank" rel="noopener" class="footer-link gh">GitHub</a></li>
+        {% if site.discord_handle and site.discord_handle != "" %}
+        <li><span class="footer-link">Discord: {{ site.discord_handle }}</span></li>
+        {% endif %}
       </ul>
     </div>
 
@@ -30,5 +38,11 @@
 
   <div class="footer-bottom">
     <span class="footer-copy">© {{ 'now' | date: "%Y" }} Denis (0N1S3C) • THWS Würzburg</span>
+    <span class="footer-ai-note">This site was designed and refined with AI assistance.</span>
+    {% if site.enable_visitor_counter and site.goatcounter_code != "" %}
+    <span class="footer-visits">
+      <a href="https://{{ site.goatcounter_code }}.goatcounter.com" target="_blank" rel="noopener" title="Visitor stats (GoatCounter)">visits ↗</a>
+    </span>
+    {% endif %}
   </div>
 </footer>

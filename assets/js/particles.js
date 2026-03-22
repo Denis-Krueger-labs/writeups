@@ -1,6 +1,6 @@
 /**
  * Moth particle system — canvas-based background moths
- * Gothic purple aesthetic for 0N1S3C2's writeup site
+ * Gothic purple aesthetic for 0N1S3C's writeup site
  */
 
 (function () {

@@ -1,15 +1,25 @@
-title: "0N1S3C2 — Cybersecurity Writeups"
+title: "0N1S3C — Cybersecurity Writeups"
 description: "HTB & TryHackMe penetration testing reports. Red team methodology, privilege escalation, Active Directory attacks."
 url: "https://Denis-Krueger-labs.github.io"
 baseurl: "/writeups"
 
 author:
   name: "Denis"
-  handle: "0N1S3C2"
+  handle: "0N1S3C"
   htb: "https://app.hackthebox.com/users/3188353"
   thm: "https://tryhackme.com/p/0N1S3C"
   github: "https://github.com/Denis-Krueger-labs"
   university: "THWS Würzburg"
+
+# Site identity & social
+main_site_url: "https://0n1s3c.dev"      # placeholder — update when live
+portfolio_label: "Main Site"
+discord_handle: "streetfighter_lp"
+github_profile: "https://github.com/Denis-Krueger-labs"
+
+# Visitor counter (GoatCounter — https://www.goatcounter.com)
+enable_visitor_counter: false
+goatcounter_code: ""                      # fill in your GoatCounter site code to enable
 
 permalink: pretty
 markdown: kramdown

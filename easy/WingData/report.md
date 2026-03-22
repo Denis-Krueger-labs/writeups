@@ -14,7 +14,7 @@ description: "Wing FTP NULL byte injection RCE, SHA256+salt hash crack for later
 > **Platform:** HackTheBox \
 > **Difficulty:** `Easy` \
 > **Date:** 2026-03-09 \
-> **Author:** 0N1S3C2 \
+> **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only
 
 ---

@@ -14,7 +14,7 @@ description: "Pterodactyl Panel RCE via PEAR, CVE-2025-6018/6019 PAM and udisks 
 > **Platform:** HackTheBox \
 > **Difficulty:** `Medium` \
 > **Date:** 2026-03-11 \
-> **Author:** 0N1S3C2 \
+> **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only 
 
 ---
