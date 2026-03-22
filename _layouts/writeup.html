@@ -93,7 +93,7 @@ layout: default
       {% unless next_wu %}
         {% assign next_wu = wu %}
       {% endunless %}
-    {% endif %}
+    {% endunless %}
   {% endfor %}
 
   {% if prev_wu or next_wu %}
