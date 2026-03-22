@@ -8,7 +8,7 @@ description: "Denis Krüger — Information Security student at THWS Würzburg, 
 
 <header class="about-header reveal">
   <div class="about-header-inner">
-    <div class="about-moth" aria-hidden="true">{% include moth.svg %}</div>
+    <div class="about-moth" aria-hidden="true"><img src="{{ '/assets/img/moth-logo.svg' | prepend: site.baseurl }}" alt="" width="400" height="400" style="width:400px;height:400px;object-fit:contain;"></div>
     <div class="about-intro">
       <div class="about-handle">0N1S3C</div>
       <h1 class="about-name">Denis Krüger</h1>

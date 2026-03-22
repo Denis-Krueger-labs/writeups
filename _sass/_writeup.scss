@@ -69,7 +69,7 @@
   transform: translateY(-50%);
   opacity: 0.3;
   pointer-events: none;
-  .moth-small { width: 110px; height: auto; }
+  img { width: 400px; height: 400px; object-fit: contain; }
   @media (max-width: 768px) { display: none; }
 }
 
