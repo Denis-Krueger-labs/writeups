@@ -542,7 +542,7 @@
     background: linear-gradient(90deg, transparent, $purple-800, transparent);
   }
 
-  .divider-rose { font-size: 1rem; animation: roseSpin 24s linear infinite; opacity: 0.5; }
+  .divider-moon { width: 22px; height: auto; animation: mothFloat 14s ease-in-out infinite; opacity: 0.45; }
 }
 
 // ═══════════════════════════════════════════

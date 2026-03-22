@@ -12,7 +12,7 @@ author:
   university: "THWS Würzburg"
 
 # Site identity & social
-main_site_url: "https://0n1s3c.dev"      # placeholder — update when live
+main_site_url: ""                        # set when live (e.g. "https://0n1s3c.dev")
 portfolio_label: "Main Site"
 discord_handle: "streetfighter_lp"
 github_profile: "https://github.com/Denis-Krueger-labs"
