@@ -22,6 +22,9 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 | [WingData](easy/WingData/report.md) | HTB | Linux | Wing FTP unauthenticated RCE (CVE-2025-47812), tarfile symlink CVE-2025-4517 | 2026-03-09 |
 | [Eighteen](easy/Eighteen/report.md) | HTB | Windows DC | MSSQL impersonation, BadSuccessor CVE-2025-53779, dMSA abuse, Kerberos tunneling | 2026-03-10 |
 | [Conversor](easy/Conversor/report.md) | HTB | Linux | Source code disclosure, path traversal file upload, cronjob hijack, sudo needrestart | 2026-03-08 |
+| [TwoMillion](easy/TwoMillion/report.md) | HTB | Linux | Invite-code abuse, mass assignment, command injection, credential reuse, OverlayFS CVE-2023-0386 | 2026-03-16 |
+| [Expressway](easy/Expressway/report.md) | HTB | Linux | UDP/IKE aggressive mode enum, offline PSK crack, TFTP config disclosure, credential reuse, sudo proxy policy bypass | 2026-03-15 |
+| [Kobold](easy/Kobold/report.md) | HTB | Linux | MCPJam RCE CVE-2025-64714, PrivateBin LFI CVE-2026-23944, bind mount inode persistence, Arcane Docker API privesc | 2026-03-21 |
 | [Bashed](easy/bashed/report.md) | HTB | Linux | Exposed phpbash webshell, sudo misconfiguration, cronjob hijack | 2026-03-07 |
 | [Shocker](easy/shocker/report.md) | HTB | Linux | ShellShock CVE-2014-6271 (CGI), sudo perl GTFOBins | 2026-03-07 |
 | [All In One](easy/all-in-one/report.md) | THM | Linux | LFI (mail-masta plugin), credential discovery, sudo socat | 2026-02-20 |
@@ -38,6 +41,7 @@ Structured reports demonstrating methodical penetration testing, privilege escal
 | [Jarvis](./medium/Jarvis/report.md) | HTB | Linux | SQLi → phpMyAdmin CVE-2018-12613 LFI → Command injection bypass → SUID systemctl | 2026-03-12 |
 | [Browsed](./medium/Browsed/report.md) | HTB | Linux | Chrome Extension Upload → SSRF to localhost:5000 → Flask Bash Injection → Reverse Shell (larry) → Python __pycache__ Poisoning |  2026-03-13 |
 | [Injectics](./medium/Injectics/report.md) | THM | Linux | mail.log Disclosure → SQLi Auth Bypass → DROP TABLE → Twig SSTI Sandbox Escape (sort Filter) → RCE |  2026-03-14 |
+| [Variatype](./medium/Variatype/report.md) | HTB | Linux | Exposed Git repo, fontTools varLib arbitrary write CVE-2024-25081, FontForge filename injection CVE-2025-47273, sudo Python plugin installer cron abuse | 2026-03-16 |
 ### Hard
 
 | Box | Platform | OS | Key Techniques | Date |
@@ -108,7 +112,7 @@ See [METHODOLOGY.md](mythology.md) for the full assessment framework.
 
 ## Stats
 
-- **HTB:** Premium member, 10 boxes solved (8 Easy, 2 Medium, preparing for more Medium/Hard)
+- **HTB:** Hacker 14 boxes solved (11 Easy, 3 Medium, preparing for more Medium/Hard)
 - **THM:** Top 1%, Gold League #1 (1,069 points), 211+ rooms completed (including 3 documented challenge boxes)
 - **Current Goal:** CWES certification → CWEE → CPTS path
 - **Training Focus:** Red teaming, privilege escalation, Active Directory attacks
