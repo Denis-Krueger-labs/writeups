@@ -2,7 +2,7 @@
   <div class="footer-deco" aria-hidden="true">
     <span class="footer-line"></span>
     {% include moth-tiny.svg %}
-    <span class="footer-rose">🌹</span>
+    <img src="{{ '/assets/img/moon-accent.svg' | prepend: site.baseurl }}" alt="" class="footer-moon">
     {% include moth-tiny.svg %}
     <span class="footer-line"></span>
   </div>
@@ -25,7 +25,7 @@
         <li><a href="{{ site.author.thm }}" target="_blank" rel="noopener" class="footer-link thm">TryHackMe</a></li>
         <li><a href="{{ site.author.github }}" target="_blank" rel="noopener" class="footer-link gh">GitHub</a></li>
         {% if site.discord_handle and site.discord_handle != "" %}
-        <li><span class="footer-link">Discord: {{ site.discord_handle }}</span></li>
+        <li><a href="https://discord.gg/5BhCVQhu" target="_blank" rel="noopener" class="footer-link">Discord</a></li>
         {% endif %}
       </ul>
     </div>

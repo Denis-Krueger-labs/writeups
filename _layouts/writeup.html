@@ -56,7 +56,7 @@ layout: default
   <!-- Rose divider -->
   <div class="writeup-divider" aria-hidden="true">
     <span class="divider-line"></span>
-    <span class="divider-rose">🌹</span>
+    <img src="{{ '/assets/img/moon-accent.svg' | prepend: site.baseurl }}" alt="" class="divider-moon">
     <span class="divider-line"></span>
   </div>
 
@@ -148,9 +148,7 @@ layout: default
     <span class="endnote-label">◆</span>
     Questions, corrections, or discussion?
     <a href="{{ site.author.github }}" target="_blank" rel="noopener">GitHub</a>
-    {% if site.discord_handle and site.discord_handle != "" %}
-    · Discord: <code>{{ site.discord_handle }}</code>
-    {% endif %}
+    · <a href="https://discord.gg/5BhCVQhu" target="_blank" rel="noopener">Discord</a>
   </div>
 
   <!-- Back link -->
