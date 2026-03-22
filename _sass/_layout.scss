@@ -388,7 +388,7 @@
   animation: mothFloat 9s ease-in-out infinite, glowPulse 6s ease-in-out infinite;
   filter: drop-shadow(0 0 20px rgba(120,40,220,0.4)) drop-shadow(0 0 50px rgba(90,20,160,0.15));
 
-  .moth-hero { width: clamp(180px, 32vw, 280px); height: auto; }
+  .moth-hero { width: clamp(240px, 42vw, 420px); height: auto; }
 }
 
 .hero-content {
@@ -744,14 +744,14 @@
   bottom: 2rem;
   z-index: 50;
   font-family: $font-mono;
-  font-size: 0.74rem;
+  font-size: 1rem;
   color: $text-secondary;
   background: rgba(3, 2, 12, 0.88);
   border: 1px solid $border-brutal;
-  border-left: 3px solid $purple-700;
-  padding: 0.8rem 1.1rem;
-  min-width: 260px;
-  max-width: 320px;
+  border-left: 4px solid $purple-700;
+  padding: 1.4rem 2rem;
+  min-width: 480px;
+  max-width: 560px;
   pointer-events: none;
   backdrop-filter: blur(6px);
   transition: opacity 0.4s;
