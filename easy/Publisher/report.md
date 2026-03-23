@@ -12,7 +12,7 @@ description: "An exposed SPIP 4.2.0 instance was exploited via CVE-2023-27372 to
 # Publisher Technical Report
 
 > **Platform:** TryHackMe \
-> **Difficulty:** `Easy \
+> **Difficulty:** `Easy` \
 > **Date:** 2026-03-23 \
 > **Author:** 0N1S3C \
 > **Scope:** Authorized lab environment only
