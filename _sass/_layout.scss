@@ -741,17 +741,17 @@
 .spotify-widget {
   position: fixed;
   left: 1.5rem;
-  top: calc(#{$nav-height} + 1rem);
+  bottom: 2rem;
   z-index: 50;
   font-family: $font-mono;
-  font-size: 1rem;
+  font-size: 0.68rem;
   color: $text-secondary;
   background: rgba(3, 2, 12, 0.88);
   border: 1px solid $border-brutal;
-  border-left: 4px solid $purple-700;
-  padding: 1.4rem 2rem;
-  min-width: 480px;
-  max-width: 560px;
+  border-left: 3px solid $purple-700;
+  padding: 0.6rem 0.85rem;
+  min-width: 220px;
+  max-width: 260px;
   pointer-events: none;
   backdrop-filter: blur(6px);
   transition: opacity 0.4s;
