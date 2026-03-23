@@ -741,7 +741,7 @@
 .spotify-widget {
   position: fixed;
   left: 1.5rem;
-  bottom: 2rem;
+  top: calc(#{$nav-height} + 1rem);
   z-index: 50;
   font-family: $font-mono;
   font-size: 1rem;
