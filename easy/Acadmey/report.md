@@ -315,6 +315,3 @@ In practice, direct command execution via the Composer script was more reliable 
 
 *End of Report*
 *Classification: Public  flags and sensitive values omitted*
-
-If you want, I can also make this sound **more like your natural writeup voice**  less formal report mode, more “clean hacker blog but still professional.”
-```
